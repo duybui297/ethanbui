@@ -192,7 +192,14 @@
       "delete": "Delete",
       "deleteConfirm": "Delete this article? This cannot be undone.",
       "saved": "Saved.",
-      "deleted": "Deleted."
+      "deleted": "Deleted.",
+      "coverImage": "Cover image",
+      "upload": "Upload",
+      "uploading": "Uploading...",
+      "insertImage": "Insert image",
+      "removeCover": "Remove",
+      "uploadError": "Upload failed.",
+      "altPrompt": "Image description (alt text), optional:"
     }
   }
 }

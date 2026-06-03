@@ -192,7 +192,14 @@
       "delete": "Xoá",
       "deleteConfirm": "Xoá bài viết này? Không thể hoàn tác.",
       "saved": "Đã lưu.",
-      "deleted": "Đã xoá."
+      "deleted": "Đã xoá.",
+      "coverImage": "Ảnh bìa",
+      "upload": "Tải lên",
+      "uploading": "Đang tải lên...",
+      "insertImage": "Chèn ảnh",
+      "removeCover": "Gỡ",
+      "uploadError": "Tải lên thất bại.",
+      "altPrompt": "Mô tả ảnh (alt text), không bắt buộc:"
     }
   }
 }

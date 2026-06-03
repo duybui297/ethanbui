@@ -4,7 +4,7 @@ import type { Article, Locale } from '@/lib/supabase/types';
 
 export type ArticleListItem = Pick<
   Article,
-  'id' | 'slug' | 'title' | 'excerpt' | 'published_at' | 'reading_time' | 'locale'
+  'id' | 'slug' | 'title' | 'excerpt' | 'published_at' | 'reading_time' | 'locale' | 'og_image_url'
 > & { categories: { slug: string; name_en: string; name_vi: string }[] };
 
 export async function listPublishedArticles(
@@ -15,7 +15,7 @@ export async function listPublishedArticles(
   let q = supabase
     .from('articles')
     .select(
-      `id, slug, title, excerpt, published_at, reading_time, locale,
+      `id, slug, title, excerpt, published_at, reading_time, locale, og_image_url,
        article_categories(categories(slug, name_en, name_vi))`
     )
     .eq('locale', locale)
@@ -38,6 +38,7 @@ export async function listPublishedArticles(
     published_at: row.published_at,
     reading_time: row.reading_time,
     locale: row.locale as Locale,
+    og_image_url: (row as unknown as { og_image_url: string | null }).og_image_url ?? null,
     categories:
       (row as unknown as { article_categories: { categories: { slug: string; name_en: string; name_vi: string } | null }[] }).article_categories
         ?.map((ac) => ac.categories)
@@ -71,7 +72,7 @@ export async function getRelatedArticles(
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase
     .from('articles')
-    .select('id, slug, title, excerpt, published_at, reading_time, locale, article_categories(categories(slug, name_en, name_vi))')
+    .select('id, slug, title, excerpt, published_at, reading_time, locale, og_image_url, article_categories(categories(slug, name_en, name_vi))')
     .eq('locale', locale)
     .eq('status', 'published')
     .neq('id', articleId)
@@ -90,6 +91,7 @@ export async function getRelatedArticles(
     published_at: row.published_at,
     reading_time: row.reading_time,
     locale: row.locale as Locale,
+    og_image_url: (row as unknown as { og_image_url: string | null }).og_image_url ?? null,
     categories:
       (row as unknown as { article_categories: { categories: { slug: string; name_en: string; name_vi: string } | null }[] }).article_categories
         ?.map((ac) => ac.categories)

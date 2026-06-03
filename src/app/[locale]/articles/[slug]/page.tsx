@@ -72,6 +72,17 @@ export default async function ArticlePage({
         )}
       </header>
 
+      {article.og_image_url && (
+        <div className="mx-auto mt-10 max-w-[1000px]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={article.og_image_url}
+            alt={article.title}
+            className="aspect-[16/9] w-full rounded-[var(--radius-lg)] border border-border object-cover"
+          />
+        </div>
+      )}
+
       <div className="mt-12 grid gap-10 lg:grid-cols-[240px_minmax(0,680px)] lg:gap-16">
         <aside className="hidden lg:block">
           <div className="sticky top-24">

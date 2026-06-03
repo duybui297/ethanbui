@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { saveArticle, deleteArticle } from '@/app/[locale]/admin/articles/actions';
+import { saveArticle, deleteArticle, uploadImage } from '@/app/[locale]/admin/articles/actions';
 import type { Article, ArticleStatus, Locale } from '@/lib/supabase/types';
 import { slugify } from '@/lib/utils';
 
@@ -36,10 +36,73 @@ export function ArticleEditor(props: Props) {
   const [canonical, setCanonical] = React.useState(a?.canonical_url ?? '');
   const [featured, setFeatured] = React.useState(a?.og_image_url ?? '');
 
+  const [uploadingCover, setUploadingCover] = React.useState(false);
+  const [uploadingBody, setUploadingBody] = React.useState(false);
+  const bodyRef = React.useRef<HTMLTextAreaElement>(null);
+  const coverInputRef = React.useRef<HTMLInputElement>(null);
+  const bodyInputRef = React.useRef<HTMLInputElement>(null);
+
   // Auto-slug while creating
   React.useEffect(() => {
     if (mode === 'create' && title && !slug) setSlug(slugify(title));
   }, [title, slug, mode]);
+
+  async function uploadFile(file: File): Promise<string> {
+    const fd = new FormData();
+    fd.set('file', file);
+    const res = await uploadImage(fd);
+    return res.url;
+  }
+
+  async function onCoverFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    setUploadingCover(true);
+    try {
+      const url = await uploadFile(file);
+      setFeatured(url);
+    } catch (err) {
+      console.error(err);
+      toast.error(t('uploadError'));
+    } finally {
+      setUploadingCover(false);
+    }
+  }
+
+  function insertIntoBody(snippet: string) {
+    const el = bodyRef.current;
+    if (!el) {
+      setBody((b) => (b ? `${b}\n\n${snippet}\n` : `${snippet}\n`));
+      return;
+    }
+    const start = el.selectionStart ?? body.length;
+    const end = el.selectionEnd ?? body.length;
+    const next = body.slice(0, start) + snippet + body.slice(end);
+    setBody(next);
+    requestAnimationFrame(() => {
+      el.focus();
+      const pos = start + snippet.length;
+      el.setSelectionRange(pos, pos);
+    });
+  }
+
+  async function onBodyFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    setUploadingBody(true);
+    try {
+      const url = await uploadFile(file);
+      const alt = window.prompt(t('altPrompt'), '') ?? '';
+      insertIntoBody(`\n![${alt}](${url})\n`);
+    } catch (err) {
+      console.error(err);
+      toast.error(t('uploadError'));
+    } finally {
+      setUploadingBody(false);
+    }
+  }
 
   async function onSave(nextStatus?: ArticleStatus) {
     setSaving(true);
@@ -124,16 +187,36 @@ export function ArticleEditor(props: Props) {
             />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="body">{t('fieldBody')}</Label>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="body">{t('fieldBody')}</Label>
+              <Button
+                type="button"
+                variant="secondary"
+                size="sm"
+                onClick={() => bodyInputRef.current?.click()}
+                disabled={uploadingBody}
+              >
+                {uploadingBody ? t('uploading') : t('insertImage')}
+              </Button>
+              <input
+                ref={bodyInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={onBodyFile}
+              />
+            </div>
             <Textarea
               id="body"
+              ref={bodyRef}
               rows={28}
               className="font-mono text-[14px]"
               value={body}
               onChange={(e) => setBody(e.target.value)}
             />
             <p className="text-xs text-text-3">
-              Markdown supported. Headings, code, lists, tables (GFM).
+              Markdown supported. Headings, code, lists, tables (GFM). Use the
+              button above to upload an image at the cursor.
             </p>
           </div>
         </div>
@@ -165,7 +248,44 @@ export function ArticleEditor(props: Props) {
             </Select>
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="featured">{t('fieldFeaturedImage')}</Label>
+            <Label htmlFor="featured">{t('coverImage')}</Label>
+            {featured ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={featured}
+                alt=""
+                className="aspect-[16/9] w-full rounded-[var(--radius-sm)] border border-border object-cover"
+              />
+            ) : null}
+            <div className="flex gap-2">
+              <Button
+                type="button"
+                variant="secondary"
+                size="sm"
+                onClick={() => coverInputRef.current?.click()}
+                disabled={uploadingCover}
+              >
+                {uploadingCover ? t('uploading') : t('upload')}
+              </Button>
+              {featured ? (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setFeatured('')}
+                  disabled={uploadingCover}
+                >
+                  {t('removeCover')}
+                </Button>
+              ) : null}
+            </div>
+            <input
+              ref={coverInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={onCoverFile}
+            />
             <Input
               id="featured"
               type="url"

@@ -147,4 +147,12 @@
     text-decoration: underline;
     text-underline-offset: 3px;
   }
+  .prose-article :where(img) {
+    border: 1px solid var(--color-border);
+    @apply my-8 h-auto max-w-full rounded-[var(--radius-md)];
+  }
+  .prose-article :where(figcaption) {
+    @apply mt-2 text-center text-sm;
+    color: var(--color-text-3);
+  }
 }
