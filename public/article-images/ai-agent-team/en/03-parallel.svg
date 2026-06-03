@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 420" font-family="Helvetica Neue, Arial, sans-serif">
+  <style>
+    .ln{stroke:#94a3b8;stroke-width:1.6;}
+    .t{fill:#1e293b;}
+    .m{fill:#64748b;}
+    .wt{fill:#ffffff;}
+    .ws{fill:#ffffff;opacity:.92;}
+    .ahd{fill:#94a3b8;}
+    .loop{stroke:#6c6cf0;stroke-width:1.7;stroke-dasharray:5 4;fill:none;}
+    .loopt{fill:#6c6cf0;}
+    .ahl{fill:#6c6cf0;}
+    @media (prefers-color-scheme:dark){
+      .ln{stroke:#cbd5e1;} .t{fill:#f1f5f9;} .m{fill:#94a3b8;} .ahd{fill:#cbd5e1;}
+      .loop{stroke:#a5b4fc;} .loopt{fill:#a5b4fc;} .ahl{fill:#a5b4fc;}
+    }
+  </style>
+  <defs>
+    <marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" class="ahd"/>
+    </marker>
+    <marker id="aha" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" class="ahl"/>
+    </marker>
+  </defs>
+
+  <text x="490" y="44" text-anchor="middle" font-size="15" font-weight="700" class="t">Run in parallel and auto-pull the next batch</text>
+
+  <rect x="30" y="150" width="150" height="100" rx="8" fill="#e9706b"/>
+  <text x="105" y="194" text-anchor="middle" font-size="15" font-weight="700" class="wt">Backlog</text>
+  <text x="105" y="216" text-anchor="middle" font-size="12" class="ws">task queue</text>
+
+  <rect x="280" y="92" width="370" height="70" rx="8" fill="#2f9bde"/>
+  <text x="300" y="124" font-size="14" font-weight="700" class="wt">Task A</text>
+  <text x="300" y="146" font-size="12.5" class="ws">PM &#8594; SWE &#8594; QA &#8594; PM</text>
+
+  <rect x="280" y="238" width="370" height="70" rx="8" fill="#34bfa0"/>
+  <text x="300" y="270" font-size="14" font-weight="700" class="wt">Task B</text>
+  <text x="300" y="292" font-size="12.5" class="ws">PM &#8594; SWE &#8594; QA &#8594; PM</text>
+
+  <text x="465" y="205" text-anchor="middle" font-size="12.5" class="m">2 tasks at once</text>
+
+  <line class="ln" x1="180" y1="190" x2="276" y2="127" marker-end="url(#ah)"/>
+  <line class="ln" x1="180" y1="210" x2="276" y2="273" marker-end="url(#ah)"/>
+
+  <rect x="750" y="150" width="200" height="100" rx="8" fill="#8cbf3f"/>
+  <text x="850" y="188" text-anchor="middle" font-size="14" font-weight="700" class="wt">Batch done</text>
+  <text x="850" y="210" text-anchor="middle" font-size="12" class="ws">pull next 2 tasks</text>
+  <text x="850" y="228" text-anchor="middle" font-size="12" class="ws">from backlog</text>
+
+  <line class="ln" x1="650" y1="127" x2="746" y2="190" marker-end="url(#ah)"/>
+  <line class="ln" x1="650" y1="273" x2="746" y2="210" marker-end="url(#ah)"/>
+
+  <path class="loop" d="M850 250 C850 360, 105 360, 105 254" marker-end="url(#aha)"/>
+  <text x="478" y="382" text-anchor="middle" font-size="12.5" class="loopt">self-looping instruction: runs until the backlog is empty</text>
+</svg>

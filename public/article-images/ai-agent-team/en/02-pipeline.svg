@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 320" font-family="Helvetica Neue, Arial, sans-serif">
+  <style>
+    .ln{stroke:#94a3b8;stroke-width:1.6;}
+    .t{fill:#1e293b;}
+    .m{fill:#64748b;}
+    .wt{fill:#ffffff;}
+    .ws{fill:#ffffff;opacity:.92;}
+    .ahd{fill:#94a3b8;}
+    .loop{stroke:#e74c3c;stroke-width:1.7;stroke-dasharray:5 4;fill:none;}
+    .loopt{fill:#e74c3c;}
+    .ahl{fill:#e74c3c;}
+    @media (prefers-color-scheme:dark){
+      .ln{stroke:#cbd5e1;} .t{fill:#f1f5f9;} .m{fill:#94a3b8;} .ahd{fill:#cbd5e1;}
+      .loop{stroke:#f87171;} .loopt{fill:#f87171;} .ahl{fill:#f87171;}
+    }
+  </style>
+  <defs>
+    <marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" class="ahd"/>
+    </marker>
+    <marker id="aha" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" class="ahl"/>
+    </marker>
+  </defs>
+
+  <text x="540" y="46" text-anchor="middle" font-size="15" font-weight="700" class="t">Every task runs the same sequence, no exceptions</text>
+
+  <g font-size="14">
+    <rect x="20"  y="100" width="150" height="74" rx="8" fill="#e9706b"/>
+    <text x="95"  y="133" text-anchor="middle" font-weight="700" class="wt">Backlog</text>
+    <text x="95"  y="154" text-anchor="middle" font-size="12" class="ws">waiting tasks</text>
+
+    <rect x="198" y="100" width="150" height="74" rx="8" fill="#2f9bde"/>
+    <text x="273" y="133" text-anchor="middle" font-weight="700" class="wt">PM</text>
+    <text x="273" y="154" text-anchor="middle" font-size="12" class="ws">groom spec</text>
+
+    <rect x="376" y="100" width="150" height="74" rx="8" fill="#34bfa0"/>
+    <text x="451" y="133" text-anchor="middle" font-weight="700" class="wt">SWE</text>
+    <text x="451" y="154" text-anchor="middle" font-size="12" class="ws">code + test</text>
+
+    <rect x="554" y="100" width="150" height="74" rx="8" fill="#ef8b3a"/>
+    <text x="629" y="133" text-anchor="middle" font-weight="700" class="wt">QA</text>
+    <text x="629" y="154" text-anchor="middle" font-size="12" class="ws">verify</text>
+
+    <rect x="732" y="100" width="150" height="74" rx="8" fill="#e6398f"/>
+    <text x="807" y="133" text-anchor="middle" font-weight="700" class="wt">PM</text>
+    <text x="807" y="154" text-anchor="middle" font-size="12" class="ws">accept</text>
+
+    <rect x="910" y="100" width="150" height="74" rx="8" fill="#8cbf3f"/>
+    <text x="985" y="133" text-anchor="middle" font-weight="700" class="wt">Commit</text>
+    <text x="985" y="154" text-anchor="middle" font-size="12" class="ws">close task</text>
+  </g>
+
+  <g>
+    <line class="ln" x1="170" y1="137" x2="194" y2="137" marker-end="url(#ah)"/>
+    <line class="ln" x1="348" y1="137" x2="372" y2="137" marker-end="url(#ah)"/>
+    <line class="ln" x1="526" y1="137" x2="550" y2="137" marker-end="url(#ah)"/>
+    <line class="ln" x1="704" y1="137" x2="728" y2="137" marker-end="url(#ah)"/>
+    <line class="ln" x1="882" y1="137" x2="906" y2="137" marker-end="url(#ah)"/>
+  </g>
+
+  <path class="loop" d="M629 174 C629 246, 451 246, 451 178" marker-end="url(#aha)"/>
+  <text x="540" y="266" text-anchor="middle" font-size="12.5" class="loopt">QA fail: back to SWE to fix</text>
+</svg>
