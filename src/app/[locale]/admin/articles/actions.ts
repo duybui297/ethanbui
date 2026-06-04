@@ -156,3 +156,30 @@ export async function uploadImage(
 
   return { url: pub.publicUrl, path };
 }
+
+/**
+ * Reorder articles by updating display_order.
+ * Accepts an ordered array of article IDs (EN locale).
+ * The index in the array becomes the display_order value.
+ */
+export async function reorderArticles(orderedIds: string[]) {
+  const { supabase } = await requireAdmin();
+
+  // Update each article's display_order based on its position in the array
+  const updates = orderedIds.map((id, index) =>
+    supabase
+      .from('articles')
+      .update({ display_order: index })
+      .eq('id', id)
+  );
+
+  const results = await Promise.all(updates);
+  const failed = results.find((r) => r.error);
+  if (failed?.error) throw failed.error;
+
+  // Revalidate all locale pages
+  revalidatePath('/en/articles');
+  revalidatePath('/vi/articles');
+  revalidatePath('/en');
+  revalidatePath('/vi');
+}

@@ -199,7 +199,12 @@
       "insertImage": "Chèn ảnh",
       "removeCover": "Gỡ",
       "uploadError": "Tải lên thất bại.",
-      "altPrompt": "Mô tả ảnh (alt text), không bắt buộc:"
+      "altPrompt": "Mô tả ảnh (alt text), không bắt buộc:",
+      "displayOrder": "Thứ tự hiển thị (EN)",
+      "saveOrder": "Lưu thứ tự",
+      "dragHint": "Kéo thả hoặc dùng mũi tên để sắp xếp. Bài viết VI sẽ tự động theo thứ tự này.",
+      "colOrder": "#",
+      "allArticles": "Tất cả bài viết"
     }
   }
 }

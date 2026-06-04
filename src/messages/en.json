@@ -199,7 +199,12 @@
       "insertImage": "Insert image",
       "removeCover": "Remove",
       "uploadError": "Upload failed.",
-      "altPrompt": "Image description (alt text), optional:"
+      "altPrompt": "Image description (alt text), optional:",
+      "displayOrder": "Display Order (EN)",
+      "saveOrder": "Save order",
+      "dragHint": "Drag rows or use arrows to reorder. VI articles will mirror this order automatically.",
+      "colOrder": "#",
+      "allArticles": "All Articles"
     }
   }
 }

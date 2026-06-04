@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { formatDate } from '@/lib/utils';
+import { ArticleReorder } from '@/components/admin/article-reorder';
 import type { Locale } from '@/lib/supabase/types';
 
 export const dynamic = 'force-dynamic';
@@ -17,10 +18,20 @@ export default async function AdminArticlesPage({
   setRequestLocale(locale);
   const t = await getTranslations('admin.articles');
   const supabase = await createSupabaseServerClient();
+
+  // Fetch all articles for the listing table
   const { data: articles } = await supabase
     .from('articles')
     .select('id, title, slug, locale, status, updated_at')
     .order('updated_at', { ascending: false });
+
+  // Fetch EN published articles for the reorder section
+  const { data: enPublished } = await supabase
+    .from('articles')
+    .select('*')
+    .eq('locale', 'en')
+    .eq('status', 'published')
+    .order('published_at', { ascending: false });
 
   return (
     <section>
@@ -32,6 +43,40 @@ export default async function AdminArticlesPage({
           <Link href="/admin/articles/new">+ {t('newArticle')}</Link>
         </Button>
       </header>
+
+      {/* Reorder section — EN published articles */}
+      {enPublished && enPublished.length >= 1 && (
+        <div className="mb-10">
+          <h2 className="mb-4 text-lg font-semibold tracking-tight text-text-1">
+            {t('displayOrder')}
+          </h2>
+          <ArticleReorder
+            articles={enPublished.map((a) => ({
+              id: a.id,
+              title: a.title,
+              slug: a.slug,
+              status: a.status,
+              published_at: a.published_at,
+              display_order: (a as Record<string, unknown>).display_order as number ?? 0
+            }))}
+            labels={{
+              title: t('displayOrder'),
+              saveOrder: t('saveOrder'),
+              saving: t('saving'),
+              saved: t('saved'),
+              dragHint: t('dragHint'),
+              colOrder: t('colOrder'),
+              colTitle: t('colTitle'),
+              colStatus: t('colStatus')
+            }}
+          />
+        </div>
+      )}
+
+      {/* All articles table */}
+      <h2 className="mb-4 text-lg font-semibold tracking-tight text-text-1">
+        {t('allArticles')}
+      </h2>
 
       {!articles || articles.length === 0 ? (
         <p className="rounded-md border border-dashed border-border p-8 text-center text-sm text-text-3">

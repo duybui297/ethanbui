@@ -66,6 +66,7 @@ export interface Article {
   og_image_url: string | null;
   translation_of: string | null;
   author_id: string | null;
+  display_order: number;
   created_at: string;
   updated_at: string;
 }
