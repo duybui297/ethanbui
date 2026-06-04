@@ -1,5 +1,6 @@
 -- AI Agent Team series: 3 posts x EN/VI. Run after 0001_initial.sql + seed.sql.
--- Idempotent: on conflict (locale, slug) do nothing.
+-- UPSERT: inserts if missing, updates content (title/excerpt/body/reading_time/meta) if the row already exists.
+-- Safe to re-run. Original published_at and status are preserved on update.
 
 insert into public.articles (locale, slug, title, excerpt, body_md, status, published_at, reading_time, meta_title, meta_description)
 values
@@ -17,6 +18,8 @@ That's when I changed how I think about it. I stopped seeing the main session as
 
 ## What 'orchestrator' means
 
+![You sit in the orchestrator seat, delegating and judging](/article-images/ai-agent-team/en/b1-1-orchestrator.svg)
+
 The main session doesn't do the work with its own hands anymore. It runs a small team of agents, each with one role. It takes a rough piece of work from me, splits it into tasks, hands each one to the right agent, tracks progress, holds the team to the process, and only commits code after a final acceptance step.
 
 I want to be clear here, because this is easy to mistake for a prompt trick. At heart it's a way of organizing work.
@@ -30,6 +33,8 @@ When a single session writes code and also rules that the code is right, nobody 
 Splitting the roles fixes exactly that. Every step gets its own gatekeeper. The one who writes the code is separate from the one who decides it's correct.
 
 ## Why 'one agent does everything' falls apart
+
+![One agent doing everything versus four split roles](/article-images/ai-agent-team/en/b1-2-single-vs-roles.svg)
 
 Let me sit on the breaking point a bit, because once you see it you understand why the roles have to split.
 
@@ -49,9 +54,10 @@ So I decided to build a team. Each agent gets its own role with clear borders. A
 
 ## The four roles on the team
 
+![Swimlane: four roles running around the orchestrator](/article-images/ai-agent-team/en/b1-3-four-roles.svg)
+
 In my current setup, I split the work across four roles.
 
-![Orchestrator delegating to four roles: PM, SWE, QA, On-Call](/article-images/ai-agent-team/en/01-four-roles.svg)
 
 **Product Manager.** Takes a rough piece of work and turns it into something buildable. A spec with a user story, acceptance criteria, test scenarios. This is the role that turns my vague sentence into a clear brief for the whole team. After the code and QA are done, the PM comes back one more time, looks at the result through the user's eyes, and decides whether it's truly finished.
 
@@ -65,6 +71,8 @@ Each role carries one narrow slice of responsibility. Sounds fussy, even slow. B
 
 ## Why narrow slices win
 
+![Narrow tasks go straight, wide tasks drift](/article-images/ai-agent-team/en/b1-4-narrow-scope.svg)
+
 Two reasons.
 
 One, narrow slices make skipping a step much harder. One agent doing everything jumps around easily: write code, commit, forget the tests, forget acceptance, because it's in a hurry to reach the finish. When each step has its own role standing there waiting, a skip shows up immediately. A task can't jump from SWE to commit without passing through QA, because QA is a physical link in the chain.
@@ -77,6 +85,8 @@ This is also where I think a lot of people working with agents are missing the p
 
 ## This part is reusable
 
+![Reusable loop: spec, roles, process, result](/article-images/ai-agent-team/en/b1-5-repeatable.svg)
+
 I noticed one more thing, and it matters for how I work: this four-role structure isn't tied to any one project.
 
 Once I've defined each role, I carry the whole set over to a new project. The brief changes, the language changes, the technical constraints change, but the four roles and the borders between them stay put. I don't have to think it through from scratch each time. That's the kind of investment I like: spend the effort once, reuse it many times.
@@ -84,7 +94,15 @@ Once I've defined each role, I carry the whole set over to a new project. The br
 The four roles are half the story. The other half is how a task moves through each role in the right order, how to run several tasks in parallel without sitting and watching, and how to track all of it. That's part 2.
 
 If you take one idea from this, take this: the power comes from how you organize around the agent, so that every piece of work has someone to verify it.$body$, 'published', now() - interval '10 minutes', 7, $q$I stopped treating my coding agent like a tool, and started treating it like a team$q$, $q$I stopped using my coding agent like a tool and started running it like a team. The orchestrator setup, and the four roles that make 'done' mean something again.$q$)
-on conflict (locale, slug) do nothing;
+on conflict (locale, slug) do update set
+  title = excluded.title,
+  excerpt = excluded.excerpt,
+  body_md = excluded.body_md,
+  reading_time = excluded.reading_time,
+  meta_title = excluded.meta_title,
+  meta_description = excluded.meta_description,
+  updated_at = now();
+-- published_at and status are intentionally NOT overwritten, so re-running keeps the original publish date.
 
 insert into public.articles (locale, slug, title, excerpt, body_md, status, published_at, reading_time, meta_title, meta_description)
 values
@@ -94,9 +112,10 @@ In part 1 I covered why I treat the main session as an orchestrator and split th
 
 ## The path a task takes
 
+![A task's path from backlog to commit](/article-images/ai-agent-team/en/b2-1-task-path.svg)
+
 Every task runs the same sequence of steps. I allow no exceptions, not even for small work, because exceptions are where a process starts to crack.
 
-![Pipeline: Backlog, PM, SWE, QA, PM acceptance, Commit, with a QA-fail loop back to SWE](/article-images/ai-agent-team/en/02-pipeline.svg)
 
 I tell the orchestrator to create a task and push it into the backlog. The PM picks it up and grooms it into a clear spec. The SWE writes code and tests. QA runs the tests, checks each criterion, then calls it pass or fail. On a fail, the task goes back to the SWE to fix. On a pass, the PM steps in one last time to accept it. Only after the PM nods does the orchestrator commit the code and close the task.
 
@@ -105,6 +124,8 @@ The loop tightens in my head like this: PM, SWE, QA, then back to PM before comm
 That "QA fails, send it back to SWE" loop sounds obvious, but it's where I see the real value of separating roles. Because QA is its own role, it has no problem sending a task back. An agent that owns everything tends to wave things through, because a fail means admitting it got its own work wrong. A separate QA has none of that ego. A fail is a fail, with evidence attached.
 
 ## Why the final PM acceptance matters most
+
+![The PM's final acceptance gate before commit](/article-images/ai-agent-team/en/b2-2-final-gate.svg)
 
 Of the whole sequence, the step that's easiest to drop is the one I guard hardest: the final PM acceptance, after QA has already passed.
 
@@ -117,6 +138,8 @@ A feature can be flawlessly "done" by every technical measure and still fall apa
 The final PM step looks straight at that gap. The PM goes back to the original user story and asks: does this result actually serve what the user needs? It's the last line of defense, and it catches exactly the kind of error no test can.
 
 ## Write the process to a file, don't say it out loud each time
+
+![Writing the process to files for agents to read](/article-images/ai-agent-team/en/b2-3-process-to-files.svg)
 
 To get the whole team through this sequence consistently, I don't repeat it every session. I write it to a file, right in the repo. The agent reads it and follows it:
 
@@ -131,9 +154,10 @@ There's a subtle point here that I'll come back to in part 3: when the process l
 
 ## Running in parallel and keeping the loop alive
 
+![Running in parallel and auto-pulling the next batch](/article-images/ai-agent-team/en/b2-4-parallel.svg)
+
 One task at a time wastes time. I usually run two tasks in parallel. When a batch of two finishes, the orchestrator pulls two more from the backlog. Round after round.
 
-![Two tasks running in parallel, then auto-pulling the next batch from the backlog](/article-images/ai-agent-team/en/03-parallel.svg)
 
 Sounds simple, but there's a snag anyone running agents this way hits: the loop dies on its own.
 
@@ -149,13 +173,14 @@ But I want to say the attached condition plainly, because it gets lost in the ru
 
 ## Tracking tasks: GitHub Issues or files
 
+![Task status through filenames](/article-images/ai-agent-team/en/b2-5-task-status.svg)
+
 A self-running loop only helps if I can see what it's doing. I use one of two ways to record state.
 
 The first is **GitHub Issues**. This fits when I want public coordination and I want each agent's report attached to each task. Every issue becomes a full record: the PM writes the requirements, acceptance criteria, test scenarios; the SWE reports the code is done; QA confirms with screenshots of the result. Open an issue and you read the whole history of which hands the work passed through, who did what, and why it passed or failed.
 
 The second is a **file-based tracker**. Much lighter. The state lives in the filename itself.
 
-![Task status through filenames: .todo.md to .groomed.md to .in-progress.md to done/](/article-images/ai-agent-team/en/04-file-status.svg)
 
 A task moves from `.todo.md` to `.groomed.md` to `.in-progress.md`, then finally into a `done/` folder. No external service, no network, just files in the repo. Look at the filename and you know where the task sits in the loop.
 
@@ -165,8 +190,16 @@ But here's the point that outweighs both options: the tracker is only the place 
 
 The same loop, PM, SWE, QA, back to PM, runs identically no matter where I record the state. The tracking tool is the notebook. The thing that produces quality is the process around it, the role separation and forcing every task through the full sequence. Switch trackers and the result doesn't change. Drop the process and the fanciest tracker is useless.
 
-That's the how: roles in part 1, process in part 2. In part 3 I take it into the field, across different kinds of projects, including one I botched, and pull out what's left after all of it.$body$, 'published', now() - interval '20 minutes', 7, $q$The process that keeps an agent team from fooling itself$q$, $q$How one task moves through PM, SWE, QA and a final acceptance step, how to run several in parallel without babysitting them, and how I track the lot.$q$)
-on conflict (locale, slug) do nothing;
+That's the how: roles in part 1, process in part 2. In part 3 I take it into the field, across different kinds of projects, including one I botched, and pull out what's left after all of it.$body$, 'published', now() - interval '20 minutes', 6, $q$The process that keeps an agent team from fooling itself$q$, $q$How one task moves through PM, SWE, QA and a final acceptance step, how to run several in parallel without babysitting them, and how I track the lot.$q$)
+on conflict (locale, slug) do update set
+  title = excluded.title,
+  excerpt = excluded.excerpt,
+  body_md = excluded.body_md,
+  reading_time = excluded.reading_time,
+  meta_title = excluded.meta_title,
+  meta_description = excluded.meta_description,
+  updated_at = now();
+-- published_at and status are intentionally NOT overwritten, so re-running keeps the original publish date.
 
 insert into public.articles (locale, slug, title, excerpt, body_md, status, published_at, reading_time, meta_title, meta_description)
 values
@@ -177,6 +210,8 @@ The first two parts were theory and process. Part 1 covered why I split the main
 I'm deliberately not painting it rosy. This approach wins on some kinds of work and stumbles on others. Knowing where it stumbles matters more than knowing where it wins.
 
 ## Greenfield projects: where the agent team shines
+
+![Greenfield project flow runs smoothly](/article-images/ai-agent-team/en/b3-1-greenfield.svg)
 
 The work this fits best is a project built from zero.
 
@@ -190,6 +225,8 @@ I still have to say one thing straight, so nobody reads this and pictures a free
 
 ## Small, tight, single-purpose projects
 
+![Small, tight, single-purpose project flow](/article-images/ai-agent-team/en/b3-2-small-tight.svg)
+
 The second fit is just as strong: small jobs, clear scope, one purpose.
 
 A tracker running serverless. A utility library. A set of benchmark scripts to measure performance. Work like this has sharp borders, easy to describe as acceptance criteria QA can check all the way through.
@@ -199,6 +236,8 @@ For this kind I usually don't need many parallel lanes. The backlog is short, so
 What do those two kinds share? Both give the agent a clean space to work in. Little legacy, few hidden constraints, a brief that fits in a box.
 
 ## And here's the time I botched it
+
+![Skipping the PM step on a legacy port](/article-images/ai-agent-team/en/b3-3-botched.svg)
 
 Now the part fewer people tell.
 
@@ -216,6 +255,8 @@ The lesson was expensive but tidy: the more a job carries legacy and hidden cons
 
 ## Why it stumbles on this kind of work
 
+![Why the agent stumbles on hidden-context work](/article-images/ai-agent-team/en/b3-4-why-stumbles.svg)
+
 Looking back, the reason is clear enough.
 
 A greenfield project hands the agent a blank sheet. A rewrite on an old base is the opposite: the hardest part lives in things that aren't written in the code, that live in the head of the person who's lived with the system. Why this spot does it this way. That quirk exists to humor a rare failure case. That constraint is there because some far-off system depends on it.
@@ -226,9 +267,10 @@ This agent team doesn't generate understanding of an old system on its own. It o
 
 ## Three things that keep the agent on track
 
+![Three things that keep the agent on track](/article-images/ai-agent-team/en/b3-5-three-things.svg)
+
 Pulling together the nights that worked and the one that didn't, I'm left with three things. Miss one of the three and the agent starts to drift.
 
-![Three things that keep the agent on track: clear spec, roles assigned, fixed process](/article-images/ai-agent-team/en/05-three-things.svg)
 
 **One, a clear spec.** This is the thing I underrated and paid for. A spec sounds like paperwork, but it's where I pour the understanding the agent has no way to get on its own. A loose spec means every later step runs cleanly on a wrong foundation.
 
@@ -240,6 +282,8 @@ With all three, the agent runs nearly straight and I barely have to watch. Miss 
 
 ## What's left after all of it
 
+![A reusable system for any project](/article-images/ai-agent-team/en/b3-6-conclusion.svg)
+
 If you ask me what actually changed over these weeks, I won't point at a model or a prompt.
 
 What changed is that I stopped seeing the agent as a machine I command and started seeing it as a team I have to organize. Same model, same tools. What I rearranged was the work around it: who builds, who guards, who grades, which step it goes through, what "done" means.
@@ -247,7 +291,15 @@ What changed is that I stopped seeing the agent as a machine I command and start
 And the overnight automation trick, much as I love it, is just the top layer. It's only safe when the three things underneath are tight. Automation without verification only helps you make wrong things faster, exactly like the night I ported it wrong.
 
 If you carry one line from this whole series, carry this: however strong the agent gets, it only runs straight when you build enough structure around it that every piece of work has someone to check it, and every "done" has evidence behind it.$body$, 'published', now() - interval '30 minutes', 7, $q$I took the agent team into the field, including the time I botched it$q$, $q$Three real runs with the agent team, including the one I botched, and the three things that keep it from drifting.$q$)
-on conflict (locale, slug) do nothing;
+on conflict (locale, slug) do update set
+  title = excluded.title,
+  excerpt = excluded.excerpt,
+  body_md = excluded.body_md,
+  reading_time = excluded.reading_time,
+  meta_title = excluded.meta_title,
+  meta_description = excluded.meta_description,
+  updated_at = now();
+-- published_at and status are intentionally NOT overwritten, so re-running keeps the original publish date.
 
 insert into public.articles (locale, slug, title, excerpt, body_md, status, published_at, reading_time, meta_title, meta_description, translation_of)
 values
@@ -265,6 +317,8 @@ Không phải gãy kiểu agent viết code dở. Code phần lớn vẫn chạy
 
 ## Orchestrator nghĩa là gì
 
+![Bạn ở vai điều phối, giao việc và phán xét kết quả](/article-images/ai-agent-team/b1-1-orchestrator.svg)
+
 Session chính không tự tay làm nữa. Nó điều phối một team agent nhỏ, mỗi agent một vai. Nó nhận một việc thô từ tôi, tách thành task, giao cho đúng agent, theo dõi tiến độ, ép cả team đi đúng quy trình, và chỉ commit code sau khi có một bước nghiệm thu cuối.
 
 Tôi nói rõ chỗ này vì nó dễ bị hiểu lầm thành một mẹo prompt. Thực ra nó là một cách tổ chức công việc, ở tầm đó.
@@ -278,6 +332,8 @@ Khi một session vừa viết code vừa tự phán code đúng, không có ai 
 Tách vai ra giải đúng chỗ đó. Mỗi bước có một người gác cổng riêng. Người viết code không phải người quyết code đúng.
 
 ## Vì sao cách "một agent làm tất" vỡ trận
+
+![Một agent ôm hết so với tách thành bốn vai](/article-images/ai-agent-team/b1-2-single-vs-roles.svg)
 
 Tôi muốn nói kỹ hơn về chỗ gãy, vì hiểu nó thì mới thấy vì sao phải chia vai.
 
@@ -297,9 +353,10 @@ Vậy nên tôi quyết định dựng một team. Mỗi agent một vai riêng,
 
 ## Bốn vai trong team
 
+![Sơ đồ swimlane: bốn vai chạy quanh orchestrator](/article-images/ai-agent-team/b1-3-four-roles.svg)
+
 Trong setup hiện tại, tôi chia việc cho bốn vai.
 
-![Orchestrator điều phối bốn vai: PM, SWE, QA, On-Call](/article-images/ai-agent-team/01-bon-vai.svg)
 
 **Product Manager.** Nhận một việc thô và biến nó thành thứ làm được. Spec với user story, tiêu chí nghiệm thu, kịch bản test. Đây là vai biến câu nói mơ hồ của tôi thành đề bài rõ ràng cho cả nhóm. Xong phần code và QA, PM còn quay lại một lần nữa, nhìn kết quả dưới góc người dùng và quyết việc đã thật sự xong chưa.
 
@@ -313,6 +370,8 @@ Mỗi vai gánh một khoanh trách nhiệm hẹp. Nghe có vẻ rườm rà, th
 
 ## Vì sao khoanh hẹp lại ăn
 
+![Task hẹp đi thẳng, task rộng thì lệch hướng](/article-images/ai-agent-team/b1-4-narrow-scope.svg)
+
 Hai lý do.
 
 Một, khoanh hẹp khiến việc bỏ bước khó hơn nhiều. Một agent ôm hết rất dễ nhảy cóc: viết code xong commit luôn, quên test, quên nghiệm thu, vì nó vội tới đích. Khi mỗi bước có một vai riêng đứng đó chờ, bỏ bước là lộ ra ngay. Task không thể nhảy từ SWE sang commit mà không đi qua QA, vì QA là một mắt xích vật lý trong chuỗi.
@@ -325,6 +384,8 @@ Nhưng cái lợi tôi quý nhất nằm ở chỗ này: vai viết code và vai
 
 ## Điều này lặp lại được
 
+![Vòng lặp dùng lại: spec, vai, quy trình, kết quả](/article-images/ai-agent-team/b1-5-repeatable.svg)
+
 Tôi để ý một điểm nữa, quan trọng với cách tôi làm việc: cấu trúc bốn vai này không dính vào một dự án cụ thể.
 
 Khi đã định nghĩa xong từng vai, tôi bê nguyên bộ đó sang dự án mới. Đề bài đổi, ngôn ngữ đổi, ràng buộc kỹ thuật đổi, nhưng bốn vai và ranh giới giữa chúng thì giữ nguyên. Tôi không phải nghĩ lại từ đầu mỗi lần. Đó là kiểu đầu tư tôi thích: bỏ công một lần, dùng lại nhiều lần.
@@ -332,7 +393,15 @@ Khi đã định nghĩa xong từng vai, tôi bê nguyên bộ đó sang dự á
 Bốn vai mới là một nửa câu chuyện. Nửa còn lại là cách một task chạy qua tay từng vai theo đúng thứ tự, cách chạy nhiều task song song mà không phải ngồi canh, và cách theo dõi tất cả. Đó là nội dung bài 2.
 
 Nếu bạn chỉ mang đúng một ý từ bài này, mang ý này: sức mạnh đến từ cách bạn tổ chức quanh con agent, để mỗi việc đều có người kiểm chứng.$body$, 'published', now() - interval '10 minutes', 7, $q$Tôi ngừng coi coding agent là một công cụ, và bắt đầu coi nó là một team$q$, $q$Tôi ngừng coi coding agent là công cụ và bắt đầu chạy nó như một team. Cách dựng orchestrator, và bốn vai khiến chữ 'xong' có nghĩa trở lại.$q$, (select id from public.articles where locale='en' and slug=$q$coding-agent-as-a-team$q$))
-on conflict (locale, slug) do nothing;
+on conflict (locale, slug) do update set
+  title = excluded.title,
+  excerpt = excluded.excerpt,
+  body_md = excluded.body_md,
+  reading_time = excluded.reading_time,
+  meta_title = excluded.meta_title,
+  meta_description = excluded.meta_description,
+  updated_at = now();
+-- published_at and status are intentionally NOT overwritten, so re-running keeps the original publish date.
 
 insert into public.articles (locale, slug, title, excerpt, body_md, status, published_at, reading_time, meta_title, meta_description, translation_of)
 values
@@ -342,9 +411,10 @@ values
 
 ## Đường đi của một task
 
+![Chuỗi xử lý một task từ backlog đến commit](/article-images/ai-agent-team/b2-1-task-path.svg)
+
 Mọi task đi qua cùng một dãy bước. Tôi không cho ngoại lệ, kể cả với việc nhỏ, vì ngoại lệ là chỗ quy trình bắt đầu rạn.
 
-![Pipeline: Backlog, PM, SWE, QA, PM nghiệm thu, Commit, kèm vòng lặp QA rớt quay lại SWE](/article-images/ai-agent-team/02-pipeline.svg)
 
 Tôi nói với orchestrator để tạo task và đẩy vào backlog. PM nhặt lên, gọt thành spec rõ ràng. SWE code và viết test. QA chạy test, soi từng tiêu chí, rồi phán đậu hay rớt. Nếu rớt, task quay về SWE sửa. Nếu đậu, PM bước vào lần cuối để nghiệm thu. Chỉ sau khi PM gật, orchestrator mới commit code và đóng task.
 
@@ -353,6 +423,8 @@ Vòng lặp gọn lại trong đầu thế này: PM, SWE, QA, rồi về PM trư
 Cái loop "QA rớt thì quay lại SWE" nghe hiển nhiên, nhưng nó là chỗ tôi thấy giá trị thật của việc tách vai. Vì QA là một vai riêng, nó không ngại trả task về. Một agent ôm hết sẽ có xu hướng tự tặc lưỡi cho qua, vì rớt nghĩa là tự nhận mình làm sai. QA tách rời thì không có cái sĩ diện đó. Nó rớt là rớt, kèm bằng chứng.
 
 ## Vì sao bước PM nghiệm thu cuối là quan trọng nhất
+
+![Cửa nghiệm thu cuối của PM trước khi commit](/article-images/ai-agent-team/b2-2-final-gate.svg)
 
 Trong cả dãy bước, bước dễ bị bỏ nhất lại là bước tôi giữ chặt nhất: PM nghiệm thu lần cuối, sau khi QA đã đậu.
 
@@ -365,6 +437,8 @@ Một tính năng có thể "xong" hoàn hảo dưới mắt kỹ thuật mà v�
 Bước PM cuối soi đúng khoảng cách đó. PM quay lại user story ban đầu và hỏi: kết quả này có thật sự phục vụ cái người dùng cần không? Đây là lớp bảo vệ cuối, và nó bắt được đúng loại lỗi mà không cái test nào bắt được.
 
 ## Viết quy trình ra file, đừng nhắc bằng miệng
+
+![Viết quy trình ra file để agent đọc](/article-images/ai-agent-team/b2-3-process-to-files.svg)
 
 Để cả team đi đúng dãy bước này một cách nhất quán, tôi không lặp lại nó mỗi phiên làm việc. Tôi viết nó ra file, ngay trong repo. Agent đọc và bám theo:
 
@@ -379,9 +453,10 @@ Có một điểm tinh tế ở đây mà tôi sẽ quay lại ở bài 3: khi q
 
 ## Chạy song song và giữ vòng lặp không chết
 
+![Chạy song song và tự kéo đợt task tiếp theo](/article-images/ai-agent-team/b2-4-parallel.svg)
+
 Một task một lần thì phí thời gian. Tôi thường chạy hai task song song. Khi xong một đợt hai task, orchestrator kéo tiếp hai task nữa từ backlog. Cứ thế cuốn chiếu.
 
-![Chạy song song hai task, xong đợt thì tự kéo đợt tiếp theo từ backlog](/article-images/ai-agent-team/03-song-song.svg)
 
 Nghe đơn giản, nhưng có một chỗ kẹt mà ai chạy agent kiểu này cũng gặp: vòng lặp tự chết.
 
@@ -397,13 +472,14 @@ Nhưng tôi muốn nói thẳng một điều kiện đi kèm, vì nó dễ bị
 
 ## Theo dõi task: GitHub Issues hay file
 
+![Trạng thái task qua tên file](/article-images/ai-agent-team/b2-5-task-status.svg)
+
 Vòng lặp tự chạy chỉ có ích khi tôi nhìn được nó đang làm gì. Tôi dùng một trong hai cách ghi trạng thái.
 
 Cách thứ nhất là **GitHub Issues**. Hợp khi tôi muốn phối hợp công khai và muốn báo cáo của từng agent dính kèm vào từng task. Mỗi issue thành một hồ sơ đầy đủ: PM ghi yêu cầu, tiêu chí nghiệm thu, kịch bản test; SWE báo đã code xong; QA xác nhận kèm ảnh chụp kết quả. Mở một issue ra là đọc được cả lịch sử việc đó đi qua những tay nào, ai làm gì, vì sao đậu hay rớt.
 
 Cách thứ hai là **tracker bằng file**. Nhẹ hơn nhiều. Trạng thái nằm luôn trong tên file.
 
-![Trạng thái task qua tên file: .todo.md sang .groomed.md sang .in-progress.md sang done/](/article-images/ai-agent-team/04-trang-thai-file.svg)
 
 Một task đi từ `.todo.md` sang `.groomed.md` sang `.in-progress.md`, rồi cuối cùng vào thư mục `done/`. Không cần dịch vụ ngoài, không cần mạng, chỉ là file trong repo. Nhìn tên file là biết task đang ở đâu trong vòng lặp.
 
@@ -414,7 +490,15 @@ Nhưng đây là điểm quan trọng hơn cả hai lựa chọn: cái tracker c
 Cùng một vòng lặp PM, SWE, QA, về PM chạy y hệt dù tôi ghi trạng thái ở đâu. Công cụ theo dõi là cái sổ, còn cái tạo ra chất lượng là quy trình quanh nó, là việc tách vai và bắt mọi task đi đủ bước. Đổi tracker không đổi kết quả. Bỏ quy trình thì tracker xịn tới đâu cũng vô dụng.
 
 Tới đây tôi đã kể xong cách làm: vai trò ở bài 1, quy trình ở bài 2. Bài 3 tôi đem nó ra thực chiến, qua các loại dự án khác nhau, kể cả một dự án tôi làm hỏng, rồi rút ra cái gì còn lại sau tất cả.$body$, 'published', now() - interval '20 minutes', 7, $q$Quy trình giữ cho một team agent không tự lừa chính nó$q$, $q$Một task đi qua PM, SWE, QA và bước nghiệm thu cuối thế nào, chạy nhiều task song song mà không phải ngồi canh, và tôi theo dõi tất cả bằng gì.$q$, (select id from public.articles where locale='en' and slug=$q$agent-team-process$q$))
-on conflict (locale, slug) do nothing;
+on conflict (locale, slug) do update set
+  title = excluded.title,
+  excerpt = excluded.excerpt,
+  body_md = excluded.body_md,
+  reading_time = excluded.reading_time,
+  meta_title = excluded.meta_title,
+  meta_description = excluded.meta_description,
+  updated_at = now();
+-- published_at and status are intentionally NOT overwritten, so re-running keeps the original publish date.
 
 insert into public.articles (locale, slug, title, excerpt, body_md, status, published_at, reading_time, meta_title, meta_description, translation_of)
 values
@@ -425,6 +509,8 @@ Hai bài trước là lý thuyết và quy trình. Bài 1 nói vì sao tôi tác
 Tôi cố tình không tô hồng. Cách làm này ăn ở một số loại việc và vấp ở loại khác. Biết nó vấp chỗ nào còn quan trọng hơn biết nó ăn chỗ nào.
 
 ## Dự án dựng mới: chỗ team agent tỏa sáng nhất
+
+![Luồng dự án dựng mới chạy mượt](/article-images/ai-agent-team/b3-1-greenfield.svg)
 
 Loại việc hợp nhất với cách này là dự án dựng từ con số không.
 
@@ -438,6 +524,8 @@ Tôi vẫn phải nói thẳng một điều, để khỏi ai đọc xong tưở
 
 ## Dự án nhỏ, gọn, một mục đích
 
+![Luồng dự án nhỏ, gọn, một mục đích](/article-images/ai-agent-team/b3-2-small-tight.svg)
+
 Loại thứ hai hợp không kém: mấy việc nhỏ, phạm vi rõ, một mục đích.
 
 Một cái tracker chạy serverless. Một thư viện tiện ích. Một bộ script benchmark đo hiệu năng. Những việc kiểu này có biên giới sắc, dễ mô tả thành tiêu chí nghiệm thu mà QA kiểm được tới nơi tới chốn.
@@ -447,6 +535,8 @@ Với loại này tôi thường không cần chạy song song nhiều luồng. 
 Điểm chung của hai loại trên là gì? Cả hai đều cho agent một không gian sạch để làm. Ít di sản, ít ràng buộc ngầm, đề bài gói gọn được.
 
 ## Và đây là lần tôi làm hỏng
+
+![Bỏ bước PM trong dự án port code cũ](/article-images/ai-agent-team/b3-3-botched.svg)
 
 Giờ tới phần ít người kể.
 
@@ -464,6 +554,8 @@ Bài học đắt nhưng gọn: việc càng dính nhiều di sản và ràng bu
 
 ## Vì sao nó vấp ở loại việc này
 
+![Vì sao agent vấp ở việc nhiều ngữ cảnh ẩn](/article-images/ai-agent-team/b3-4-why-stumbles.svg)
+
 Ngẫm lại, lý do khá rõ.
 
 Dự án dựng mới cho agent một tờ giấy trắng. Việc viết lại trên nền cũ thì ngược hẳn: phần khó nhất nằm ở những thứ không viết trong code, mà nằm trong đầu người đã sống với hệ thống đó. Vì sao chỗ này làm thế này. Cái quirk kia tồn tại để chiều một ca lỗi hiếm. Cái ràng buộc nọ là do một hệ thống khác ở xa đang phụ thuộc vào.
@@ -474,9 +566,10 @@ Cách team agent này không tự sinh ra hiểu biết về một hệ thống 
 
 ## Ba thứ giữ cho agent đi thẳng
 
+![Ba thứ giữ agent đi thẳng](/article-images/ai-agent-team/b3-5-three-things.svg)
+
 Gom hết mấy đêm chạy được lẫn lần chạy hỏng, tôi rút lại còn ba thứ. Thiếu một trong ba là agent bắt đầu trôi.
 
-![Ba thứ giữ agent đi thẳng: spec viết rõ, vai được phân, quy trình cố định](/article-images/ai-agent-team/05-ba-thu.svg)
 
 **Một, spec viết rõ.** Đây là thứ tôi xem nhẹ và phải trả giá. Spec nghe như thủ tục giấy tờ, nhưng nó là nơi tôi rót cái hiểu biết mà agent không có cách nào tự lấy được. Spec lỏng thì mọi khâu sau đều chạy chuẩn trên một nền sai.
 
@@ -488,6 +581,8 @@ Gom hết mấy đêm chạy được lẫn lần chạy hỏng, tôi rút lại
 
 ## Cái còn lại sau tất cả
 
+![Hệ thống dùng lại cho dự án bất kỳ](/article-images/ai-agent-team/b3-6-conclusion.svg)
+
 Nếu bạn hỏi tôi cái gì thật sự đổi sau mấy tuần này, tôi sẽ không chỉ vào con model hay cái prompt nào.
 
 Cái đổi là tôi ngừng coi agent là một cái máy tôi ra lệnh, và bắt đầu coi nó là một team tôi phải tổ chức. Cùng một model, cùng mấy công cụ. Thứ tôi xếp lại là công việc quanh nó: ai làm, ai gác, ai chấm, đi qua bước nào, "xong" nghĩa là gì.
@@ -495,9 +590,17 @@ Cái đổi là tôi ngừng coi agent là một cái máy tôi ra lệnh, và b
 Và cái mẹo tự động chạy qua đêm, dù tôi rất thích, chỉ là lớp trên cùng. Nó chỉ an toàn khi ba thứ ở dưới đã chặt. Tự động hóa mà không có kiểm chứng chỉ giúp bạn tạo ra đống sai nhanh hơn, đúng như đêm tôi port hỏng.
 
 Nếu bạn mang đúng một câu từ cả series này, mang câu này: con agent mạnh tới đâu cũng chỉ đi thẳng được khi bạn dựng đủ khung quanh nó để mỗi việc đều có người kiểm, và mỗi cái "xong" đều có bằng chứng đứng sau.$body$, 'published', now() - interval '30 minutes', 7, $q$Tôi đem team agent ra thực chiến, kể cả lần làm hỏng$q$, $q$Ba lần chạy thật với team agent, kể cả lần tôi làm hỏng, và ba thứ giữ nó khỏi đi lệch.$q$, (select id from public.articles where locale='en' and slug=$q$agent-team-in-the-field$q$))
-on conflict (locale, slug) do nothing;
+on conflict (locale, slug) do update set
+  title = excluded.title,
+  excerpt = excluded.excerpt,
+  body_md = excluded.body_md,
+  reading_time = excluded.reading_time,
+  meta_title = excluded.meta_title,
+  meta_description = excluded.meta_description,
+  updated_at = now();
+-- published_at and status are intentionally NOT overwritten, so re-running keeps the original publish date.
 
--- Backfill EN.translation_of -> VI counterpart
+-- Backfill EN.translation_of -> VI counterpart (only if not already set)
 update public.articles e
 set translation_of = v.id
 from public.articles v

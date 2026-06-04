@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 340" font-family="Helvetica Neue, Arial, sans-serif"><style>
+.ln{stroke:#94a3b8;stroke-width:1.6;fill:none;}
+.t{fill:#1e293b;} .m{fill:#64748b;}
+.wt{fill:#ffffff;} .ws{fill:#ffffff;opacity:.92;}
+.ahd{fill:#94a3b8;}
+.fail{stroke:#e74c3c;stroke-width:1.7;stroke-dasharray:5 4;fill:none;}
+.failt{fill:#e74c3c;}
+.loop{stroke:#6c6cf0;stroke-width:1.7;stroke-dasharray:5 4;fill:none;}
+.loopt{fill:#6c6cf0;}
+.skip{stroke:#e74c3c;stroke-width:1.6;stroke-dasharray:2 4;fill:none;}
+@media (prefers-color-scheme:dark){
+ .ln{stroke:#cbd5e1;} .t{fill:#f1f5f9;} .m{fill:#94a3b8;} .ahd{fill:#cbd5e1;}
+ .fail{stroke:#f87171;} .failt{fill:#f87171;}
+ .loop{stroke:#a5b4fc;} .loopt{fill:#a5b4fc;}
+ .skip{stroke:#f87171;}
+}
+</style><defs>
+<marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="ahd"/></marker>
+<marker id="af" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="failt"/></marker>
+<marker id="al" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="loopt"/></marker>
+</defs><text x="550.0" y="44" text-anchor="middle" font-size="15" font-weight="700" class="t">Write the process into files for agents to read, not spoken reminders</text><rect x="60" y="130" width="180" height="64" rx="8" fill="#6c6cf0"/><text x="150.0" y="167.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">Process</text><rect x="320" y="108" width="210" height="46" rx="8" fill="#64748b"/><text x="425.0" y="136.0" text-anchor="middle" font-size="13" font-weight="700" font-family="Menlo, Consolas, monospace" class="wt">roles.md</text><path class="ln" d="M240 162 L316 131.0" marker-end="url(#ah)"/><rect x="320" y="166" width="210" height="46" rx="8" fill="#64748b"/><text x="425.0" y="194.0" text-anchor="middle" font-size="13" font-weight="700" font-family="Menlo, Consolas, monospace" class="wt">process.md</text><path class="ln" d="M240 162 L316 189.0" marker-end="url(#ah)"/><rect x="320" y="224" width="210" height="46" rx="8" fill="#64748b"/><text x="425.0" y="252.0" text-anchor="middle" font-size="13" font-weight="700" font-family="Menlo, Consolas, monospace" class="wt">task.md</text><path class="ln" d="M240 162 L316 247.0" marker-end="url(#ah)"/><rect x="600" y="130" width="200" height="64" rx="8" fill="#34bfa0"/><text x="700.0" y="167.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">Each agent reads files</text><path class="ln" d="M530 131.0 L596 162" marker-end="url(#ah)"/><path class="ln" d="M530 189.0 L596 162" marker-end="url(#ah)"/><path class="ln" d="M530 247.0 L596 162" marker-end="url(#ah)"/><line class="ln" x1="800" y1="162" x2="856" y2="162" marker-end="url(#ah)"/><rect x="860" y="130" width="200" height="64" rx="8" fill="#8cbf3f"/><text x="960.0" y="167.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">Consistent execution</text><text x="550.0" y="318" text-anchor="middle" font-size="12.5" class="m">Chat reminders fade after a few turns.</text></svg>

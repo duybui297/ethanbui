@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 360" font-family="Helvetica Neue, Arial, sans-serif"><style>
+.ln{stroke:#94a3b8;stroke-width:1.6;fill:none;}
+.t{fill:#1e293b;} .m{fill:#64748b;}
+.wt{fill:#ffffff;} .ws{fill:#ffffff;opacity:.92;}
+.ahd{fill:#94a3b8;}
+.fail{stroke:#e74c3c;stroke-width:1.7;stroke-dasharray:5 4;fill:none;}
+.failt{fill:#e74c3c;}
+.loop{stroke:#6c6cf0;stroke-width:1.7;stroke-dasharray:5 4;fill:none;}
+.loopt{fill:#6c6cf0;}
+.skip{stroke:#e74c3c;stroke-width:1.6;stroke-dasharray:2 4;fill:none;}
+@media (prefers-color-scheme:dark){
+ .ln{stroke:#cbd5e1;} .t{fill:#f1f5f9;} .m{fill:#94a3b8;} .ahd{fill:#cbd5e1;}
+ .fail{stroke:#f87171;} .failt{fill:#f87171;}
+ .loop{stroke:#a5b4fc;} .loopt{fill:#a5b4fc;}
+ .skip{stroke:#f87171;}
+}
+</style><defs>
+<marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="ahd"/></marker>
+<marker id="af" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="failt"/></marker>
+<marker id="al" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="loopt"/></marker>
+</defs><text x="560.0" y="44" text-anchor="middle" font-size="15" font-weight="700" class="t">The narrower the task, the straighter the agent goes</text><text x="74" y="133.0" text-anchor="middle" font-size="12.5" font-weight="700" class="failt">Wide</text><rect x="150.0" y="100" width="176" height="58" rx="8" fill="#64748b"/><text x="238.0" y="134.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">Wide, vague task</text><rect x="532.0" y="100" width="176" height="58" rx="8" fill="#ef8b3a"/><text x="620.0" y="134.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">Guesses intent</text><rect x="914.0" y="100" width="176" height="58" rx="8" fill="#e74c3c"/><text x="1002.0" y="134.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">Goes off track</text><line class="ln" x1="326.0" y1="129.0" x2="528.0" y2="129.0" marker-end="url(#ah)"/><line class="ln" x1="708.0" y1="129.0" x2="910.0" y2="129.0" marker-end="url(#ah)"/><text x="74" y="263.0" text-anchor="middle" font-size="12.5" font-weight="700" class="t">Narrow</text><rect x="150.0" y="230" width="176" height="58" rx="8" fill="#2f9bde"/><text x="238.0" y="264.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">Narrow, clear task</text><rect x="532.0" y="230" width="176" height="58" rx="8" fill="#34bfa0"/><text x="620.0" y="264.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">Stays in scope</text><rect x="914.0" y="230" width="176" height="58" rx="8" fill="#8cbf3f"/><text x="1002.0" y="264.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">Lands it</text><line class="ln" x1="326.0" y1="259.0" x2="528.0" y2="259.0" marker-end="url(#ah)"/><line class="ln" x1="708.0" y1="259.0" x2="910.0" y2="259.0" marker-end="url(#ah)"/></svg>

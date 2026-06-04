@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 360" font-family="Helvetica Neue, Arial, sans-serif"><style>
+.ln{stroke:#94a3b8;stroke-width:1.6;fill:none;}
+.t{fill:#1e293b;} .m{fill:#64748b;}
+.wt{fill:#ffffff;} .ws{fill:#ffffff;opacity:.92;}
+.ahd{fill:#94a3b8;}
+.fail{stroke:#e74c3c;stroke-width:1.7;stroke-dasharray:5 4;fill:none;}
+.failt{fill:#e74c3c;}
+.loop{stroke:#6c6cf0;stroke-width:1.7;stroke-dasharray:5 4;fill:none;}
+.loopt{fill:#6c6cf0;}
+.skip{stroke:#e74c3c;stroke-width:1.6;stroke-dasharray:2 4;fill:none;}
+@media (prefers-color-scheme:dark){
+ .ln{stroke:#cbd5e1;} .t{fill:#f1f5f9;} .m{fill:#94a3b8;} .ahd{fill:#cbd5e1;}
+ .fail{stroke:#f87171;} .failt{fill:#f87171;}
+ .loop{stroke:#a5b4fc;} .loopt{fill:#a5b4fc;}
+ .skip{stroke:#f87171;}
+}
+</style><defs>
+<marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="ahd"/></marker>
+<marker id="af" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="failt"/></marker>
+<marker id="al" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="loopt"/></marker>
+</defs><text x="540.0" y="42" text-anchor="middle" font-size="15" font-weight="700" class="t">One agent carrying everything drifts; splitting into roles keeps control</text><text x="265" y="82" text-anchor="middle" font-size="13" font-weight="700" class="failt">One agent does it all</text><rect x="150" y="100" width="230" height="64" rx="8" fill="#64748b"/><text x="265.0" y="137.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">Spec + code + test + fixes</text><line class="ln" x1="265" y1="164" x2="265" y2="206" marker-end="url(#ah)"/><rect x="150" y="210" width="230" height="72" rx="8" fill="#e74c3c"/><text x="265.0" y="251.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">Drifts, skips steps, calls it done</text><line x1="540" y1="80" x2="540" y2="300" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="3 4"/><text x="810" y="82" text-anchor="middle" font-size="13" font-weight="700" class="t">Split into roles</text><rect x="700" y="100" width="104" height="46" rx="8" fill="#2f9bde"/><text x="752.0" y="128.0" text-anchor="middle" font-size="12" font-weight="700" class="wt">PM</text><rect x="820" y="100" width="104" height="46" rx="8" fill="#34bfa0"/><text x="872.0" y="128.0" text-anchor="middle" font-size="12" font-weight="700" class="wt">SWE</text><rect x="700" y="154" width="104" height="46" rx="8" fill="#ef8b3a"/><text x="752.0" y="182.0" text-anchor="middle" font-size="12" font-weight="700" class="wt">QA</text><rect x="820" y="154" width="104" height="46" rx="8" fill="#e6398f"/><text x="872.0" y="182.0" text-anchor="middle" font-size="12" font-weight="700" class="wt">On-Call</text><line class="ln" x1="810" y1="212" x2="810" y2="236" marker-end="url(#ah)"/><rect x="700" y="240" width="240" height="64" rx="8" fill="#8cbf3f"/><text x="820.0" y="277.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">One job per role, stays in control</text></svg>

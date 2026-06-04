@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 320" font-family="Helvetica Neue, Arial, sans-serif"><style>
+.ln{stroke:#94a3b8;stroke-width:1.6;fill:none;}
+.t{fill:#1e293b;} .m{fill:#64748b;}
+.wt{fill:#ffffff;} .ws{fill:#ffffff;opacity:.92;}
+.ahd{fill:#94a3b8;}
+.fail{stroke:#e74c3c;stroke-width:1.7;stroke-dasharray:5 4;fill:none;}
+.failt{fill:#e74c3c;}
+.loop{stroke:#6c6cf0;stroke-width:1.7;stroke-dasharray:5 4;fill:none;}
+.loopt{fill:#6c6cf0;}
+.skip{stroke:#e74c3c;stroke-width:1.6;stroke-dasharray:2 4;fill:none;}
+@media (prefers-color-scheme:dark){
+ .ln{stroke:#cbd5e1;} .t{fill:#f1f5f9;} .m{fill:#94a3b8;} .ahd{fill:#cbd5e1;}
+ .fail{stroke:#f87171;} .failt{fill:#f87171;}
+ .loop{stroke:#a5b4fc;} .loopt{fill:#a5b4fc;}
+ .skip{stroke:#f87171;}
+}
+</style><defs>
+<marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="ahd"/></marker>
+<marker id="af" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="failt"/></marker>
+<marker id="al" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="loopt"/></marker>
+</defs><text x="590.0" y="44" text-anchor="middle" font-size="15" font-weight="700" class="t">The time I botched it: skipped the PM step on a legacy port</text><rect x="30.0" y="120" width="190" height="68" rx="8" fill="#e9706b"/><text x="125.0" y="159.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">Port legacy system</text><rect x="262.5" y="120" width="190" height="68" rx="8" fill="none" class="skip"/><text x="357.5" y="159.0" text-anchor="middle" font-size="13" font-weight="700" class="failt">Skipped PM groom</text><rect x="495.0" y="120" width="190" height="68" rx="8" fill="#34bfa0"/><text x="590.0" y="159.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">SWE ran solo</text><rect x="727.5" y="120" width="190" height="68" rx="8" fill="#e6398f"/><text x="822.5" y="159.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">No one accepted</text><rect x="960.0" y="120" width="190" height="68" rx="8" fill="#e74c3c"/><text x="1055.0" y="159.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">Off spec, redo</text><line class="ln" x1="220.0" y1="154.0" x2="258.5" y2="154.0" marker-end="url(#ah)"/><line class="ln" x1="452.5" y1="154.0" x2="491.0" y2="154.0" marker-end="url(#ah)"/><line class="ln" x1="685.0" y1="154.0" x2="723.5" y2="154.0" marker-end="url(#ah)"/><line class="ln" x1="917.5" y1="154.0" x2="956.0" y2="154.0" marker-end="url(#ah)"/><text x="590.0" y="294" text-anchor="middle" font-size="12.5" class="failt">Without groom and acceptance, the agent drifted with nothing to stop it.</text></svg>

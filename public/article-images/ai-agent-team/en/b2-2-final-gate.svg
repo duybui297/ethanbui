@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 360" font-family="Helvetica Neue, Arial, sans-serif"><style>
+.ln{stroke:#94a3b8;stroke-width:1.6;fill:none;}
+.t{fill:#1e293b;} .m{fill:#64748b;}
+.wt{fill:#ffffff;} .ws{fill:#ffffff;opacity:.92;}
+.ahd{fill:#94a3b8;}
+.fail{stroke:#e74c3c;stroke-width:1.7;stroke-dasharray:5 4;fill:none;}
+.failt{fill:#e74c3c;}
+.loop{stroke:#6c6cf0;stroke-width:1.7;stroke-dasharray:5 4;fill:none;}
+.loopt{fill:#6c6cf0;}
+.skip{stroke:#e74c3c;stroke-width:1.6;stroke-dasharray:2 4;fill:none;}
+@media (prefers-color-scheme:dark){
+ .ln{stroke:#cbd5e1;} .t{fill:#f1f5f9;} .m{fill:#94a3b8;} .ahd{fill:#cbd5e1;}
+ .fail{stroke:#f87171;} .failt{fill:#f87171;}
+ .loop{stroke:#a5b4fc;} .loopt{fill:#a5b4fc;}
+ .skip{stroke:#f87171;}
+}
+</style><defs>
+<marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="ahd"/></marker>
+<marker id="af" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="failt"/></marker>
+<marker id="al" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="loopt"/></marker>
+</defs><text x="540.0" y="44" text-anchor="middle" font-size="15" font-weight="700" class="t">The PM's final acceptance gate is the most important checkpoint</text><rect x="60" y="120" width="200" height="64" rx="8" fill="#ef8b3a"/><text x="160.0" y="157.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">QA says pass</text><line class="ln" x1="260" y1="152" x2="316" y2="152" marker-end="url(#ah)"/><polygon points="430,104.0 520.0,152 430,200.0 340.0,152" fill="#2f9bde"/><text x="430" y="156" text-anchor="middle" font-size="13" font-weight="700" class="wt">PM re-checks spec</text><path class="ln" d="M520 152 L640 152" marker-end="url(#ah)"/><text x="580" y="140" text-anchor="middle" font-size="11" class="m">matches spec</text><rect x="640" y="124" width="200" height="58" rx="29.0" fill="#8cbf3f"/><text x="740.0" y="158.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">Commit</text><path class="fail" d="M430 200 L430 270 L260 270" marker-end="url(#af)"/><text x="360" y="262" text-anchor="middle" font-size="11" class="failt">has gaps</text><rect x="60" y="242" width="200" height="58" rx="8" fill="#e74c3c"/><text x="160.0" y="276.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">Back to SWE</text><text x="540.0" y="334" text-anchor="middle" font-size="12.5" class="m">Skip this gate: the agent calls it done before it matches the spec.</text></svg>

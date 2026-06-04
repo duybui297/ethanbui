@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 300" font-family="Helvetica Neue, Arial, sans-serif"><style>
+.ln{stroke:#94a3b8;stroke-width:1.6;fill:none;}
+.t{fill:#1e293b;} .m{fill:#64748b;}
+.wt{fill:#ffffff;} .ws{fill:#ffffff;opacity:.92;}
+.ahd{fill:#94a3b8;}
+.fail{stroke:#e74c3c;stroke-width:1.7;stroke-dasharray:5 4;fill:none;}
+.failt{fill:#e74c3c;}
+.loop{stroke:#6c6cf0;stroke-width:1.7;stroke-dasharray:5 4;fill:none;}
+.loopt{fill:#6c6cf0;}
+.skip{stroke:#e74c3c;stroke-width:1.6;stroke-dasharray:2 4;fill:none;}
+@media (prefers-color-scheme:dark){
+ .ln{stroke:#cbd5e1;} .t{fill:#f1f5f9;} .m{fill:#94a3b8;} .ahd{fill:#cbd5e1;}
+ .fail{stroke:#f87171;} .failt{fill:#f87171;}
+ .loop{stroke:#a5b4fc;} .loopt{fill:#a5b4fc;}
+ .skip{stroke:#f87171;}
+}
+</style><defs>
+<marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="ahd"/></marker>
+<marker id="af" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="failt"/></marker>
+<marker id="al" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="loopt"/></marker>
+</defs><text x="590.0" y="46" text-anchor="middle" font-size="15" font-weight="700" class="t">Dự án nhỏ, gọn, một mục đích cũng hợp</text><rect x="50.0" y="128" width="176" height="72" rx="8" fill="#2f9bde"/><text x="138.0" y="169.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">Một mục đích rõ</text><rect x="351.3333333333333" y="128" width="176" height="72" rx="8" fill="#34bfa0"/><text x="439.3333333333333" y="169.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">Phạm vi hẹp</text><rect x="652.6666666666666" y="128" width="176" height="72" rx="8" fill="#ef8b3a"/><text x="740.6666666666666" y="169.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">Một vòng quy trình</text><rect x="954.0" y="128" width="176" height="72" rx="8" fill="#8cbf3f"/><text x="1042.0" y="169.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">Đóng gọn</text><line class="ln" x1="226.0" y1="164.0" x2="347.3333333333333" y2="164.0" marker-end="url(#ah)"/><line class="ln" x1="527.3333333333333" y1="164.0" x2="648.6666666666666" y2="164.0" marker-end="url(#ah)"/><line class="ln" x1="828.6666666666666" y1="164.0" x2="950.0" y2="164.0" marker-end="url(#ah)"/></svg>

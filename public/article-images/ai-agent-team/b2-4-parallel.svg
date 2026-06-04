@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 430" font-family="Helvetica Neue, Arial, sans-serif"><style>
+.ln{stroke:#94a3b8;stroke-width:1.6;fill:none;}
+.t{fill:#1e293b;} .m{fill:#64748b;}
+.wt{fill:#ffffff;} .ws{fill:#ffffff;opacity:.92;}
+.ahd{fill:#94a3b8;}
+.fail{stroke:#e74c3c;stroke-width:1.7;stroke-dasharray:5 4;fill:none;}
+.failt{fill:#e74c3c;}
+.loop{stroke:#6c6cf0;stroke-width:1.7;stroke-dasharray:5 4;fill:none;}
+.loopt{fill:#6c6cf0;}
+.skip{stroke:#e74c3c;stroke-width:1.6;stroke-dasharray:2 4;fill:none;}
+@media (prefers-color-scheme:dark){
+ .ln{stroke:#cbd5e1;} .t{fill:#f1f5f9;} .m{fill:#94a3b8;} .ahd{fill:#cbd5e1;}
+ .fail{stroke:#f87171;} .failt{fill:#f87171;}
+ .loop{stroke:#a5b4fc;} .loopt{fill:#a5b4fc;}
+ .skip{stroke:#f87171;}
+}
+</style><defs>
+<marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="ahd"/></marker>
+<marker id="af" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="failt"/></marker>
+<marker id="al" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="loopt"/></marker>
+</defs><text x="500.0" y="44" text-anchor="middle" font-size="15" font-weight="700" class="t">Chạy song song và tự kéo đợt việc tiếp theo</text><rect x="30" y="160" width="150" height="100" rx="8" fill="#e9706b"/><text x="105.0" y="207.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">Backlog</text><text x="105.0" y="226.0" text-anchor="middle" font-size="12" class="ws">hàng đợi task</text><rect x="290" y="96" width="380" height="70" rx="8" fill="#2f9bde"/><text x="480.0" y="128.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">Task A</text><text x="480.0" y="147.0" text-anchor="middle" font-size="12" class="ws">PM → SWE → QA → PM</text><rect x="290" y="250" width="380" height="70" rx="8" fill="#34bfa0"/><text x="480.0" y="282.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">Task B</text><text x="480.0" y="301.0" text-anchor="middle" font-size="12" class="ws">PM → SWE → QA → PM</text><text x="480" y="212" text-anchor="middle" font-size="12.5" class="m">2 task một lúc</text><line class="ln" x1="180" y1="200" x2="286" y2="131" marker-end="url(#ah)"/><line class="ln" x1="180" y1="222" x2="286" y2="283" marker-end="url(#ah)"/><rect x="750" y="160" width="200" height="100" rx="8" fill="#8cbf3f"/><text x="850.0" y="207.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">Đợt xong</text><text x="850.0" y="226.0" text-anchor="middle" font-size="12" class="ws">kéo 2 task kế từ backlog</text><line class="ln" x1="670" y1="131" x2="746" y2="200" marker-end="url(#ah)"/><line class="ln" x1="670" y1="285" x2="746" y2="222" marker-end="url(#ah)"/><path class="loop" d="M850 260 C850 372, 110 372, 110 264" marker-end="url(#al)"/><text x="480" y="392" text-anchor="middle" font-size="12.5" class="loopt">lệnh tự lặp: chạy đến khi backlog rỗng</text></svg>

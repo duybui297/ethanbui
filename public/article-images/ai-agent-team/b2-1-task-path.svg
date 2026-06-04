@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 320" font-family="Helvetica Neue, Arial, sans-serif"><style>
+.ln{stroke:#94a3b8;stroke-width:1.6;fill:none;}
+.t{fill:#1e293b;} .m{fill:#64748b;}
+.wt{fill:#ffffff;} .ws{fill:#ffffff;opacity:.92;}
+.ahd{fill:#94a3b8;}
+.fail{stroke:#e74c3c;stroke-width:1.7;stroke-dasharray:5 4;fill:none;}
+.failt{fill:#e74c3c;}
+.loop{stroke:#6c6cf0;stroke-width:1.7;stroke-dasharray:5 4;fill:none;}
+.loopt{fill:#6c6cf0;}
+.skip{stroke:#e74c3c;stroke-width:1.6;stroke-dasharray:2 4;fill:none;}
+@media (prefers-color-scheme:dark){
+ .ln{stroke:#cbd5e1;} .t{fill:#f1f5f9;} .m{fill:#94a3b8;} .ahd{fill:#cbd5e1;}
+ .fail{stroke:#f87171;} .failt{fill:#f87171;}
+ .loop{stroke:#a5b4fc;} .loopt{fill:#a5b4fc;}
+ .skip{stroke:#f87171;}
+}
+</style><defs>
+<marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="ahd"/></marker>
+<marker id="af" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="failt"/></marker>
+<marker id="al" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="loopt"/></marker>
+</defs><text x="590.0" y="44" text-anchor="middle" font-size="15" font-weight="700" class="t">Mọi task chạy cùng một chuỗi, không ngoại lệ</text><rect x="30" y="110" width="150" height="72" rx="8" fill="#e9706b"/><text x="105.0" y="143.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">Backlog</text><text x="105.0" y="162.0" text-anchor="middle" font-size="12" class="ws">chờ xử lý</text><rect x="220" y="110" width="150" height="72" rx="8" fill="#2f9bde"/><text x="295.0" y="143.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">PM</text><text x="295.0" y="162.0" text-anchor="middle" font-size="12" class="ws">groom spec</text><rect x="410" y="110" width="150" height="72" rx="8" fill="#34bfa0"/><text x="485.0" y="143.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">SWE</text><text x="485.0" y="162.0" text-anchor="middle" font-size="12" class="ws">code + test</text><rect x="600" y="110" width="150" height="72" rx="8" fill="#ef8b3a"/><text x="675.0" y="143.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">QA</text><text x="675.0" y="162.0" text-anchor="middle" font-size="12" class="ws">kiểm thử</text><line class="ln" x1="180" y1="146.0" x2="216" y2="146.0" marker-end="url(#ah)"/><line class="ln" x1="370" y1="146.0" x2="406" y2="146.0" marker-end="url(#ah)"/><line class="ln" x1="560" y1="146.0" x2="596" y2="146.0" marker-end="url(#ah)"/><line class="ln" x1="750" y1="146.0" x2="772" y2="146.0" marker-end="url(#ah)"/><polygon points="828,108.0 880.0,146.0 828,184.0 776.0,146.0" fill="#ef8b3a"/><text x="828" y="150.0" text-anchor="middle" font-size="13" font-weight="700" class="wt">Đạt?</text><rect x="966" y="110" width="150" height="72" rx="8" fill="#e6398f"/><text x="1041.0" y="143.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">PM</text><text x="1041.0" y="162.0" text-anchor="middle" font-size="12" class="ws">nghiệm thu</text><line class="ln" x1="880" y1="146.0" x2="962" y2="146.0" marker-end="url(#ah)"/><text x="923" y="108" text-anchor="middle" font-size="11" class="m">đạt</text><rect x="1156" y="116" width="150" height="60" rx="30.0" fill="#8cbf3f"/><text x="1231.0" y="151.0" text-anchor="middle" font-size="14" font-weight="700" class="wt">Commit</text><line class="ln" x1="1116" y1="146.0" x2="1152" y2="146.0" marker-end="url(#ah)"/><path class="fail" d="M828 184.0 L828 222 L485.0 222 L485.0 184" marker-end="url(#af)"/><text x="619.0" y="240" text-anchor="middle" font-size="12" class="failt">chưa đạt: trả lại SWE</text></svg>
