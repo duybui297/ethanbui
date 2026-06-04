@@ -158,12 +158,19 @@ export function ArticleEditor(props: Props) {
               {t('delete')}
             </Button>
           )}
-          <Button variant="secondary" onClick={() => onSave('draft')} disabled={saving}>
+          {mode === 'edit' && status !== 'draft' && (
+            <Button variant="secondary" onClick={() => onSave('draft')} disabled={saving}>
+              {saving ? t('saving') : t('unpublish')}
+            </Button>
+          )}
+          <Button variant="secondary" onClick={() => onSave()} disabled={saving}>
             {saving ? t('saving') : t('save')}
           </Button>
-          <Button onClick={() => onSave('published')} disabled={saving}>
-            {t('publish')}
-          </Button>
+          {status !== 'published' && (
+            <Button onClick={() => onSave('published')} disabled={saving}>
+              {t('publish')}
+            </Button>
+          )}
         </div>
       </header>
 
