@@ -52,9 +52,20 @@ export function Header() {
           href="/"
           className="flex items-center gap-2 text-sm font-semibold tracking-tight"
         >
-          <span className="grid h-7 w-7 place-items-center rounded-md bg-text-1 text-bg">
-            E
-          </span>
+          <img
+            src="/brand-icon/v4-coral-dark.svg"
+            alt=""
+            width={28}
+            height={28}
+            className="h-7 w-7 dark:hidden"
+          />
+          <img
+            src="/brand-icon/v4-coral-cream.svg"
+            alt=""
+            width={28}
+            height={28}
+            className="hidden h-7 w-7 dark:block"
+          />
           <span className="hidden text-text-1 sm:block">
             {t('site.ownerName')}
           </span>
