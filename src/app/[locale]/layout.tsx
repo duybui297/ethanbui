@@ -9,6 +9,7 @@ import '@/app/globals.css';
 import { Header } from '@/components/site/header';
 import { Footer } from '@/components/site/footer';
 import { ThemeProvider } from '@/components/site/theme-provider';
+import { AlternateLinkProvider } from '@/components/site/alternate-link-context';
 import { locales, type Locale } from '@/lib/i18n/config';
 
 export const metadata: Metadata = {
@@ -57,12 +58,14 @@ export default async function LocaleLayout({
       <body className="min-h-screen bg-bg text-text-1">
         <NextIntlClientProvider locale={locale as Locale} messages={messages}>
           <ThemeProvider>
-            <Header />
-            <main id="main" className="min-h-[60vh]">
-              {children}
-            </main>
-            <Footer />
-            <Toaster richColors closeButton />
+            <AlternateLinkProvider>
+              <Header />
+              <main id="main" className="min-h-[60vh]">
+                {children}
+              </main>
+              <Footer />
+              <Toaster richColors closeButton />
+            </AlternateLinkProvider>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

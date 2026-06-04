@@ -64,6 +64,44 @@ export async function getArticleBySlug(locale: Locale, slug: string): Promise<Ar
   return data;
 }
 
+/**
+ * Given an article identified by (locale, slug), return the slug of its
+ * translation in `targetLocale`, or null if no translation exists.
+ *
+ * translation_of is bidirectional: both the EN and VI rows point at each other.
+ */
+export async function getArticleTranslationSlug(
+  locale: Locale,
+  slug: string,
+  targetLocale: Locale
+): Promise<string | null> {
+  if (locale === targetLocale) return slug;
+  const supabase = await createSupabaseServerClient();
+
+  // 1. Fetch the current article's id and translation_of
+  const { data: current } = await supabase
+    .from('articles')
+    .select('id, translation_of')
+    .eq('locale', locale)
+    .eq('slug', slug)
+    .eq('status', 'published')
+    .maybeSingle();
+  if (!current) return null;
+
+  // 2. The translation is either:
+  //    a) the article pointed to by translation_of (if it matches targetLocale)
+  //    b) another article whose translation_of points to current.id
+  const { data: translation } = await supabase
+    .from('articles')
+    .select('slug')
+    .eq('locale', targetLocale)
+    .eq('status', 'published')
+    .or(`id.eq.${current.translation_of},translation_of.eq.${current.id}`)
+    .maybeSingle();
+
+  return translation?.slug ?? null;
+}
+
 export async function getRelatedArticles(
   locale: Locale,
   articleId: string,

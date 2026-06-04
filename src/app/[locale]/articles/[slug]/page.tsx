@@ -7,9 +7,11 @@ import { ArticleToc } from '@/components/article/toc';
 import { MarkdownBody } from '@/components/article/markdown-body';
 import { ArticleCard } from '@/components/article/article-card';
 import { SubscribeBlock } from '@/components/site/subscribe-block';
-import { getArticleBySlug, getRelatedArticles } from '@/lib/articles';
+import { SetAlternateLinks } from '@/components/site/alternate-link-context';
+import { getArticleBySlug, getRelatedArticles, getArticleTranslationSlug } from '@/lib/articles';
 import { formatDate, absoluteUrl } from '@/lib/utils';
 import type { Locale } from '@/lib/supabase/types';
+import { locales } from '@/lib/i18n/config';
 
 export const revalidate = 60;
 
@@ -50,8 +52,21 @@ export default async function ArticlePage({
 
   const related = await getRelatedArticles(locale as Locale, article.id, 3);
 
+  // Build alternate locale links for the LangSwitcher
+  const alternateLinks: Partial<Record<string, string>> = {};
+  for (const l of locales) {
+    if (l === locale) {
+      alternateLinks[l] = `/articles/${slug}`;
+    } else {
+      const translatedSlug = await getArticleTranslationSlug(locale as Locale, slug, l);
+      alternateLinks[l] = translatedSlug ? `/articles/${translatedSlug}` : '/articles';
+    }
+  }
+
   return (
-    <article className="mx-auto max-w-[1200px] px-6 pb-24 pt-12 lg:px-10 lg:pt-20">
+    <>
+      <SetAlternateLinks links={alternateLinks} />
+      <article className="mx-auto max-w-[1200px] px-6 pb-24 pt-12 lg:px-10 lg:pt-20">
       <header className="mx-auto max-w-[820px]">
         <div className="mb-4 flex items-center gap-3 text-xs text-text-3">
           {article.published_at && (
@@ -127,5 +142,6 @@ export default async function ArticlePage({
         </Link>
       </p>
     </article>
+    </>
   );
 }
