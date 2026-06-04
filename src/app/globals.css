@@ -7,29 +7,29 @@
    ===================================================================== */
 
 @theme {
-  /* Brand accent */
-  --color-accent-50: #eef0ff;
-  --color-accent-500: #5b5bd6;
-  --color-accent-600: #4b4bc4;
+  /* Brand accent — coral, from logo gradient #E07A50 → #B8431F */
+  --color-accent-50:  #fbeee6;
+  --color-accent-500: #e07a50;
+  --color-accent-600: #c85e30;
 
-  /* Neutrals */
-  --color-bg: #ffffff;
-  --color-bg-subtle: #fafafa;
-  --color-bg-muted: #f4f4f5;
-  --color-surface: #ffffff;
-  --color-surface-hi: #f9f9fa;
-  --color-border: #e5e5e8;
-  --color-border-hi: #d1d1d6;
-  --color-text-1: #0a0a0b;
-  --color-text-2: #3c3c43;
-  --color-text-3: #6b6b73;
-  --color-text-disabled: #a1a1a6;
+  /* Neutrals — warm stone, anchored to logo cream #F2EFE6 */
+  --color-bg:         #fdfcf9;
+  --color-bg-subtle:  #f6f2eb;
+  --color-bg-muted:   #ede8df;
+  --color-surface:    #fdfcf9;
+  --color-surface-hi: #f6f2eb;
+  --color-border:     #e2dad0;
+  --color-border-hi:  #cfc9bc;
+  --color-text-1:     #1c1917;
+  --color-text-2:     #44403c;
+  --color-text-3:     #78716c;
+  --color-text-disabled: #a8a29e;
 
   /* Semantic */
-  --color-success: #0e7c66;
+  --color-success: #0e7c5a;
   --color-warning: #b5651d;
-  --color-danger: #c0362c;
-  --color-info: #2d6aa8;
+  --color-danger:  #c0362c;
+  --color-info:    #2d6aa8;
 
   /* Radius */
   --radius-sm: 6px;
@@ -47,27 +47,28 @@
 }
 
 /* Dark theme via class on <html>. next-themes adds class="dark". */
+/* Anchored to logo dark background #211F1D */
 .dark {
-  --color-bg: #0a0a0b;
-  --color-bg-subtle: #101012;
-  --color-bg-muted: #17171a;
-  --color-surface: #131316;
-  --color-surface-hi: #1b1b1f;
-  --color-border: #26262b;
-  --color-border-hi: #34343a;
-  --color-text-1: #f5f5f7;
-  --color-text-2: #c7c7cc;
-  --color-text-3: #8e8e93;
-  --color-text-disabled: #5c5c63;
+  --color-bg:         #171411;
+  --color-bg-subtle:  #211f1d;
+  --color-bg-muted:   #2c2925;
+  --color-surface:    #1e1b18;
+  --color-surface-hi: #272421;
+  --color-border:     #3a3530;
+  --color-border-hi:  #4c4740;
+  --color-text-1:     #f5efe6;
+  --color-text-2:     #c4bab0;
+  --color-text-3:     #8a827a;
+  --color-text-disabled: #5a5550;
 
-  --color-accent-500: #7c7cff;
-  --color-accent-600: #6b6bea;
-  --color-accent-50: #1a1b3a;
+  --color-accent-500: #f08d65;
+  --color-accent-600: #e07a50;
+  --color-accent-50:  #301a0e;
 
-  --color-success: #3dba9f;
-  --color-warning: #e89544;
-  --color-danger: #f26a60;
-  --color-info: #5fa1e0;
+  --color-success: #3dbd9f;
+  --color-warning: #e99444;
+  --color-danger:  #f26a60;
+  --color-info:    #5fa0e0;
 }
 
 @layer base {
@@ -117,7 +118,7 @@
 /* Article prose tuning */
 @layer components {
   .prose-article {
-    @apply prose prose-neutral max-w-[680px];
+    @apply prose prose-stone max-w-[680px];
     color: var(--color-text-1);
   }
   .dark .prose-article {
