@@ -48,14 +48,14 @@ export default async function ContactPage({
             </li>
             <li>
               <span className="text-text-3">{t('sideLinkedinLabel')}:</span>{' '}
-              <a className="text-accent-500 hover:underline" href="https://linkedin.com/" target="_blank" rel="noreferrer">
-                linkedin.com/in/your-handle
+              <a className="text-accent-500 hover:underline" href="https://www.linkedin.com/in/ethanbui92" target="_blank" rel="noreferrer">
+                linkedin.com/in/ethanbui92
               </a>
             </li>
             <li>
-              <span className="text-text-3">{t('sideGithubLabel')}:</span>{' '}
-              <a className="text-accent-500 hover:underline" href="https://github.com/" target="_blank" rel="noreferrer">
-                github.com/your-handle
+              <span className="text-text-3">{t('sideMediumLabel')}:</span>{' '}
+              <a className="text-accent-500 hover:underline" href="https://medium.com/@ethanbui92" target="_blank" rel="noreferrer">
+                medium.com/@ethanbui92
               </a>
             </li>
           </ul>
