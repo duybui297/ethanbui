@@ -6,7 +6,9 @@ import { subscribeToBeehiiv } from '@/lib/beehiiv';
 const Schema = z.object({
   email: z.string().email(),
   locale: z.enum(['en', 'vi']).default('en'),
-  source: z.string().max(50).optional()
+  source: z.string().max(50).optional(),
+  // Honeypot. Real users never see or fill this. Bots auto-fill every field.
+  website: z.string().optional()
 });
 
 export async function POST(req: Request) {
@@ -16,6 +18,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Invalid input' }, { status: 400 });
   }
   const input = parsed.data;
+
+  // Honeypot tripped: pretend success, but don't subscribe anyone. Keeps the
+  // bot from retrying and keeps junk out of Beehiiv and the subscribers table.
+  if (input.website && input.website.trim() !== '') {
+    return NextResponse.json({ ok: true });
+  }
 
   let beehiivId: string | undefined;
   try {

@@ -25,7 +25,11 @@ export async function subscribeToBeehiiv(input: SubscribeInput) {
       body: JSON.stringify({
         email: input.email,
         reactivate_existing: true,
-        send_welcome_email: true,
+        // Double opt-in is enabled on the Beehiiv publication. Beehiiv sends the
+        // confirmation email, holds the subscriber as "pending", then fires the
+        // welcome preset after they confirm. Keep this false so we don't trigger
+        // a second, duplicate welcome from the API side.
+        send_welcome_email: false,
         utm_source: input.source ?? 'site',
         custom_fields: input.locale ? [{ name: 'locale', value: input.locale }] : undefined
       })

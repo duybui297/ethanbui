@@ -10,7 +10,10 @@ export function SubscribeBlock({ variant = 'card' }: { variant?: 'card' | 'inlin
   const t = useTranslations('home');
   const locale = useLocale();
   const [email, setEmail] = React.useState('');
+  // Honeypot. Hidden from real users; only bots fill it.
+  const [website, setWebsite] = React.useState('');
   const [loading, setLoading] = React.useState(false);
+  const [submitted, setSubmitted] = React.useState(false);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -20,14 +23,14 @@ export function SubscribeBlock({ variant = 'card' }: { variant?: 'card' | 'inlin
       const res = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, locale, source: 'site' })
+        body: JSON.stringify({ email, locale, source: 'site', website })
       });
       if (!res.ok) throw new Error(await res.text());
-      toast.success('Subscribed.');
+      setSubmitted(true);
       setEmail('');
     } catch (err) {
       console.error(err);
-      toast.error('Something broke. Try again.');
+      toast.error(t('subscribeError'));
     } finally {
       setLoading(false);
     }
@@ -42,23 +45,45 @@ export function SubscribeBlock({ variant = 'card' }: { variant?: 'card' | 'inlin
       }
     >
       <div className="mx-auto max-w-[680px]">
-        <h2 className="text-lg font-semibold tracking-tight text-text-1">
-          {t('subscribeTitle')}
-        </h2>
-        <p className="mt-1 text-sm text-text-2">{t('subscribeBody')}</p>
-        <form className="mt-4 flex flex-col gap-3 sm:flex-row" onSubmit={onSubmit}>
-          <Input
-            type="email"
-            required
-            placeholder={t('subscribePlaceholder')}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="sm:flex-1"
-          />
-          <Button type="submit" disabled={loading}>
-            {loading ? '...' : t('subscribeButton')}
-          </Button>
-        </form>
+        {submitted ? (
+          <div>
+            <h2 className="text-lg font-semibold tracking-tight text-text-1">
+              {t('subscribeCheckTitle')}
+            </h2>
+            <p className="mt-1 text-sm text-text-2">{t('subscribeCheckBody')}</p>
+          </div>
+        ) : (
+          <>
+            <h2 className="text-lg font-semibold tracking-tight text-text-1">
+              {t('subscribeTitle')}
+            </h2>
+            <p className="mt-1 text-sm text-text-2">{t('subscribeBody')}</p>
+            <form className="mt-4 flex flex-col gap-3 sm:flex-row" onSubmit={onSubmit}>
+              {/* Honeypot field: visually hidden, off-tab, never autofilled for humans. */}
+              <input
+                type="text"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+                className="absolute left-[-9999px] h-0 w-0 opacity-0"
+              />
+              <Input
+                type="email"
+                required
+                placeholder={t('subscribePlaceholder')}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="sm:flex-1"
+              />
+              <Button type="submit" disabled={loading}>
+                {loading ? '...' : t('subscribeButton')}
+              </Button>
+            </form>
+          </>
+        )}
       </div>
     </section>
   );

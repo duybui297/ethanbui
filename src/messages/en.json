@@ -51,7 +51,10 @@
     "subscribeTitle": "Get new playbooks and field notes by email.",
     "subscribeBody": "1 to 2 emails a month. Easy to unsubscribe.",
     "subscribePlaceholder": "your@email.com",
-    "subscribeButton": "Subscribe"
+    "subscribeButton": "Subscribe",
+    "subscribeCheckTitle": "Check your inbox.",
+    "subscribeCheckBody": "Click the confirmation link I just sent to finish subscribing.",
+    "subscribeError": "Something broke. Try again."
   },
   "about": {
     "title": "About",
@@ -125,6 +128,12 @@
   "notFound": {
     "title": "Nothing here.",
     "body": "The page moved, or it never existed.",
+    "ctaHome": "Back to home",
+    "ctaLatest": "Read latest article"
+  },
+  "subscribeConfirmed": {
+    "title": "You're confirmed.",
+    "body": "Thanks for confirming. The first email is on its way. Reply to it anytime, I read every one.",
     "ctaHome": "Back to home",
     "ctaLatest": "Read latest article"
   },

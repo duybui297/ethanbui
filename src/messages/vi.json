@@ -51,7 +51,10 @@
     "subscribeTitle": "Nhận playbook và field notes mới qua email.",
     "subscribeBody": "1 đến 2 email mỗi tháng. Hủy đăng ký dễ.",
     "subscribePlaceholder": "email@cua-ban.com",
-    "subscribeButton": "Đăng ký"
+    "subscribeButton": "Đăng ký",
+    "subscribeCheckTitle": "Kiểm tra hộp thư.",
+    "subscribeCheckBody": "Bấm vào link xác nhận tôi vừa gửi để hoàn tất đăng ký.",
+    "subscribeError": "Có gì đó sai. Thử lại."
   },
   "about": {
     "title": "Giới thiệu",
@@ -125,6 +128,12 @@
   "notFound": {
     "title": "Không có gì ở đây.",
     "body": "Trang đã chuyển, hoặc chưa từng tồn tại.",
+    "ctaHome": "Về trang chủ",
+    "ctaLatest": "Đọc bài mới nhất"
+  },
+  "subscribeConfirmed": {
+    "title": "Đã xác nhận.",
+    "body": "Cảm ơn bạn đã xác nhận. Email đầu tiên đang trên đường tới. Reply lại bất cứ lúc nào, tôi đọc hết.",
     "ctaHome": "Về trang chủ",
     "ctaLatest": "Đọc bài mới nhất"
   },
