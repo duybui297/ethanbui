@@ -40,12 +40,7 @@ export default async function ContactPage({
             {t('sideTitle')}
           </h2>
           <ul className="mt-4 space-y-3 text-sm">
-            <li>
-              <span className="text-text-3">{t('sideEmailLabel')}:</span>{' '}
-              <a className="text-accent-500 hover:underline" href="mailto:hello@example.com">
-                hello@example.com
-              </a>
-            </li>
+
             <li>
               <span className="text-text-3">{t('sideLinkedinLabel')}:</span>{' '}
               <a className="text-accent-500 hover:underline" href="https://www.linkedin.com/in/ethanbui92" target="_blank" rel="noreferrer">
