@@ -12,7 +12,15 @@ const nextConfig = {
     ]
   },
   experimental: {
-    optimizePackageImports: ['lucide-react']
+    optimizePackageImports: ['lucide-react'],
+    // Keep navigated pages in the client-side Router Cache for a while so that
+    // pressing "Back" (e.g. detail -> list) restores instantly from cache
+    // instead of re-running the server render. Next 15 defaults dynamic to 0s,
+    // which is why Back felt as slow as the forward navigation.
+    staleTimes: {
+      dynamic: 60,
+      static: 180
+    }
   }
 };
 

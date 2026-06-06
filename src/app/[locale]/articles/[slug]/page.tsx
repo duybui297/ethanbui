@@ -8,7 +8,7 @@ import { MarkdownBody } from '@/components/article/markdown-body';
 import { ArticleCard } from '@/components/article/article-card';
 import { SubscribeBlock } from '@/components/site/subscribe-block';
 import { SetAlternateLinks } from '@/components/site/alternate-link-context';
-import { getArticleBySlug, getRelatedArticles, getArticleTranslationSlug } from '@/lib/articles';
+import { getArticleBySlug, getRelatedArticles, getTranslationSlugForArticle } from '@/lib/articles';
 import { formatDate, absoluteUrl } from '@/lib/utils';
 import type { Locale } from '@/lib/supabase/types';
 import { locales } from '@/lib/i18n/config';
@@ -50,18 +50,25 @@ export default async function ArticlePage({
   const article = await getArticleBySlug(locale as Locale, slug);
   if (!article) notFound();
 
-  const related = await getRelatedArticles(locale as Locale, article.id, 3);
+  // Fetch related articles and the per-locale alternate links in parallel.
+  // They all depend only on `article`, so there's no reason to await them
+  // sequentially — doing so was a big part of the navigation lag.
+  const otherLocales = locales.filter((l) => l !== locale);
+  const [related, translatedSlugs] = await Promise.all([
+    getRelatedArticles(locale as Locale, article.id, 3),
+    Promise.all(
+      otherLocales.map((l) => getTranslationSlugForArticle(article, l as Locale))
+    )
+  ]);
 
   // Build alternate locale links for the LangSwitcher
-  const alternateLinks: Partial<Record<string, string>> = {};
-  for (const l of locales) {
-    if (l === locale) {
-      alternateLinks[l] = `/articles/${slug}`;
-    } else {
-      const translatedSlug = await getArticleTranslationSlug(locale as Locale, slug, l);
-      alternateLinks[l] = translatedSlug ? `/articles/${translatedSlug}` : '/articles';
-    }
-  }
+  const alternateLinks: Partial<Record<string, string>> = {
+    [locale]: `/articles/${slug}`
+  };
+  otherLocales.forEach((l, i) => {
+    const translatedSlug = translatedSlugs[i];
+    alternateLinks[l] = translatedSlug ? `/articles/${translatedSlug}` : '/articles';
+  });
 
   return (
     <>

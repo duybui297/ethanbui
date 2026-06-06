@@ -1,4 +1,5 @@
 import 'server-only';
+import { cache } from 'react';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import type { Article, Locale } from '@/lib/supabase/types';
 
@@ -150,20 +151,53 @@ function mapArticleRows(data: unknown[]): ArticleListItem[] {
   });
 }
 
-export async function getArticleBySlug(locale: Locale, slug: string): Promise<Article | null> {
-  const supabase = await createSupabaseServerClient();
-  const { data, error } = await supabase
-    .from('articles')
-    .select('*')
-    .eq('locale', locale)
-    .eq('slug', slug)
-    .eq('status', 'published')
-    .maybeSingle();
-  if (error) {
-    console.error('getArticleBySlug', error);
-    return null;
+/**
+ * Fetch a single published article by (locale, slug).
+ *
+ * Wrapped in React `cache()` so that calling it multiple times within the same
+ * request (e.g. once in `generateMetadata` and again in the page component)
+ * only hits Supabase once. This removes a redundant round-trip on every
+ * article-detail navigation.
+ */
+export const getArticleBySlug = cache(
+  async (locale: Locale, slug: string): Promise<Article | null> => {
+    const supabase = await createSupabaseServerClient();
+    const { data, error } = await supabase
+      .from('articles')
+      .select('*')
+      .eq('locale', locale)
+      .eq('slug', slug)
+      .eq('status', 'published')
+      .maybeSingle();
+    if (error) {
+      console.error('getArticleBySlug', error);
+      return null;
+    }
+    return data;
   }
-  return data;
+);
+
+/**
+ * Like {@link getArticleTranslationSlug}, but reuses an already-loaded article
+ * (its `id` and `translation_of`) so we skip the extra "fetch current article"
+ * query. Use this from the detail page, which already has the article in hand.
+ */
+export async function getTranslationSlugForArticle(
+  article: Pick<Article, 'id' | 'slug' | 'translation_of' | 'locale'>,
+  targetLocale: Locale
+): Promise<string | null> {
+  if (article.locale === targetLocale) return article.slug;
+  const supabase = await createSupabaseServerClient();
+
+  const { data: translation } = await supabase
+    .from('articles')
+    .select('slug')
+    .eq('locale', targetLocale)
+    .eq('status', 'published')
+    .or(`id.eq.${article.translation_of},translation_of.eq.${article.id}`)
+    .maybeSingle();
+
+  return translation?.slug ?? null;
 }
 
 /**
