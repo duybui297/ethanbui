@@ -101,6 +101,36 @@
     "subscribeInlineBody": "1 đến 2 email mỗi tháng. Hủy đăng ký dễ.",
     "authorCardBio": "Practitioner. AI trong software delivery, ở mọi quy mô."
   },
+  "share": {
+    "title": "Chia sẻ",
+    "copyLink": "Sao chép link",
+    "copied": "Đã sao chép!",
+    "shareOn": "Chia sẻ qua",
+    "shareNative": "Chia sẻ"
+  },
+  "comments": {
+    "title": "Bình luận",
+    "nameLabel": "Tên",
+    "namePlaceholder": "Tên của bạn",
+    "emailLabel": "Email (tuỳ chọn)",
+    "emailPlaceholder": "email@cua-ban.com",
+    "emailHint": "Nếu bạn để lại email, tôi sẽ gửi thông báo khi trả lời để bạn luôn cập nhật. Email sẽ không hiển thị công khai.",
+    "contentLabel": "Bình luận",
+    "contentPlaceholder": "Chia sẻ suy nghĩ của bạn...",
+    "submit": "Đăng bình luận",
+    "submitting": "Đang đăng...",
+    "success": "Đã đăng bình luận!",
+    "error": "Có gì đó sai. Thử lại.",
+    "empty": "Chưa có bình luận. Hãy là người đầu tiên chia sẻ suy nghĩ.",
+    "replyTo": "Trả lời",
+    "cancelReply": "Huỷ",
+    "adminBadge": "Tác giả",
+    "justNow": "vừa xong",
+    "minutesAgo": "{count} phút trước",
+    "hoursAgo": "{count} giờ trước",
+    "daysAgo": "{count} ngày trước",
+    "commentCount": "{count, plural, =0 {Bình luận} =1 {1 Bình luận} other {# Bình luận}}"
+  },
   "contact": {
     "title": "Mình nói chuyện nhé",
     "subtitle": "Cho tôi biết bạn đang làm gì. Tôi trả lời trong 1 ngày làm việc.",

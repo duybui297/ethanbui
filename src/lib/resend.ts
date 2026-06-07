@@ -54,3 +54,62 @@ export async function sendLeadAck(input: { to: string; locale: string }) {
   await resend.emails.send({ from, to: input.to, subject: c.subject, text: c.body });
   return { ok: true };
 }
+
+export async function sendCommentReplyNotification(input: {
+  to: string;
+  commenterName: string;
+  originalComment: string;
+  replyBody: string;
+  articleTitle: string;
+  articleUrl: string;
+  locale: string;
+}) {
+  const resend = getResend();
+  const from = process.env.RESEND_FROM ?? 'Ethan <onboarding@resend.dev>';
+  if (!resend) return { skipped: true };
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ethanbui.com';
+  const fullArticleUrl = `${siteUrl}${input.articleUrl}`;
+
+  const en = {
+    subject: `Ethan replied to your comment on "${input.articleTitle}"`,
+    body: [
+      `Hi ${input.commenterName},`,
+      '',
+      `Ethan replied to your comment on "${input.articleTitle}".`,
+      '',
+      '--- Your comment ---',
+      input.originalComment,
+      '',
+      '--- Ethan\'s reply ---',
+      input.replyBody,
+      '',
+      `Read the full conversation: ${fullArticleUrl}`,
+      '',
+      'Ethan'
+    ].join('\n')
+  };
+
+  const vi = {
+    subject: `Ethan đã trả lời bình luận của bạn trong "${input.articleTitle}"`,
+    body: [
+      `Xin chào ${input.commenterName},`,
+      '',
+      `Ethan đã trả lời bình luận của bạn trong "${input.articleTitle}".`,
+      '',
+      '--- Bình luận của bạn ---',
+      input.originalComment,
+      '',
+      '--- Phản hồi của Ethan ---',
+      input.replyBody,
+      '',
+      `Xem toàn bộ cuộc trò chuyện: ${fullArticleUrl}`,
+      '',
+      'Ethan'
+    ].join('\n')
+  };
+
+  const c = input.locale === 'vi' ? vi : en;
+  await resend.emails.send({ from, to: input.to, subject: c.subject, text: c.body });
+  return { ok: true };
+}

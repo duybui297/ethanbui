@@ -7,6 +7,8 @@ import { ArticleToc } from '@/components/article/toc';
 import { MarkdownBody } from '@/components/article/markdown-body';
 import { ArticleCard } from '@/components/article/article-card';
 import { SubscribeBlock } from '@/components/site/subscribe-block';
+import { CommentSection } from '@/components/article/comment-section';
+import { ShareBar } from '@/components/article/share-bar';
 import { SetAlternateLinks } from '@/components/site/alternate-link-context';
 import { getArticleBySlug, getRelatedArticles, getTranslationSlugForArticle } from '@/lib/articles';
 import { formatDate, absoluteUrl } from '@/lib/utils';
@@ -107,13 +109,27 @@ export default async function ArticlePage({
 
       <div className="mt-12 grid gap-10 lg:grid-cols-[240px_minmax(0,680px)] lg:gap-16">
         <aside className="hidden lg:block">
-          <div className="sticky top-24">
+          <div className="sticky top-24 space-y-8">
             <ArticleToc source={article.body_md} title={t('article.tocTitle')} />
+            <ShareBar
+              title={article.title}
+              url={`/${locale}/articles/${article.slug}`}
+              variant="sidebar"
+            />
           </div>
         </aside>
 
         <div>
           <MarkdownBody source={article.body_md} />
+
+          {/* Share bar — inline for mobile, hidden on desktop (shown in sidebar) */}
+          <div className="lg:hidden">
+            <ShareBar
+              title={article.title}
+              url={`/${locale}/articles/${article.slug}`}
+              variant="inline"
+            />
+          </div>
 
           <div className="mt-16 rounded-[var(--radius-lg)] border border-border bg-bg-subtle p-6">
             <h2 className="text-base font-semibold text-text-1">
@@ -124,6 +140,8 @@ export default async function ArticlePage({
               <SubscribeBlock variant="inline" />
             </div>
           </div>
+
+          <CommentSection articleId={article.id} />
         </div>
       </div>
 

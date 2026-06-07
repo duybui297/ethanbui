@@ -13,6 +13,17 @@ export type ArticleStatus = 'draft' | 'published' | 'scheduled';
 export type LeadIntent = 'workshop' | 'speaking' | 'advisory' | 'podcast' | 'other';
 export type LeadStatus = 'new' | 'replied' | 'archived';
 
+export interface Comment {
+  id: string;
+  article_id: string;
+  parent_id: string | null;
+  author_name: string;
+  author_email: string | null;
+  body: string;
+  is_admin_reply: boolean;
+  created_at: string;
+}
+
 // ---- Row types ----
 
 export interface Profile {
@@ -154,6 +165,12 @@ export interface Database {
         Row: Subscriber;
         Insert: Insert<Subscriber, 'email'>;
         Update: Update<Subscriber>;
+        Relationships: [];
+      };
+      comments: {
+        Row: Comment;
+        Insert: Insert<Comment, 'article_id' | 'author_name' | 'body'>;
+        Update: Update<Comment>;
         Relationships: [];
       };
     };

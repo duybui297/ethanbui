@@ -101,6 +101,36 @@
     "subscribeInlineBody": "1 to 2 emails a month. Easy to unsubscribe.",
     "authorCardBio": "Practitioner. AI in software delivery, at all scale."
   },
+  "share": {
+    "title": "Share",
+    "copyLink": "Copy link",
+    "copied": "Copied!",
+    "shareOn": "Share on",
+    "shareNative": "Share"
+  },
+  "comments": {
+    "title": "Comments",
+    "nameLabel": "Name",
+    "namePlaceholder": "Your name",
+    "emailLabel": "Email (optional)",
+    "emailPlaceholder": "your@email.com",
+    "emailHint": "If you leave your email, I'll notify you when I reply so you stay in the loop. Your email won't be displayed publicly.",
+    "contentLabel": "Comment",
+    "contentPlaceholder": "Share your thoughts...",
+    "submit": "Post comment",
+    "submitting": "Posting...",
+    "success": "Comment posted!",
+    "error": "Something went wrong. Try again.",
+    "empty": "No comments yet. Be the first to share your thoughts.",
+    "replyTo": "Reply",
+    "cancelReply": "Cancel",
+    "adminBadge": "Author",
+    "justNow": "just now",
+    "minutesAgo": "{count}m ago",
+    "hoursAgo": "{count}h ago",
+    "daysAgo": "{count}d ago",
+    "commentCount": "{count, plural, =0 {Comments} =1 {1 Comment} other {# Comments}}"
+  },
   "contact": {
     "title": "Let's talk",
     "subtitle": "Tell me what you're working on. I reply within 1 business day.",
