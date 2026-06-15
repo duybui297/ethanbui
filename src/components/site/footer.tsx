@@ -17,6 +17,7 @@ export function Footer() {
         <FooterColumn title={t('site.explore')}>
           <FooterLink href="/about">{t('nav.about')}</FooterLink>
           <FooterLink href="/articles">{t('nav.articles')}</FooterLink>
+          <FooterLink href="/products">{t('nav.products')}</FooterLink>
         </FooterColumn>
 
         <FooterColumn title={t('site.read')}>

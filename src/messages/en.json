@@ -5,6 +5,7 @@
     "playbooks": "Playbooks",
     "caseStudies": "Case studies",
     "talks": "Talks",
+    "products": "Products",
     "contact": "Contact",
     "subscribe": "Subscribe",
     "tools": "Tools",
@@ -165,6 +166,16 @@
     "body": "Thanks for confirming. The first email is on its way. Reply to it anytime, I read every one.",
     "ctaHome": "Back to home",
     "ctaLatest": "Read latest article"
+  },
+  "products": {
+    "badge": "Upcoming Innovations",
+    "title": "Upcoming Innovations",
+    "subtitle": "We're building the next generation of AI tools. Join the waitlist to get early access and exclusive updates.",
+    "product1Title": "AI Chatbot Trained on Your Business Knowledge",
+    "product1Desc": "An intelligent AI chatbot that learns directly from your company's documents, website, and internal knowledge base. It provides accurate, context-aware answers to customers and employees, helping automate support, reduce manual workload, and deliver consistent information across your organization.",
+    "product2Title": "AI Document Translator",
+    "product2Desc": "A powerful AI tool that automatically translates documents while preserving formatting and structure. It supports multiple file types and languages, enabling businesses to quickly convert reports, manuals, and internal documents with high accuracy and minimal manual editing.",
+    "visitProduct": "Learn more"
   },
   "admin": {
     "nav": {

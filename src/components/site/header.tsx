@@ -27,6 +27,7 @@ export function Header() {
   const nav = [
     { href: '/about', label: t('nav.about') },
     { href: '/articles', label: t('nav.articles') },
+    { href: '/products', label: t('nav.products') },
     { href: '/contact', label: t('nav.contact') }
   ] as const;
 

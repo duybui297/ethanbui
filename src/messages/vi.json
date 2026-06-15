@@ -5,6 +5,7 @@
     "playbooks": "Playbooks",
     "caseStudies": "Case studies",
     "talks": "Talks",
+    "products": "Sản phẩm",
     "contact": "Liên hệ",
     "subscribe": "Đăng ký",
     "tools": "Công cụ",
@@ -165,6 +166,16 @@
     "body": "Cảm ơn bạn đã xác nhận. Email đầu tiên đang trên đường tới. Reply lại bất cứ lúc nào, tôi đọc hết.",
     "ctaHome": "Về trang chủ",
     "ctaLatest": "Đọc bài mới nhất"
+  },
+  "products": {
+    "badge": "Sản phẩm sắp ra mắt",
+    "title": "Sản phẩm sắp ra mắt",
+    "subtitle": "Chúng tôi đang xây dựng thế hệ công cụ AI tiếp theo. Đăng ký waitlist để nhận quyền truy cập sớm và cập nhật độc quyền.",
+    "product1Title": "AI Chatbot được đào tạo trên kiến thức doanh nghiệp",
+    "product1Desc": "Chatbot AI thông minh học trực tiếp từ tài liệu, website và cơ sở kiến thức nội bộ của công ty bạn. Nó cung cấp câu trả lời chính xác, nhận biết ngữ cảnh cho khách hàng và nhân viên, giúp tự động hóa hỗ trợ, giảm khối lượng công việc thủ công và cung cấp thông tin nhất quán trong toàn tổ chức.",
+    "product2Title": "AI Dịch tài liệu",
+    "product2Desc": "Công cụ AI mạnh mẽ tự động dịch tài liệu trong khi bảo toàn định dạng và cấu trúc. Hỗ trợ nhiều loại tệp và ngôn ngữ, giúp doanh nghiệp nhanh chóng chuyển đổi báo cáo, hướng dẫn và tài liệu nội bộ với độ chính xác cao và ít chỉnh sửa thủ công.",
+    "visitProduct": "Tìm hiểu thêm"
   },
   "admin": {
     "nav": {
