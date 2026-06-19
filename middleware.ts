@@ -47,6 +47,7 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Match all paths except static files and Next internals.
-  matcher: ['/((?!_next|api|.*\\..*).*)']
+  // Match all paths except static files, Next internals, and the standalone
+  // Japanese learning app mounted at /products/nihongo (must bypass i18n routing).
+  matcher: ['/((?!_next|api|products/nihongo|.*\\..*).*)']
 };
