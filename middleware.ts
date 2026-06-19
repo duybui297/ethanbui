@@ -6,6 +6,28 @@ import { routing } from './src/lib/i18n/routing';
 const intlMiddleware = createMiddleware(routing);
 
 export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // 0. Geo-aware default locale for locale-less paths.
+  //    Visitors located in Vietnam default to `vi`; everyone else to `en`.
+  //    A user's explicit choice (the NEXT_LOCALE cookie set by the language
+  //    switcher) always wins over geo, so switching language sticks.
+  const hasLocalePrefix = /^\/(en|vi)(\/|$)/.test(pathname);
+  if (!hasLocalePrefix) {
+    const cookieLocale = request.cookies.get('NEXT_LOCALE')?.value;
+    const country = (request.headers.get('x-vercel-ip-country') || '').toUpperCase();
+    const locale =
+      cookieLocale === 'vi' || cookieLocale === 'en'
+        ? cookieLocale
+        : country === 'VN'
+          ? 'vi'
+          : 'en';
+
+    const redirectUrl = request.nextUrl.clone();
+    redirectUrl.pathname = `/${locale}${pathname === '/' ? '' : pathname}`;
+    return NextResponse.redirect(redirectUrl);
+  }
+
   // 1. Refresh Supabase auth cookies on every request.
   const response = intlMiddleware(request);
 
@@ -31,8 +53,6 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   // 2. Gate /admin routes (except /admin/login) behind auth.
-  const url = new URL(request.url);
-  const pathname = url.pathname;
   const isAdminRoute = /^\/(en|vi)\/admin(\/|$)/.test(pathname);
   const isLoginRoute = /^\/(en|vi)\/admin\/login(\/|$)/.test(pathname);
 
