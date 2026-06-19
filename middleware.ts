@@ -74,5 +74,11 @@ export async function middleware(request: NextRequest) {
 export const config = {
   // Match all paths except static files, Next internals, and the standalone
   // Japanese learning app mounted at /products/nihongo (must bypass i18n routing).
-  matcher: ['/((?!_next|api|products/nihongo|.*\\..*).*)']
+  matcher: [
+    // The bare root must be listed explicitly — the catch-all pattern below
+    // does NOT match '/', which otherwise 404s (there is no app/page.tsx, only
+    // app/[locale]). Without this, the geo redirect never runs for the root.
+    '/',
+    '/((?!_next|api|products/nihongo|.*\\..*).*)'
+  ]
 };
