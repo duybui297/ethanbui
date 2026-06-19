@@ -22,12 +22,12 @@ const nextConfig = {
       static: 180
     }
   },
-  // Force the locale-less /products entry to the Vietnamese version.
+  // Force the locale-less /products entry to the default-locale (en) version.
   // next.config redirects run BEFORE middleware, and the source is an exact
   // match, so /products/nihongo (the live app) is untouched.
   async redirects() {
     return [
-      { source: '/products', destination: '/vi/products', permanent: false }
+      { source: '/products', destination: '/en/products', permanent: false }
     ];
   },
   // Standalone Japanese learning app (static files in public/products/nihongo).
