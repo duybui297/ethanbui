@@ -22,6 +22,14 @@ const nextConfig = {
       static: 180
     }
   },
+  // Force the locale-less /products entry to the Vietnamese version.
+  // next.config redirects run BEFORE middleware, and the source is an exact
+  // match, so /products/nihongo (the live app) is untouched.
+  async redirects() {
+    return [
+      { source: '/products', destination: '/vi/products', permanent: false }
+    ];
+  },
   // Standalone Japanese learning app (static files in public/products/nihongo).
   // Serve its index.html at the clean entry path /products/nihongo.
   // Sub-assets (css/js/data) are served directly from public by filename.
