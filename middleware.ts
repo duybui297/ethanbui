@@ -22,7 +22,15 @@ export async function middleware(request: NextRequest) {
 
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = `/${locale}${pathname === '/' ? '' : pathname}`;
-    return NextResponse.redirect(redirectUrl);
+    const res = NextResponse.redirect(redirectUrl);
+    // Never let a CDN cache this geo redirect and serve one region's result to
+    // everyone — that would pin all visitors to whichever locale was cached first.
+    res.headers.set('Cache-Control', 'no-store');
+    res.headers.set('Vary', 'x-vercel-ip-country');
+    // TEMP DEBUG: inspect in DevTools -> Network -> the redirect request ->
+    // Response Headers. Shows exactly what country Vercel reported.
+    res.headers.set('x-debug-geo-country', country || 'none');
+    return res;
   }
 
   // 1. Refresh Supabase auth cookies on every request.
