@@ -168,14 +168,22 @@
     "ctaLatest": "Đọc bài mới nhất"
   },
   "products": {
-    "badge": "Sản phẩm sắp ra mắt",
-    "title": "Sản phẩm sắp ra mắt",
-    "subtitle": "Chúng tôi đang xây dựng thế hệ công cụ AI tiếp theo. Đăng ký waitlist để nhận quyền truy cập sớm và cập nhật độc quyền.",
+    "badge": "Sản phẩm",
+    "title": "Sản phẩm",
+    "subtitle": "Những sản phẩm thật tôi đã ra mắt, cùng những gì sắp tới. Làm nhanh, launch thật.",
+    "overviewTitle": "Sản phẩm thật, đã ra mắt",
+    "overviewDesc": "Đây không phải ý tưởng hay bản mẫu. Mỗi sản phẩm đều đã được vibe code thành công và đưa ra thị trường thật cho người dùng thật.",
+    "liveSectionTitle": "Đã ra mắt",
+    "upcomingSectionTitle": "Sắp ra mắt",
+    "liveBadge": "ĐÃ RA MẮT",
+    "nihongoTitle": "Nihongo Sprint",
+    "nihongoDesc": "Lộ trình học cấp tốc đưa bạn từ con số 0 đến trình độ JLPT N5. Kana, từ vựng cốt lõi và ngữ pháp được chia nhỏ, dễ nhớ để bạn đạt N5 nhanh hơn.",
     "product1Title": "AI Chatbot được đào tạo trên kiến thức doanh nghiệp",
     "product1Desc": "Chatbot AI thông minh học trực tiếp từ tài liệu, website và cơ sở kiến thức nội bộ của công ty bạn. Nó cung cấp câu trả lời chính xác, nhận biết ngữ cảnh cho khách hàng và nhân viên, giúp tự động hóa hỗ trợ, giảm khối lượng công việc thủ công và cung cấp thông tin nhất quán trong toàn tổ chức.",
     "product2Title": "AI Dịch tài liệu",
     "product2Desc": "Công cụ AI mạnh mẽ tự động dịch tài liệu trong khi bảo toàn định dạng và cấu trúc. Hỗ trợ nhiều loại tệp và ngôn ngữ, giúp doanh nghiệp nhanh chóng chuyển đổi báo cáo, hướng dẫn và tài liệu nội bộ với độ chính xác cao và ít chỉnh sửa thủ công.",
-    "visitProduct": "Tìm hiểu thêm"
+    "visitProduct": "Tìm hiểu thêm",
+    "visitLiveProduct": "Dùng thử ngay"
   },
   "admin": {
     "nav": {

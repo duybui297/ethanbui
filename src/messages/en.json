@@ -168,14 +168,22 @@
     "ctaLatest": "Read latest article"
   },
   "products": {
-    "badge": "Upcoming Innovations",
-    "title": "Upcoming Innovations",
-    "subtitle": "We're building the next generation of AI tools. Join the waitlist to get early access and exclusive updates.",
+    "badge": "Products",
+    "title": "Products",
+    "subtitle": "Real products I've shipped, plus what's coming next. Built fast, launched for real.",
+    "overviewTitle": "Real products, actually shipped",
+    "overviewDesc": "These aren't concepts or mockups. Each one was vibe-coded into a working product and launched to real users in the market.",
+    "liveSectionTitle": "Live now",
+    "upcomingSectionTitle": "Upcoming",
+    "liveBadge": "NOW LIVE",
+    "nihongoTitle": "Nihongo Sprint",
+    "nihongoDesc": "A fast-track learning path that takes you from zero to JLPT N5. Kana, core vocabulary, and grammar are broken into bite-sized, memory-friendly lessons so you reach N5 faster.",
     "product1Title": "AI Chatbot Trained on Your Business Knowledge",
     "product1Desc": "An intelligent AI chatbot that learns directly from your company's documents, website, and internal knowledge base. It provides accurate, context-aware answers to customers and employees, helping automate support, reduce manual workload, and deliver consistent information across your organization.",
     "product2Title": "AI Document Translator",
     "product2Desc": "A powerful AI tool that automatically translates documents while preserving formatting and structure. It supports multiple file types and languages, enabling businesses to quickly convert reports, manuals, and internal documents with high accuracy and minimal manual editing.",
-    "visitProduct": "Learn more"
+    "visitProduct": "Learn more",
+    "visitLiveProduct": "Try it now"
   },
   "admin": {
     "nav": {
