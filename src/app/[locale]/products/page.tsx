@@ -36,7 +36,7 @@ const liveProducts: Product[] = [
     badgeKey: 'liveBadge',
     titleKey: 'nihongoTitle',
     descKey: 'nihongoDesc',
-    url: 'https://www.ethanbui.net/products/nihongo'
+    url: 'https://www.ethanbui.net/en/products/access'
   }
 ];
 
