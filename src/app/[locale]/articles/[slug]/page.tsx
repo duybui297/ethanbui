@@ -36,7 +36,12 @@ export async function generateMetadata({
       description: article.excerpt ?? undefined,
       type: 'article',
       publishedTime: article.published_at ?? undefined,
-      images: [article.og_image_url ?? `/api/og?title=${encodeURIComponent(article.title)}`]
+      images: [
+        article.og_image_url ??
+          `/api/og?slug=${encodeURIComponent(article.slug)}&title=${encodeURIComponent(
+            article.title
+          )}`
+      ]
     }
   };
 }

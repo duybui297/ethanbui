@@ -36,6 +36,13 @@ export function ArticleEditor(props: Props) {
   const [canonical, setCanonical] = React.useState(a?.canonical_url ?? '');
   const [featured, setFeatured] = React.useState(a?.og_image_url ?? '');
 
+  // Live preview of the auto-generated cover used on the public cards when no
+  // custom image is uploaded. Mirrors what /api/og renders (distinct concept
+  // per slug), so the admin sees the real cover instead of a blank box.
+  const autoCoverUrl =
+    `/api/og?variant=thumb&slug=${encodeURIComponent(slug || 'draft')}` +
+    `&title=${encodeURIComponent(title || 'Untitled')}`;
+
   const [uploadingCover, setUploadingCover] = React.useState(false);
   const [uploadingBody, setUploadingBody] = React.useState(false);
   const bodyRef = React.useRef<HTMLTextAreaElement>(null);
@@ -256,14 +263,17 @@ export function ArticleEditor(props: Props) {
           </div>
           <div className="grid gap-2">
             <Label htmlFor="featured">{t('coverImage')}</Label>
-            {featured ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={featured}
-                alt=""
-                className="aspect-[16/9] w-full rounded-[var(--radius-sm)] border border-border object-cover"
-              />
-            ) : null}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={featured || autoCoverUrl}
+              alt=""
+              className="aspect-[16/9] w-full rounded-[var(--radius-sm)] border border-border object-cover"
+            />
+            {!featured && (
+              <p className="text-xs text-text-3">
+                Auto-generated cover (distinct per article). Upload an image to override.
+              </p>
+            )}
             <div className="flex gap-2">
               <Button
                 type="button"

@@ -15,6 +15,15 @@ export function ArticleCard({ article, locale }: { article: ArticleListItem; loc
       : category.name_en
     : null;
 
+  // Every card shows a cover. Prefer a real uploaded image; otherwise fall back
+  // to the generated /api/og cover, which renders a distinct visual concept per
+  // article (keyed by slug) so the list never looks repetitive.
+  const coverSrc =
+    article.og_image_url ??
+    `/api/og?variant=thumb&slug=${encodeURIComponent(article.slug)}` +
+      `&title=${encodeURIComponent(article.title)}` +
+      `&eyebrow=${encodeURIComponent(categoryName ?? 'AI in software delivery')}`;
+
   return (
     <Card className="group overflow-hidden transition-shadow hover:shadow-[0_4px_16px_rgba(0,0,0,0.06)]">
       <Link href={`/articles/${article.slug}`} className="flex items-start gap-4 p-5 sm:gap-5 sm:p-6">
@@ -41,14 +50,12 @@ export function ArticleCard({ article, locale }: { article: ArticleListItem; loc
             </p>
           )}
         </div>
-        {article.og_image_url ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={article.og_image_url}
-            alt=""
-            className="aspect-[4/3] w-24 shrink-0 rounded-[var(--radius-md)] object-cover sm:w-32"
-          />
-        ) : null}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={coverSrc}
+          alt=""
+          className="aspect-[4/3] w-24 shrink-0 rounded-[var(--radius-md)] object-cover sm:w-32"
+        />
       </Link>
     </Card>
   );

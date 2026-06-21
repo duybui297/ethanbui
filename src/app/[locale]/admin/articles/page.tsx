@@ -22,7 +22,7 @@ export default async function AdminArticlesPage({
   // Fetch all articles for the listing table
   const { data: articles } = await supabase
     .from('articles')
-    .select('id, title, slug, locale, status, updated_at')
+    .select('id, title, slug, locale, status, updated_at, og_image_url')
     .order('updated_at', { ascending: false });
 
   // Fetch EN published articles for the reorder section
@@ -87,6 +87,7 @@ export default async function AdminArticlesPage({
           <table className="w-full text-sm">
             <thead className="bg-bg-subtle text-left text-xs uppercase tracking-wider text-text-3">
               <tr>
+                <th className="px-4 py-3 w-20">Cover</th>
                 <th className="px-4 py-3">{t('colTitle')}</th>
                 <th className="px-4 py-3">{t('colLocale')}</th>
                 <th className="px-4 py-3">{t('colStatus')}</th>
@@ -96,6 +97,19 @@ export default async function AdminArticlesPage({
             <tbody className="divide-y divide-border">
               {articles.map((a) => (
                 <tr key={a.id} className="hover:bg-bg-muted">
+                  <td className="px-4 py-3">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={
+                        a.og_image_url ??
+                        `/api/og?variant=thumb&slug=${encodeURIComponent(
+                          a.slug
+                        )}&title=${encodeURIComponent(a.title)}`
+                      }
+                      alt=""
+                      className="aspect-[4/3] w-16 rounded-[var(--radius-sm)] border border-border object-cover"
+                    />
+                  </td>
                   <td className="px-4 py-3">
                     <Link
                       href={`/admin/articles/${a.id}`}
