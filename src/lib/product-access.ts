@@ -1,6 +1,7 @@
 import 'server-only';
 import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { getGatedProduct } from '@/lib/products';
+import { addResendContact } from '@/lib/resend-contacts';
 
 type RecordArgs = {
   email: string;
@@ -48,15 +49,18 @@ export async function recordProductAccess({
         product_first_seen_at: new Date().toISOString()
       })
       .eq('id', existing.id);
-    return;
+  } else {
+    await supabase.from('subscribers').insert({
+      email: normEmail,
+      locale,
+      source: 'product-auth',
+      source_product: product.id,
+      auth_provider: provider,
+      product_first_seen_at: new Date().toISOString()
+    });
   }
 
-  await supabase.from('subscribers').insert({
-    email: normEmail,
-    locale,
-    source: 'product-auth',
-    source_product: product.id,
-    auth_provider: provider,
-    product_first_seen_at: new Date().toISOString()
-  });
+  // Auto-subscribe: registering through a product gate also adds the person to
+  // the Resend audience. Best-effort — never blocks the sign-in flow.
+  await addResendContact({ email: normEmail }).catch(() => {});
 }
