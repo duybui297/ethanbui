@@ -2,11 +2,52 @@ import { NextResponse, type NextRequest } from 'next/server';
 import createMiddleware from 'next-intl/middleware';
 import { createServerClient } from '@supabase/ssr';
 import { routing } from './src/lib/i18n/routing';
+import { gatedProductForPath } from './src/lib/products';
 
 const intlMiddleware = createMiddleware(routing);
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // -1. Hard-gate go-live products. These static apps live OUTSIDE i18n
+  //     routing (e.g. /products/nihongo), so we handle them before the geo
+  //     block to avoid wrongly prefixing them with a locale. Unauthenticated
+  //     visitors are sent to the product login page.
+  const gatedProduct = gatedProductForPath(pathname);
+  if (gatedProduct) {
+    const response = NextResponse.next();
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll();
+          },
+          setAll(cookies) {
+            cookies.forEach(({ name, value, options }) =>
+              response.cookies.set(name, value, options)
+            );
+          }
+        }
+      }
+    );
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      const country = (request.headers.get('x-vercel-ip-country') || '').toUpperCase();
+      const locale = country === 'VN' ? 'vi' : 'en';
+      const redirectUrl = new URL(`/${locale}/products/access`, request.url);
+      redirectUrl.searchParams.set('product', gatedProduct.id);
+      redirectUrl.searchParams.set('next', pathname);
+      const res = NextResponse.redirect(redirectUrl);
+      res.headers.set('Cache-Control', 'no-store');
+      return res;
+    }
+    return response;
+  }
 
   // 0. Geo-aware default locale for locale-less paths.
   //    Visitors located in Vietnam get `vi`; everyone else gets `en`.
@@ -79,6 +120,11 @@ export const config = {
     // does NOT match '/', which otherwise 404s (there is no app/page.tsx, only
     // app/[locale]). Without this, the geo redirect never runs for the root.
     '/',
+    // Gated product entry pages. Middleware must run here to enforce the auth
+    // gate. The product's own assets (css/js, which carry file extensions) are
+    // excluded by the catch-all below and load normally once the gate passes.
+    // When you add a new gated product, add its entry path here too.
+    '/products/nihongo',
     '/((?!_next|api|products/nihongo|.*\\..*).*)'
   ]
 };

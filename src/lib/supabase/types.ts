@@ -100,6 +100,9 @@ export interface Subscriber {
   locale: Locale;
   source: string | null;
   beehiiv_id: string | null;
+  source_product: string | null;
+  auth_provider: string | null;
+  product_first_seen_at: string | null;
   created_at: string;
 }
 

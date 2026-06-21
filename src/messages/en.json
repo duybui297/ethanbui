@@ -262,6 +262,41 @@
       "dragHint": "Drag rows or use arrows to reorder. VI articles will mirror this order automatically.",
       "colOrder": "#",
       "allArticles": "All Articles"
+    },
+    "subscribers": {
+      "title": "Subscribers",
+      "countTotal": "Total",
+      "countFromProducts": "From products",
+      "colEmail": "Email",
+      "colProduct": "Source product",
+      "colProvider": "Sign-in",
+      "colSource": "Channel",
+      "colLocale": "Locale",
+      "colJoined": "Joined",
+      "noProduct": "Newsletter",
+      "empty": "No subscribers yet."
     }
+  },
+  "productAuth": {
+    "badge": "SECURE ACCESS",
+    "title": "Sign in to use {product}",
+    "subtitle": "This is a members-only product. Sign in or create an account to continue.",
+    "continueGoogle": "Continue with Google",
+    "continueFacebook": "Continue with Facebook",
+    "redirecting": "Redirecting…",
+    "or": "or",
+    "emailLabel": "Email",
+    "sendCode": "Email me a code",
+    "sending": "Sending…",
+    "codeSent": "We sent a 6-digit code to your email.",
+    "codeLabel": "Enter the code sent to {email}",
+    "changeEmail": "Use a different email",
+    "verify": "Verify & enter",
+    "verifying": "Verifying…",
+    "resend": "Resend code",
+    "legal": "By continuing you agree to receive a one-time sign-in code. We only use your email to give you access to the product.",
+    "errorOAuth": "Could not start sign-in. Please try again.",
+    "errorSendCode": "Could not send the code. Check your email and try again.",
+    "errorBadCode": "That code is invalid or expired. Try again."
   }
 }
