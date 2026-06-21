@@ -16,11 +16,12 @@ type Props = {
 };
 
 /**
- * Google / Facebook sign-in. Off until the OAuth apps are configured in
- * Supabase (see PRODUCT_AUTH_SETUP.md, steps B & C). Flip to `true` to show
- * the buttons again — the handlers below are already wired.
+ * Google / Facebook SSO buttons. Each provider must be enabled and given a
+ * Client ID/Secret in Supabase first (see PRODUCT_AUTH_SETUP.md).
+ * Google is configured; Facebook is not yet, so its button is hidden below.
  */
-const SHOW_SSO = false;
+const SHOW_SSO = true;
+const SHOW_FACEBOOK = false;
 
 /** Build the OAuth return URL that our /api/auth/callback handler reads. */
 function callbackUrl(productId: string, next: string, locale: string) {
@@ -128,19 +129,29 @@ export function ProductAuthForm({ productId, next, locale }: Props) {
               disabled={busy !== null}
               onClick={() => oauth('google')}
             >
-              <GoogleIcon />
+              {busy === 'google' ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <GoogleIcon />
+              )}
               {busy === 'google' ? t('redirecting') : t('continueGoogle')}
             </Button>
-            <Button
-              type="button"
-              variant="secondary"
-              size="lg"
-              disabled={busy !== null}
-              onClick={() => oauth('facebook')}
-            >
-              <FacebookIcon />
-              {busy === 'facebook' ? t('redirecting') : t('continueFacebook')}
-            </Button>
+            {SHOW_FACEBOOK && (
+              <Button
+                type="button"
+                variant="secondary"
+                size="lg"
+                disabled={busy !== null}
+                onClick={() => oauth('facebook')}
+              >
+                {busy === 'facebook' ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <FacebookIcon />
+                )}
+                {busy === 'facebook' ? t('redirecting') : t('continueFacebook')}
+              </Button>
+            )}
           </div>
 
           {/* Divider */}
