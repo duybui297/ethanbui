@@ -297,6 +297,7 @@
     "legal": "By continuing you agree to receive a one-time sign-in code. We only use your email to give you access to the product.",
     "errorOAuth": "Could not start sign-in. Please try again.",
     "errorSendCode": "Could not send the code. Check your email and try again.",
-    "errorBadCode": "That code is invalid or expired. Try again."
+    "errorBadCode": "That code is invalid or expired. Try again.",
+    "opening": "Opening the product…"
   }
 }

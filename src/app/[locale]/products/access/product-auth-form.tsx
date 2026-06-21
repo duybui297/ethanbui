@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
-import { Mail, ArrowLeft } from 'lucide-react';
+import { Mail, ArrowLeft, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -37,6 +37,10 @@ export function ProductAuthForm({ productId, next, locale }: Props) {
   const [stage, setStage] = React.useState<'email' | 'code'>('email');
   const [email, setEmail] = React.useState('');
   const [code, setCode] = React.useState('');
+  // True from the moment a sign-in succeeds until the product page takes over.
+  // Drives a full-screen loader so the (slow) navigation into the product app
+  // never looks frozen.
+  const [navigating, setNavigating] = React.useState(false);
 
   async function oauth(provider: 'google' | 'facebook') {
     setBusy(provider);
@@ -96,6 +100,8 @@ export function ProductAuthForm({ productId, next, locale }: Props) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ product: productId, provider: 'email', locale })
       }).catch(() => {});
+      // Keep a full-screen loader up while the browser loads the product app.
+      setNavigating(true);
       window.location.assign(next);
     } finally {
       setBusy(null);
@@ -103,7 +109,14 @@ export function ProductAuthForm({ productId, next, locale }: Props) {
   }
 
   return (
-    <div className="grid gap-5">
+    <>
+      {navigating && (
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-3 bg-surface/95 backdrop-blur-sm">
+          <Loader2 className="h-8 w-8 animate-spin text-accent-500" />
+          <p className="text-sm font-medium text-text-2">{t('opening')}</p>
+        </div>
+      )}
+      <div className="grid gap-5">
       {/* SSO — hidden until Google/Facebook OAuth apps are configured */}
       {SHOW_SSO && (
         <>
@@ -155,7 +168,11 @@ export function ProductAuthForm({ productId, next, locale }: Props) {
             />
           </div>
           <Button type="submit" size="lg" disabled={busy !== null}>
-            <Mail className="h-4 w-4" />
+            {busy === 'email' ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Mail className="h-4 w-4" />
+            )}
             {busy === 'email' ? t('sending') : t('sendCode')}
           </Button>
         </form>
@@ -187,6 +204,7 @@ export function ProductAuthForm({ productId, next, locale }: Props) {
             />
           </div>
           <Button type="submit" size="lg" disabled={busy !== null || code.length < 6}>
+            {busy === 'email' && <Loader2 className="h-4 w-4 animate-spin" />}
             {busy === 'email' ? t('verifying') : t('verify')}
           </Button>
           <button
@@ -199,7 +217,8 @@ export function ProductAuthForm({ productId, next, locale }: Props) {
           </button>
         </form>
       )}
-    </div>
+      </div>
+    </>
   );
 }
 

@@ -297,6 +297,7 @@
     "legal": "Khi tiếp tục, bạn đồng ý nhận mã đăng nhập một lần. Chúng tôi chỉ dùng email của bạn để cấp quyền truy cập sản phẩm.",
     "errorOAuth": "Không thể bắt đầu đăng nhập. Vui lòng thử lại.",
     "errorSendCode": "Không gửi được mã. Kiểm tra email và thử lại.",
-    "errorBadCode": "Mã không đúng hoặc đã hết hạn. Vui lòng thử lại."
+    "errorBadCode": "Mã không đúng hoặc đã hết hạn. Vui lòng thử lại.",
+    "opening": "Đang mở sản phẩm…"
   }
 }
