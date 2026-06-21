@@ -445,7 +445,10 @@ export async function GET(req: Request) {
 
   const concept = pickConcept(slug, title);
   const accent = ACCENT[concept];
-  const bg = `radial-gradient(900px circle at 78% 18%, ${accent}26, transparent 55%), radial-gradient(700px circle at 12% 92%, ${accent}1A, transparent 50%), ${BG}`;
+  // Satori needs the solid colour in `backgroundColor` and ONLY gradients in
+  // `backgroundImage`; a trailing solid colour inside the gradient list throws
+  // "Invalid background image".
+  const bgImage = `radial-gradient(900px circle at 78% 18%, ${accent}26, transparent 55%), radial-gradient(700px circle at 12% 92%, ${accent}1A, transparent 50%)`;
 
   // --- Card thumbnail (4:3): artwork on top, title below. ---
   if (variant === 'thumb') {
@@ -459,7 +462,8 @@ export async function GET(req: Request) {
             flexDirection: 'column',
             justifyContent: 'space-between',
             padding: 64,
-            background: bg,
+            backgroundColor: BG,
+            backgroundImage: bgImage,
             color: TEXT,
             fontFamily: 'system-ui'
           }}
@@ -495,7 +499,8 @@ export async function GET(req: Request) {
           width: '100%',
           height: '100%',
           display: 'flex',
-          background: bg,
+          backgroundColor: BG,
+          backgroundImage: bgImage,
           color: TEXT,
           fontFamily: 'system-ui'
         }}
