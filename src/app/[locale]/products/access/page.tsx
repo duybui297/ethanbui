@@ -1,5 +1,7 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server';
+import { redirect } from 'next/navigation';
 import { GATED_PRODUCTS, getGatedProduct } from '@/lib/products';
+import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { ProductAuthForm } from './product-auth-form';
 
 export const dynamic = 'force-dynamic';
@@ -26,6 +28,17 @@ export default async function ProductAccessPage({
   const next = rawNext.startsWith('/') && !rawNext.startsWith('//')
     ? rawNext
     : (product?.path ?? '/');
+
+  // Already signed in? Skip the form and go straight in. The session is kept
+  // in the Supabase auth cookies and refreshed by middleware, so a returning
+  // visitor never has to re-authenticate.
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+  if (user) {
+    redirect(next);
+  }
 
   return (
     <section className="mx-auto flex min-h-[80vh] max-w-[440px] flex-col justify-center px-6 py-12">
