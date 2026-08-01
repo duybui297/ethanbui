@@ -1,7 +1,7 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { Metadata } from 'next';
 import { SubscribeBlock } from '@/components/site/subscribe-block';
-import { Bot, FileText, GraduationCap, Sparkles, Rocket, ArrowUpRight } from 'lucide-react';
+import { Bot, FileText, GraduationCap, Languages, Sparkles, Rocket, ArrowUpRight } from 'lucide-react';
 
 export const revalidate = 60;
 
@@ -18,7 +18,7 @@ export async function generateMetadata({
 /* ── Product data (hardcoded) ── */
 type Product = {
   id: string;
-  icon: 'bot' | 'fileText' | 'graduationCap';
+  icon: 'bot' | 'fileText' | 'graduationCap' | 'languages';
   status: 'live' | 'upcoming';
   badgeKey?: string; // translation key for the badge (live products)
   badge?: string; // literal badge text (upcoming products)
@@ -37,6 +37,15 @@ const liveProducts: Product[] = [
     titleKey: 'nihongoTitle',
     descKey: 'nihongoDesc',
     url: 'https://www.ethanbui.net/en/products/access'
+  },
+  {
+    id: 'kanji-radicals',
+    icon: 'languages',
+    status: 'live',
+    badgeKey: 'freeBadge',
+    titleKey: 'product3Title',
+    descKey: 'product3Desc',
+    url: '/hoc-bo-thu-kanji.html'
   }
 ];
 
@@ -65,7 +74,8 @@ const upcomingProducts: Product[] = [
 const iconMap = {
   bot: Bot,
   fileText: FileText,
-  graduationCap: GraduationCap
+  graduationCap: GraduationCap,
+  languages: Languages
 } as const;
 
 function ProductCard({

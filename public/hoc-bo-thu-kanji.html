@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>214 Bộ Thủ Kanji — Luyện tập</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;700;900&family=Noto+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap');
+
+:root{
+  --paper:#EAE3D2;
+  --paper-dark:#DED4BC;
+  --paper-deep:#D3C7A9;
+  --ink:#211E19;
+  --ink-soft:#5B5346;
+  --indigo:#2F4A57;
+  --indigo-dark:#1F343E;
+  --seal:#B23A2E;
+  --seal-dark:#8C2C22;
+  --jade:#4C6E5B;
+  --jade-light:#B9CBBD;
+  --gold:#AD7C34;
+  --muted:#8A8172;
+  --line: rgba(33,30,25,0.14);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:
+    radial-gradient(ellipse at top left, rgba(255,255,255,0.35), transparent 55%),
+    radial-gradient(ellipse at bottom right, rgba(0,0,0,0.05), transparent 55%),
+    var(--paper);
+  color:var(--ink);
+  font-family:'Noto Sans','Segoe UI',sans-serif;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+#app{
+  max-width:760px;
+  margin:0 auto;
+  padding:22px 16px 60px;
+  min-height:100vh;
+}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--seal);
+  font-weight:700;
+}
+h1{
+  font-family:'Noto Serif JP',serif;
+  font-weight:900;
+  font-size:clamp(26px,6vw,38px);
+  margin:6px 0 4px;
+  letter-spacing:-0.01em;
+}
+.sub{
+  color:var(--ink-soft);
+  font-size:14.5px;
+  line-height:1.55;
+  margin:0 0 22px;
+  max-width:58ch;
+}
+.card{
+  background:var(--paper-dark);
+  border:1px solid var(--line);
+  border-radius:4px;
+  box-shadow:0 1px 0 rgba(255,255,255,0.5) inset, 0 6px 18px rgba(33,30,25,0.06);
+  padding:20px;
+}
+.section-title{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--indigo);
+  font-weight:700;
+  margin:0 0 12px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.section-title::before{
+  content:"";
+  width:14px;height:1px;background:var(--seal);
+}
+
+/* ---- choice grid (func / mode) ---- */
+.choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px;}
+@media (max-width:520px){.choice-grid{grid-template-columns:1fr;}}
+.choice{
+  text-align:left;
+  border:1.5px solid var(--line);
+  background:var(--paper);
+  border-radius:3px;
+  padding:14px 14px 12px;
+  cursor:pointer;
+  transition:.15s ease;
+  font-family:'Noto Sans',sans-serif;
+  color:var(--ink);
+}
+.choice:hover{border-color:var(--indigo);}
+.choice.active{
+  border-color:var(--seal);
+  background:linear-gradient(180deg, rgba(178,58,46,0.08), rgba(178,58,46,0.03));
+  box-shadow:0 0 0 1px var(--seal);
+}
+.choice .cnum{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:var(--muted);font-weight:700;
+}
+.choice .ctitle{font-weight:700;font-size:15px;margin:4px 0 3px;}
+.choice .cdesc{font-size:12.5px;color:var(--ink-soft);line-height:1.4;}
+
+.stroke-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(78px,1fr));
+  gap:8px;
+  margin-bottom:8px;
+}
+.stroke-btn{
+  border:1px solid var(--line);
+  background:var(--paper);
+  border-radius:3px;
+  padding:10px 6px;
+  text-align:center;
+  cursor:pointer;
+  font-family:'Noto Sans',sans-serif;
+  transition:.15s ease;
+}
+.stroke-btn .n{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:18px;color:var(--indigo);}
+.stroke-btn .l{font-size:10.5px;color:var(--ink-soft);}
+.stroke-btn .c{font-size:10px;color:var(--muted);margin-top:2px;}
+.stroke-btn:hover{border-color:var(--indigo);}
+.stroke-btn.active{border-color:var(--seal);box-shadow:0 0 0 1px var(--seal);background:rgba(178,58,46,0.07);}
+
+.size-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
+.size-btn{
+  border:1px solid var(--line);background:var(--paper);border-radius:20px;
+  padding:7px 16px;font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:600;
+  cursor:pointer;color:var(--ink-soft);
+}
+.size-btn.active{border-color:var(--seal);color:var(--seal-dark);background:rgba(178,58,46,0.07);}
+
+.start-btn{
+  width:100%;
+  margin-top:14px;
+  padding:15px;
+  border:none;
+  border-radius:3px;
+  background:var(--indigo);
+  color:var(--paper);
+  font-family:'Noto Serif JP',serif;
+  font-weight:700;
+  font-size:16px;
+  letter-spacing:.02em;
+  cursor:pointer;
+  transition:.15s ease;
+}
+.start-btn:disabled{background:var(--muted);cursor:not-allowed;opacity:.6;}
+.start-btn:not(:disabled):hover{background:var(--indigo-dark);}
+
+.ref-link{
+  display:inline-flex;align-items:center;gap:6px;
+  background:none;border:none;color:var(--indigo);
+  font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;
+  cursor:pointer;padding:0;margin-top:18px;text-decoration:underline;text-underline-offset:3px;
+}
+
+/* ---- quiz screen ---- */
+.quiz-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.quiz-meta{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);}
+.score-pill{
+  font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;
+  background:var(--jade);color:#fff;padding:4px 10px;border-radius:20px;
+}
+.progress-track{height:4px;background:var(--paper-deep);border-radius:2px;overflow:hidden;margin-bottom:22px;}
+.progress-fill{height:100%;background:var(--seal);transition:width .25s ease;}
+
+.quiz-card{
+  background:var(--paper-dark);
+  border:1px solid var(--line);
+  border-radius:4px;
+  padding:28px 20px 24px;
+  text-align:center;
+  position:relative;
+}
+.prompt-label{
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:16px;
+}
+.grid-box{
+  width:150px;height:150px;margin:0 auto 12px;
+  border:2px solid var(--ink);
+  background-color:var(--paper);
+  background-image:
+    linear-gradient(rgba(178,58,46,0.4) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(178,58,46,0.4) 1px, transparent 1px),
+    linear-gradient(45deg, transparent calc(50% - 1px), rgba(178,58,46,0.22) 50%, transparent calc(50% + 1px)),
+    linear-gradient(-45deg, transparent calc(50% - 1px), rgba(178,58,46,0.22) 50%, transparent calc(50% + 1px));
+  background-size:100% 100%;
+  background-position:center;
+  background-repeat:no-repeat;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+}
+.grid-box .glyph{
+  font-family:'Noto Serif JP',serif;
+  font-weight:700;
+  font-size:88px;
+  line-height:1;
+  color:var(--ink);
+}
+.stroke-tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;color:var(--ink-soft);margin-bottom:2px;
+}
+.reading-prompt{
+  font-family:'Noto Serif JP',serif;
+  font-weight:900;
+  font-size:clamp(34px,8vw,50px);
+  color:var(--indigo-dark);
+  margin:6px 0 2px;
+}
+.meaning-hint{
+  font-size:13px;color:var(--ink-soft);font-style:italic;margin-bottom:6px;
+}
+
+.options{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px;
+}
+@media (max-width:480px){.options{grid-template-columns:1fr;}}
+.opt-btn{
+  border:1.5px solid var(--line);
+  background:var(--paper);
+  border-radius:3px;
+  padding:14px 10px;
+  cursor:pointer;
+  font-family:'Noto Sans',sans-serif;
+  font-size:16px;
+  font-weight:600;
+  color:var(--ink);
+  transition:.12s ease;
+  position:relative;
+}
+.opt-btn .opt-glyph{font-family:'Noto Serif JP',serif;font-size:40px;font-weight:700;display:block;}
+.opt-btn:hover:not(:disabled){border-color:var(--indigo);}
+.opt-btn:disabled{cursor:default;}
+.opt-btn.correct{
+  border-color:var(--jade);
+  background:linear-gradient(180deg, rgba(76,110,91,0.16), rgba(76,110,91,0.06));
+  color:var(--jade);
+}
+.opt-btn.wrong{
+  border-color:var(--muted);
+  background:rgba(90,83,70,0.08);
+  color:var(--muted);
+  text-decoration:line-through;
+}
+.seal-stamp{
+  position:absolute;top:-14px;right:-10px;
+  width:46px;height:46px;
+  border:3px solid var(--seal);
+  border-radius:6px;
+  transform:rotate(-9deg);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--seal);font-family:'Noto Serif JP',serif;font-weight:900;font-size:20px;
+  background:rgba(234,227,210,0.9);
+  animation:stampIn .28s cubic-bezier(.3,1.5,.5,1);
+}
+@keyframes stampIn{from{transform:rotate(-9deg) scale(1.8);opacity:0;}to{transform:rotate(-9deg) scale(1);opacity:1;}}
+
+.feedback-line{
+  margin-top:18px;font-size:13.5px;color:var(--ink-soft);min-height:20px;
+}
+.feedback-line b{color:var(--indigo-dark);}
+
+.next-btn{
+  margin-top:16px;
+  padding:12px 26px;
+  border:none;border-radius:3px;
+  background:var(--seal);color:#fff;
+  font-family:'Noto Serif JP',serif;font-weight:700;font-size:15px;
+  cursor:pointer;
+}
+.next-btn:hover{background:var(--seal-dark);}
+
+/* ---- result screen ---- */
+.result-hero{text-align:center;padding:30px 10px 20px;}
+.result-score{
+  font-family:'Noto Serif JP',serif;font-weight:900;
+  font-size:clamp(44px,12vw,64px);color:var(--indigo-dark);line-height:1;
+}
+.result-score span{font-size:0.4em;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.result-pct{font-family:'JetBrains Mono',monospace;color:var(--seal);font-weight:700;margin-top:4px;}
+.missed-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin:16px 0;
+}
+.missed-item{
+  border:1px solid var(--line);background:var(--paper);border-radius:3px;padding:10px;text-align:center;
+}
+.missed-item .g{font-family:'Noto Serif JP',serif;font-size:28px;}
+.missed-item .h{font-weight:700;font-size:13px;color:var(--indigo-dark);margin-top:2px;}
+.missed-item .m{font-size:11px;color:var(--ink-soft);}
+.result-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
+.result-actions button{flex:1;min-width:150px;}
+
+.btn-outline{
+  padding:12px 16px;border-radius:3px;border:1.5px solid var(--indigo);
+  background:transparent;color:var(--indigo);font-family:'Noto Serif JP',serif;font-weight:700;font-size:14px;cursor:pointer;
+}
+.btn-outline:hover{background:var(--indigo);color:var(--paper);}
+
+/* ---- reference modal ---- */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(33,30,25,0.55);
+  display:flex;align-items:flex-end;justify-content:center;z-index:50;
+}
+@media (min-width:640px){.modal-overlay{align-items:center;}}
+.modal{
+  background:var(--paper);width:100%;max-width:680px;max-height:82vh;overflow-y:auto;
+  border-radius:8px 8px 0 0;padding:18px 16px 26px;
+}
+@media (min-width:640px){.modal{border-radius:8px;}}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;position:sticky;top:0;background:var(--paper);padding-bottom:8px;}
+.modal-head h2{font-family:'Noto Serif JP',serif;font-size:19px;margin:0;}
+.modal-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--ink-soft);line-height:1;padding:4px;}
+.ref-group-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--seal);margin:16px 0 6px;
+}
+.ref-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:6px;}
+.ref-item{border:1px solid var(--line);border-radius:3px;padding:7px 8px;background:var(--paper-dark);}
+.ref-item .g{font-family:'Noto Serif JP',serif;font-size:20px;display:inline-block;width:26px;}
+.ref-item .h{font-size:12px;font-weight:700;color:var(--indigo-dark);}
+.ref-item .m{font-size:10px;color:var(--ink-soft);display:block;}
+
+.footer-note{
+  margin-top:34px;font-size:11.5px;color:var(--muted);text-align:center;line-height:1.6;
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* =========================================================
+   DATA — 214 bộ thủ Khang Hy (số thứ tự, chữ, số nét, âm Hán-Việt, nghĩa)
+   ========================================================= */
+const RAW = [
+[1,"一",1,"nhất","một, số 1"],[2,"丨",1,"cổn","nét sổ thẳng"],[3,"丶",1,"chủ","dấu chấm"],
+[4,"丿",1,"phiệt","nét phẩy"],[5,"乙",1,"ất","nét gập"],[6,"亅",1,"quyết","móc câu"],
+[7,"二",2,"nhị","hai"],[8,"亠",2,"đầu","đầu, nắp"],[9,"人",2,"nhân","người"],
+[10,"儿",2,"nhân","chân người (nhi)"],[11,"入",2,"nhập","vào"],[12,"八",2,"bát","tám, chia"],
+[13,"冂",2,"quynh","vùng biên ngoài"],[14,"冖",2,"mịch","trùm khăn"],[15,"冫",2,"băng","băng giá"],
+[16,"几",2,"kỷ","cái ghế nhỏ"],[17,"凵",2,"khảm","hố, há miệng"],[18,"刀",2,"đao","con dao"],
+[19,"力",2,"lực","sức mạnh"],[20,"勹",2,"bao","bao bọc"],[21,"匕",2,"chuỷ","cái thìa"],
+[22,"匚",2,"phương","hộp vuông"],[23,"匸",2,"hệ","che giấu"],[24,"十",2,"thập","mười"],
+[25,"卜",2,"bốc","bói toán"],[26,"卩",2,"tiết","ấn tín"],[27,"厂",2,"hán","mái đá, sườn núi"],
+[28,"厶",2,"khư","riêng tư"],[29,"又",2,"hựu","lại, tay phải"],
+[30,"口",3,"khẩu","miệng"],[31,"囗",3,"vi","vây quanh"],[32,"土",3,"thổ","đất"],
+[33,"士",3,"sĩ","kẻ sĩ, học trò"],[34,"夂",3,"truy","đi đến, theo sau"],[35,"夊",3,"tuy","đi chậm"],
+[36,"夕",3,"tịch","buổi tối"],[37,"大",3,"đại","to lớn"],[38,"女",3,"nữ","phụ nữ"],
+[39,"子",3,"tử","con"],[40,"宀",3,"miên","mái nhà"],[41,"寸",3,"thốn","tấc, đơn vị đo"],
+[42,"小",3,"tiểu","nhỏ"],[43,"尢",3,"uông","khập khiễng"],[44,"尸",3,"thi","xác chết"],
+[45,"屮",3,"triệt","mầm cây non"],[46,"山",3,"sơn","núi"],[47,"巛",3,"xuyên","sông"],
+[48,"工",3,"công","công việc"],[49,"己",3,"kỷ","bản thân"],[50,"巾",3,"cân","khăn vải"],
+[51,"干",3,"can","khiên, khô"],[52,"幺",3,"yêu","nhỏ bé"],[53,"广",3,"nghiễm","mái hiên, nhà"],
+[54,"廴",3,"dẫn","bước dài"],[55,"廾",3,"củng","chắp hai tay"],[56,"弋",3,"dặc","bắn tên, cọc"],
+[57,"弓",3,"cung","cây cung"],[58,"彐",3,"kệ","đầu mõm lợn"],[59,"彡",3,"sam","lông, vằn"],
+[60,"彳",3,"xích","bước chân trái"],
+[61,"心",4,"tâm","trái tim"],[62,"戈",4,"qua","cây giáo"],[63,"戶",4,"hộ","cửa một cánh"],
+[64,"手",4,"thủ","bàn tay"],[65,"支",4,"chi","chi nhánh"],[66,"攴",4,"phộc","gõ nhẹ"],
+[67,"文",4,"văn","văn chương, chữ"],[68,"斗",4,"đẩu","cái đấu, gáo"],[69,"斤",4,"cân","cái rìu"],
+[70,"方",4,"phương","vuông, phương hướng"],[71,"无",4,"vô","không có"],[72,"日",4,"nhật","mặt trời, ngày"],
+[73,"曰",4,"viết","nói rằng"],[74,"月",4,"nguyệt","mặt trăng"],[75,"木",4,"mộc","cây gỗ"],
+[76,"欠",4,"khiếm","thiếu, ngáp"],[77,"止",4,"chỉ","dừng lại"],[78,"歹",4,"đãi","xương tàn, chết"],
+[79,"殳",4,"thù","cây gậy, binh khí"],[80,"毋",4,"vô","chớ, đừng"],[81,"比",4,"tỷ","so sánh"],
+[82,"毛",4,"mao","lông"],[83,"氏",4,"thị","họ, dòng họ"],[84,"气",4,"khí","hơi nước"],
+[85,"水",4,"thuỷ","nước"],[86,"火",4,"hoả","lửa"],[87,"爪",4,"trảo","móng vuốt"],
+[88,"父",4,"phụ","cha"],[89,"爻",4,"hào","hào âm dương"],[90,"爿",4,"tường","mảnh gỗ tách"],
+[91,"片",4,"phiến","mảnh, tấm"],[92,"牙",4,"nha","răng nanh"],[93,"牛",4,"ngưu","trâu, bò"],
+[94,"犬",4,"khuyển","con chó"],
+[95,"玄",5,"huyền","huyền bí, sâu xa"],[96,"玉",5,"ngọc","ngọc"],[97,"瓜",5,"qua","quả dưa"],
+[98,"瓦",5,"ngoã","ngói"],[99,"甘",5,"cam","ngọt"],[100,"生",5,"sinh","sinh ra, sống"],
+[101,"用",5,"dụng","dùng"],[102,"田",5,"điền","ruộng"],[103,"疋",5,"sơ","tấm vải, chân"],
+[104,"疒",5,"nạch","bệnh tật"],[105,"癶",5,"bát","bước chân đi ngược"],[106,"白",5,"bạch","màu trắng"],
+[107,"皮",5,"bì","da"],[108,"皿",5,"mãnh","bát đĩa"],[109,"目",5,"mục","mắt"],
+[110,"矛",5,"mâu","cây mâu, giáo"],[111,"矢",5,"thỉ","mũi tên"],[112,"石",5,"thạch","đá"],
+[113,"示",5,"thị","thần linh, bày tỏ"],[114,"禸",5,"nhựu","dấu chân thú"],[115,"禾",5,"hoà","lúa"],
+[116,"穴",5,"huyệt","hang, lỗ"],[117,"立",5,"lập","đứng"],
+[118,"竹",6,"trúc","cây tre"],[119,"米",6,"mễ","gạo"],[120,"糸",6,"mịch","sợi tơ nhỏ"],
+[121,"缶",6,"phẫu","cái vò, hũ"],[122,"网",6,"võng","cái lưới"],[123,"羊",6,"dương","con dê"],
+[124,"羽",6,"vũ","lông vũ, cánh"],[125,"老",6,"lão","già"],[126,"而",6,"nhi","mà, và"],
+[127,"耒",6,"lỗi","cái cày"],[128,"耳",6,"nhĩ","tai"],[129,"聿",6,"duật","cây bút"],
+[130,"肉",6,"nhục","thịt"],[131,"臣",6,"thần","bề tôi, quan"],[132,"自",6,"tự","tự mình, mũi"],
+[133,"至",6,"chí","đến"],[134,"臼",6,"cữu","cối giã gạo"],[135,"舌",6,"thiệt","lưỡi"],
+[136,"舛",6,"suyễn","trái ngược nhau"],[137,"舟",6,"chu","thuyền"],[138,"艮",6,"cấn","dừng lại (quẻ Cấn)"],
+[139,"色",6,"sắc","màu sắc, vẻ mặt"],[140,"艸",6,"thảo","cỏ"],[141,"虍",6,"hô","vằn hổ"],
+[142,"虫",6,"trùng","côn trùng, sâu bọ"],[143,"血",6,"huyết","máu"],[144,"行",6,"hành","đi, làm"],
+[145,"衣",6,"y","áo quần"],[146,"襾",6,"á","che đậy, phía tây"],
+[147,"見",7,"kiến","nhìn thấy"],[148,"角",7,"giác","sừng, góc"],[149,"言",7,"ngôn","lời nói"],
+[150,"谷",7,"cốc","hang núi, thung lũng"],[151,"豆",7,"đậu","hạt đậu, đồ đựng"],[152,"豕",7,"thỉ","con lợn"],
+[153,"豸",7,"trãi","loài không chân"],[154,"貝",7,"bối","vỏ sò, tiền"],[155,"赤",7,"xích","màu đỏ"],
+[156,"走",7,"tẩu","chạy, đi"],[157,"足",7,"túc","chân"],[158,"身",7,"thân","thân thể"],
+[159,"車",7,"xa","xe"],[160,"辛",7,"tân","cay, khổ"],[161,"辰",7,"thần","giờ, chòm sao"],
+[162,"辵",7,"sước","đi, chợt đi chợt dừng"],[163,"邑",7,"ấp","làng, thành ấp"],[164,"酉",7,"dậu","rượu (chi Dậu)"],
+[165,"釆",7,"biện","phân biệt"],[166,"里",7,"lý","làng, dặm"],
+[167,"金",8,"kim","vàng, kim loại"],[168,"長",8,"trường","dài"],[169,"門",8,"môn","cửa hai cánh"],
+[170,"阜",8,"phụ","gò đất, đồi"],[171,"隶",8,"đãi","kịp, bắt được"],[172,"隹",8,"chuy","chim đuôi ngắn"],
+[173,"雨",8,"vũ","mưa"],[174,"青",8,"thanh","xanh"],[175,"非",8,"phi","sai trái, không phải"],
+[176,"面",9,"diện","khuôn mặt"],[177,"革",9,"cách","da thuộc"],[178,"韋",9,"vi","da thuộc mềm"],
+[179,"韭",9,"cửu","rau hẹ"],[180,"音",9,"âm","âm thanh"],[181,"頁",9,"hiệt","đầu, trang sách"],
+[182,"風",9,"phong","gió"],[183,"飛",9,"phi","bay"],[184,"食",9,"thực","ăn, thức ăn"],
+[185,"首",9,"thủ","đầu"],[186,"香",9,"hương","thơm"],
+[187,"馬",10,"mã","ngựa"],[188,"骨",10,"cốt","xương"],[189,"高",10,"cao","cao"],
+[190,"髟",10,"bưu","tóc dài"],[191,"鬥",10,"đấu","đánh nhau"],[192,"鬯",10,"sưởng","rượu tế lễ"],
+[193,"鬲",10,"cách","vạc ba chân"],[194,"鬼",10,"quỷ","ma quỷ"],
+[195,"魚",11,"ngư","cá"],[196,"鳥",11,"điểu","chim"],[197,"鹵",11,"lỗ","đất mặn, muối"],
+[198,"鹿",11,"lộc","con hươu"],[199,"麥",11,"mạch","lúa mạch"],[200,"麻",11,"ma","cây gai, mè"],
+[201,"黃",12,"hoàng","màu vàng"],[202,"黍",12,"thử","kê (loại lúa)"],[203,"黑",12,"hắc","màu đen"],
+[204,"黹",12,"chỉ","thêu thùa"],
+[205,"黽",13,"mãnh","con ếch, cóc"],[206,"鼎",13,"đỉnh","vạc ba chân"],[207,"鼓",13,"cổ","cái trống"],
+[208,"鼠",13,"thử","con chuột"],
+[209,"鼻",14,"tỵ","mũi"],[210,"齊",14,"tề","ngay ngắn, đều"],
+[211,"齒",15,"xỉ","răng"],
+[212,"龍",16,"long","con rồng"],[213,"龜",16,"quy","con rùa"],
+[214,"龠",17,"dược","ống sáo"]
+];
+const DATA = RAW.map(r=>({id:r[0],char:r[1],strokes:r[2],hv:r[3],meaning:r[4]}));
+const STROKE_COUNTS = [...new Set(DATA.map(d=>d.strokes))].sort((a,b)=>a-b);
+
+/* ============ STATE ============ */
+let state = {
+  screen:'setup',       // setup | quiz | result
+  func: null,            // 1 = xem chữ đoán âm | 2 = xem âm đoán chữ
+  mode: null,            // 'stroke' | 'mixed'
+  strokeSel: null,
+  sizeSel: null,          // for mixed mode
+  pool: [],
+  queue: [],
+  idx: 0,
+  score: 0,
+  wrong: [],
+  answered:false,
+  lastCorrectId:null,
+  retrySourceLabel:null
+};
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+/* ============ SETUP HELPERS ============ */
+function selectFunc(n){ state.func = n; render(); }
+function selectMode(m){ state.mode = m; state.strokeSel=null; state.sizeSel = m==='mixed' ? 30 : null; render(); }
+function selectStroke(n){ state.strokeSel = n; render(); }
+function selectSize(n){ state.sizeSel = n; render(); }
+
+function canStart(){
+  if(!state.func) return false;
+  if(state.mode==='stroke' && !state.strokeSel) return false;
+  if(!state.mode) return false;
+  return true;
+}
+
+function startQuiz(){
+  let pool;
+  if(state.mode==='stroke'){
+    pool = DATA.filter(d=>d.strokes===state.strokeSel);
+    state.retrySourceLabel = state.strokeSel+' nét';
+  } else {
+    pool = shuffle(DATA);
+    if(state.sizeSel && state.sizeSel < pool.length) pool = pool.slice(0,state.sizeSel);
+    state.retrySourceLabel = 'trộn tổng hợp';
+  }
+  beginSession(pool);
+}
+
+function beginSession(pool){
+  state.pool = pool;
+  state.queue = shuffle(pool);
+  state.idx = 0;
+  state.score = 0;
+  state.wrong = [];
+  state.answered = false;
+  state.lastCorrectId = null;
+  state.screen = 'quiz';
+  render();
+}
+
+function backToSetup(){
+  state.screen='setup';
+  render();
+}
+
+/* ============ QUIZ LOGIC ============ */
+function sampleDistractors(correct, poolPrimary, count){
+  let cand = poolPrimary.filter(x=>x.id!==correct.id);
+  cand = shuffle(cand);
+  let chosen = cand.slice(0,count);
+  if(chosen.length < count){
+    let extra = shuffle(DATA.filter(x=>x.id!==correct.id && !chosen.some(c=>c.id===x.id)));
+    chosen = chosen.concat(extra.slice(0, count-chosen.length));
+  }
+  return chosen;
+}
+
+let currentOptions = [];
+function buildQuestion(){
+  const correct = state.queue[state.idx];
+  const distractors = sampleDistractors(correct, state.pool, 3);
+  currentOptions = shuffle([correct, ...distractors]);
+  return correct;
+}
+
+function selectAnswer(optId){
+  if(state.answered) return;
+  state.answered = true;
+  const correct = state.queue[state.idx];
+  state.lastCorrectId = correct.id;
+  if(optId === correct.id){
+    state.score++;
+  } else {
+    if(!state.wrong.some(w=>w.id===correct.id)) state.wrong.push(correct);
+  }
+  render();
+}
+
+function nextQuestion(){
+  state.idx++;
+  state.answered = false;
+  if(state.idx >= state.queue.length){
+    state.screen = 'result';
+  }
+  render();
+}
+
+function retryWrong(){
+  if(state.wrong.length===0) return;
+  state.retrySourceLabel = 'ôn lại câu sai';
+  beginSession(state.wrong);
+}
+
+function restartSame(){
+  beginSession(state.pool);
+}
+
+/* ============ REFERENCE MODAL ============ */
+let refOpen = false;
+function openRef(){ refOpen = true; render(); }
+function closeRef(){ refOpen = false; render(); }
+
+/* ============ RENDER ============ */
+function render(){
+  const app = document.getElementById('app');
+  if(state.screen==='setup') app.innerHTML = renderSetup();
+  else if(state.screen==='quiz') app.innerHTML = renderQuiz();
+  else app.innerHTML = renderResult();
+
+  if(refOpen){
+    app.innerHTML += renderRefModal();
+  }
+}
+
+function renderSetup(){
+  const strokeCounts = STROKE_COUNTS.map(n=>{
+    const cnt = DATA.filter(d=>d.strokes===n).length;
+    const active = state.strokeSel===n ? 'active':'';
+    return `<div class="stroke-btn ${active}" onclick="selectStroke(${n})">
+      <div class="n">${n}</div>
+      <div class="l">nét</div>
+      <div class="c">${cnt} bộ</div>
+    </div>`;
+  }).join('');
+
+  const sizeOptions = [10,30,50,214];
+  const sizeRow = state.mode==='mixed' ? `
+    <div class="section-title" style="margin-top:16px;">Số câu / lượt</div>
+    <div class="size-row">
+      ${sizeOptions.map(n=>`<div class="size-btn ${state.sizeSel===n?'active':''}" onclick="selectSize(${n})">${n===214?'Tất cả (214)':n+' câu'}</div>`).join('')}
+    </div>` : '';
+
+  return `
+  <div class="eyebrow">Luyện Hán tự · Kangxi Radicals</div>
+  <h1>214 Bộ Thủ Kanji</h1>
+  <p class="sub">Chọn chức năng luyện tập và chế độ ôn bên dưới. Có thể ôn theo từng nhóm số nét, hoặc trộn toàn bộ 214 bộ thủ vào một lượt.</p>
+
+  <div class="card">
+    <div class="section-title">1 · Chọn chức năng</div>
+    <div class="choice-grid">
+      <div class="choice ${state.func===1?'active':''}" onclick="selectFunc(1)">
+        <div class="cnum">Chức năng 01</div>
+        <div class="ctitle">Nhìn chữ → đoán âm</div>
+        <div class="cdesc">Xem mặt chữ bộ thủ, chọn đúng phiên âm Hán-Việt.</div>
+      </div>
+      <div class="choice ${state.func===2?'active':''}" onclick="selectFunc(2)">
+        <div class="cnum">Chức năng 02</div>
+        <div class="ctitle">Nhìn âm → nhận mặt chữ</div>
+        <div class="cdesc">Xem phiên âm, chọn đúng chữ bộ thủ tương ứng để nhớ mặt chữ.</div>
+      </div>
+    </div>
+
+    <div class="section-title">2 · Chọn chế độ</div>
+    <div class="choice-grid">
+      <div class="choice ${state.mode==='stroke'?'active':''}" onclick="selectMode('stroke')">
+        <div class="cnum">Chế độ A</div>
+        <div class="ctitle">Theo từng nét</div>
+        <div class="cdesc">Ôn riêng từng nhóm bộ thủ 1 nét, 2 nét, 3 nét... để nắm chắc từng bước.</div>
+      </div>
+      <div class="choice ${state.mode==='mixed'?'active':''}" onclick="selectMode('mixed')">
+        <div class="cnum">Chế độ B</div>
+        <div class="ctitle">Trộn tổng hợp</div>
+        <div class="cdesc">Trộn ngẫu nhiên toàn bộ 214 bộ thủ, không phân biệt số nét.</div>
+      </div>
+    </div>
+
+    ${state.mode==='stroke' ? `
+      <div class="section-title">Chọn nhóm số nét</div>
+      <div class="stroke-grid">${strokeCounts}</div>
+    ` : ''}
+    ${sizeRow}
+
+    <button class="start-btn" ${canStart()?'':'disabled'} onclick="startQuiz()">Bắt đầu luyện tập →</button>
+  </div>
+
+  <button class="ref-link" onclick="openRef()">📖 Xem bảng đầy đủ 214 bộ thủ</button>
+  <div class="footer-note">Danh sách dựa trên 214 bộ thủ Khang Hy tự điển (康熙字典), thứ tự theo số nét tăng dần.</div>
+  `;
+}
+
+function renderQuiz(){
+  const correct = buildQuestion();
+  const total = state.queue.length;
+  const pct = Math.round(((state.idx)/total)*100);
+
+  let promptHtml, optionsHtml;
+
+  if(state.func===1){
+    promptHtml = `
+      <div class="prompt-label">Đây là bộ thủ số ${correct.id} — hãy chọn đúng âm Hán-Việt</div>
+      <div class="grid-box"><div class="glyph">${correct.char}</div></div>
+      <div class="stroke-tag">${correct.strokes} nét</div>
+    `;
+    optionsHtml = currentOptions.map(o=>optButtonReading(o, correct)).join('');
+  } else {
+    promptHtml = `
+      <div class="prompt-label">Bộ thủ số ${correct.id} có âm Hán-Việt là</div>
+      <div class="reading-prompt">${correct.hv}</div>
+      <div class="meaning-hint">nghĩa: ${correct.meaning}</div>
+    `;
+    optionsHtml = currentOptions.map(o=>optButtonGlyph(o, correct)).join('');
+  }
+
+  let feedback = '';
+  let nextBtn = '';
+  if(state.answered){
+    feedback = `<div class="feedback-line">Đáp án đúng: <b>${correct.char} — ${correct.hv}</b> (${correct.meaning})</div>`;
+    nextBtn = `<button class="next-btn" onclick="nextQuestion()">${state.idx+1>=total?'Xem kết quả →':'Câu tiếp theo →'}</button>`;
+  }
+
+  return `
+  <div class="eyebrow">${state.retrySourceLabel||''}</div>
+  <div class="quiz-top">
+    <div class="quiz-meta">Câu ${state.idx+1} / ${total}</div>
+    <div class="score-pill">${state.score} đúng</div>
+  </div>
+  <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+
+  <div class="quiz-card">
+    ${promptHtml}
+    <div class="options">${optionsHtml}</div>
+    ${feedback}
+    ${nextBtn}
+  </div>
+  `;
+}
+
+function optButtonReading(o, correct){
+  const answered = state.answered;
+  let cls='opt-btn';
+  let stamp='';
+  if(answered){
+    if(o.id===correct.id){ cls+=' correct'; stamp='<div class="seal-stamp">正</div>'; }
+    else cls+=' wrong';
+  }
+  return `<button class="${cls}" ${answered?'disabled':''} onclick="selectAnswer(${o.id})" style="position:relative;">${o.hv}${stamp}</button>`;
+}
+
+function optButtonGlyph(o, correct){
+  const answered = state.answered;
+  let cls='opt-btn';
+  let stamp='';
+  if(answered){
+    if(o.id===correct.id){ cls+=' correct'; stamp='<div class="seal-stamp">正</div>'; }
+    else cls+=' wrong';
+  }
+  return `<button class="${cls}" ${answered?'disabled':''} onclick="selectAnswer(${o.id})" style="position:relative;"><span class="opt-glyph">${o.char}</span></button>`;
+}
+
+function renderResult(){
+  const total = state.queue.length;
+  const pct = Math.round((state.score/total)*100);
+  const missedHtml = state.wrong.map(w=>`
+    <div class="missed-item">
+      <div class="g">${w.char}</div>
+      <div class="h">${w.hv}</div>
+      <div class="m">${w.meaning}</div>
+    </div>`).join('');
+
+  return `
+  <div class="eyebrow">Kết quả</div>
+  <div class="card">
+    <div class="result-hero">
+      <div class="result-score">${state.score}<span>/${total}</span></div>
+      <div class="result-pct">${pct}% chính xác</div>
+    </div>
+    ${state.wrong.length>0 ? `
+      <div class="section-title">Những bộ thủ cần ôn lại (${state.wrong.length})</div>
+      <div class="missed-grid">${missedHtml}</div>
+    ` : `<p class="sub" style="text-align:center;">Hoàn hảo — không có câu sai nào! 🎉</p>`}
+
+    <div class="result-actions">
+      ${state.wrong.length>0 ? `<button class="start-btn" style="margin-top:0;" onclick="retryWrong()">Ôn lại câu sai (${state.wrong.length})</button>` : ''}
+      <button class="btn-outline" onclick="restartSame()">Làm lại từ đầu</button>
+      <button class="btn-outline" onclick="backToSetup()">Chọn chế độ khác</button>
+    </div>
+  </div>
+  `;
+}
+
+function renderRefModal(){
+  const groups = STROKE_COUNTS.map(n=>{
+    const items = DATA.filter(d=>d.strokes===n).map(d=>`
+      <div class="ref-item"><span class="g">${d.char}</span><span class="h">${d.hv}</span><span class="m">${d.meaning}</span></div>
+    `).join('');
+    return `<div class="ref-group-title">${n} nét</div><div class="ref-grid">${items}</div>`;
+  }).join('');
+
+  return `
+  <div class="modal-overlay" onclick="if(event.target===this) closeRef()">
+    <div class="modal">
+      <div class="modal-head">
+        <h2>Bảng 214 Bộ Thủ</h2>
+        <button class="modal-close" onclick="closeRef()">×</button>
+      </div>
+      ${groups}
+    </div>
+  </div>`;
+}
+
+render();
+</script>
+</body>
+</html>

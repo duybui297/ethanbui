@@ -182,6 +182,9 @@
     "product1Desc": "An intelligent AI chatbot that learns directly from your company's documents, website, and internal knowledge base. It provides accurate, context-aware answers to customers and employees, helping automate support, reduce manual workload, and deliver consistent information across your organization.",
     "product2Title": "AI Document Translator",
     "product2Desc": "A powerful AI tool that automatically translates documents while preserving formatting and structure. It supports multiple file types and languages, enabling businesses to quickly convert reports, manuals, and internal documents with high accuracy and minimal manual editing.",
+    "product3Title": "214 Kanji Radicals — Practice App",
+    "product3Desc": "A free interactive tool to master all 214 Kangxi radicals (Bộ Thủ). Practice by stroke count or mixed mode, with two quiz styles: recognize the character from its Sino-Vietnamese reading, or identify the reading from the character. Includes a full reference table.",
+    "freeBadge": "FREE",
     "visitProduct": "Learn more",
     "visitLiveProduct": "Try it now"
   },
