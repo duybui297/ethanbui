@@ -10,6 +10,7 @@ import { Header } from '@/components/site/header';
 import { Footer } from '@/components/site/footer';
 import { ThemeProvider } from '@/components/site/theme-provider';
 import { AlternateLinkProvider } from '@/components/site/alternate-link-context';
+import { Analytics } from '@vercel/analytics/react';
 import { locales, type Locale } from '@/lib/i18n/config';
 
 export const metadata: Metadata = {
@@ -68,6 +69,7 @@ export default async function LocaleLayout({
             </AlternateLinkProvider>
           </ThemeProvider>
         </NextIntlClientProvider>
+        <Analytics />
       </body>
     </html>
   );
