@@ -26,6 +26,11 @@ export const GATED_PRODUCTS: GatedProduct[] = [
     id: 'nihongo',
     name: 'Nihongo Sprint',
     path: '/products/nihongo'
+  },
+  {
+    id: 'hoc-bo-thu',
+    name: 'Học Bộ Thủ — 214 bộ Khang Hy',
+    path: '/products/hoc-bo-thu'
   }
 ];
 

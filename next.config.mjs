@@ -22,13 +22,15 @@ const nextConfig = {
       static: 180
     }
   },
-  // Standalone Japanese learning app (static files in public/products/nihongo).
-  // Serve its index.html at the clean entry path /products/nihongo.
+  // Standalone static apps living in public/products/<id>/.
+  // Serve each index.html at its clean entry path /products/<id>.
   // Sub-assets (css/js/data) are served directly from public by filename.
   async rewrites() {
     return [
       { source: '/products/nihongo', destination: '/products/nihongo/index.html' },
-      { source: '/products/nihongo/', destination: '/products/nihongo/index.html' }
+      { source: '/products/nihongo/', destination: '/products/nihongo/index.html' },
+      { source: '/products/hoc-bo-thu', destination: '/products/hoc-bo-thu/index.html' },
+      { source: '/products/hoc-bo-thu/', destination: '/products/hoc-bo-thu/index.html' }
     ];
   }
 };

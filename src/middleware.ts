@@ -114,7 +114,7 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   // Match all paths except static files, Next internals, and the standalone
-  // Japanese learning app mounted at /products/nihongo (must bypass i18n routing).
+  // static apps mounted under /products/* (they must bypass i18n routing).
   matcher: [
     // The bare root must be listed explicitly — the catch-all pattern below
     // does NOT match '/', which otherwise 404s (there is no app/page.tsx, only
@@ -125,6 +125,7 @@ export const config = {
     // excluded by the catch-all below and load normally once the gate passes.
     // When you add a new gated product, add its entry path here too.
     '/products/nihongo',
-    '/((?!_next|api|products/nihongo|.*\\..*).*)'
+    '/products/hoc-bo-thu',
+    '/((?!_next|api|products/nihongo|products/hoc-bo-thu|.*\\..*).*)'
   ]
 };
