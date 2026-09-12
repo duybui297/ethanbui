@@ -1,8 +1,8 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import createMiddleware from 'next-intl/middleware';
-import { createServerClient } from '@supabase/ssr';
-import { routing } from './src/lib/i18n/routing';
-import { gatedProductForPath } from './src/lib/products';
+import { createServerClient, type CookieOptions } from '@supabase/ssr';
+import { routing } from './lib/i18n/routing';
+import { gatedProductForPath } from './lib/products';
 
 const intlMiddleware = createMiddleware(routing);
 
@@ -24,7 +24,7 @@ export async function middleware(request: NextRequest) {
           getAll() {
             return request.cookies.getAll();
           },
-          setAll(cookies) {
+          setAll(cookies: { name: string; value: string; options: CookieOptions }[]) {
             cookies.forEach(({ name, value, options }) =>
               response.cookies.set(name, value, options)
             );
@@ -85,7 +85,7 @@ export async function middleware(request: NextRequest) {
         getAll() {
           return request.cookies.getAll();
         },
-        setAll(cookies) {
+        setAll(cookies: { name: string; value: string; options: CookieOptions }[]) {
           cookies.forEach(({ name, value, options }) =>
             response.cookies.set(name, value, options)
           );
