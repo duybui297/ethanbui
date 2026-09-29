@@ -144,7 +144,8 @@
       c3.appendChild(el('li', { html: '<span>' + A.markHan(L.trongKanji) + '</span>' }));
     } else {
       c3.appendChild(el('li', { html: '<span><b>Ý nghĩa:</b> ' + A.esc(r.mean) + '</span>' }));
-      c3.appendChild(el('li', { html: '<span class="muted">Bài phân tích chi tiết cho bộ này đang được biên soạn.</span>' }));
+      if (!(window.LESSON_NOTES || {})[r.n])
+        c3.appendChild(el('li', { html: '<span class="muted">Bài phân tích chi tiết cho bộ này đang được biên soạn.</span>' }));
     }
     quad.appendChild(el('div', { class: 'card' }, [c3]));
 
