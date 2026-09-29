@@ -158,6 +158,9 @@
       c4.appendChild(row);
       c4.appendChild(el('p', { class: 'sub', style: 'margin:14px 0 0',
         text: L.viDu.length + ' chữ Hán được phân tích bên dưới.' }));
+    } else if ((window.LESSON_NOTES || {})[r.n]) {
+      /* bộ quá hiếm, cố ý không viết bài — hiện lý do thay vì hứa "batch tiếp theo" */
+      c4.appendChild(el('div', { class: 'note', text: window.LESSON_NOTES[r.n] }));
     } else {
       c4.appendChild(el('div', { class: 'note',
         html: 'Bộ <b class="han">' + A.esc(r.f[0]) + '</b> (' + A.esc(r.hv) +
