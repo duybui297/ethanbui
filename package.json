@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "db:reset": "supabase db reset",
     "db:push": "supabase db push",
-    "db:seed": "node scripts/seed.mjs"
+    "db:seed": "node scripts/seed.mjs",
+    "build:owner-copilot": "npm --prefix products-src/owner-copilot install && npm --prefix products-src/owner-copilot run build"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.2",

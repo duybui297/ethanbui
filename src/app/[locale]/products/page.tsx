@@ -1,7 +1,7 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { Metadata } from 'next';
 import { SubscribeBlock } from '@/components/site/subscribe-block';
-import { Bot, BookOpen, FileText, GraduationCap, Languages, Sparkles, Rocket, ArrowUpRight } from 'lucide-react';
+import { Bot, BookOpen, FileText, GraduationCap, Languages, LineChart, Sparkles, Rocket, ArrowUpRight } from 'lucide-react';
 
 export const revalidate = 60;
 
@@ -18,7 +18,7 @@ export async function generateMetadata({
 /* ── Product data (hardcoded) ── */
 type Product = {
   id: string;
-  icon: 'bot' | 'bookOpen' | 'fileText' | 'graduationCap' | 'languages';
+  icon: 'bot' | 'bookOpen' | 'fileText' | 'graduationCap' | 'languages' | 'lineChart';
   status: 'live' | 'upcoming';
   badgeKey?: string; // translation key for the badge (live products)
   badge?: string; // literal badge text (upcoming products)
@@ -55,6 +55,15 @@ const liveProducts: Product[] = [
     titleKey: 'product3Title',
     descKey: 'product3Desc',
     url: '/hoc-bo-thu-kanji.html'
+  },
+  {
+    id: 'owner-copilot',
+    icon: 'lineChart',
+    status: 'live',
+    badgeKey: 'liveBadge',
+    titleKey: 'ownerCopilotTitle',
+    descKey: 'ownerCopilotDesc',
+    url: '/products/owner-copilot'
   }
 ];
 
@@ -85,7 +94,8 @@ const iconMap = {
   bookOpen: BookOpen,
   fileText: FileText,
   graduationCap: GraduationCap,
-  languages: Languages
+  languages: Languages,
+  lineChart: LineChart
 } as const;
 
 function ProductCard({

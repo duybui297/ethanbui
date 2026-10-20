@@ -1,0 +1,5 @@
+{
+  "name": "Owner Copilot",
+  "description": "A financial copilot for business owners: morning brief, 90-day cash forecast, profit explained, money-leak detection, bill-payment priorities, what-if simulator and Gemini-powered Q&A.",
+  "requestFramePermissions": ["microphone"]
+}

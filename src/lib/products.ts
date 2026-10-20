@@ -31,6 +31,11 @@ export const GATED_PRODUCTS: GatedProduct[] = [
     id: 'hoc-bo-thu',
     name: 'Học Bộ Thủ — 214 bộ Khang Hy',
     path: '/products/hoc-bo-thu'
+  },
+  {
+    id: 'owner-copilot',
+    name: 'Owner Copilot',
+    path: '/products/owner-copilot'
   }
 ];
 

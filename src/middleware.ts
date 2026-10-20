@@ -126,6 +126,7 @@ export const config = {
     // When you add a new gated product, add its entry path here too.
     '/products/nihongo',
     '/products/hoc-bo-thu',
-    '/((?!_next|api|products/nihongo|products/hoc-bo-thu|.*\\..*).*)'
+    '/products/owner-copilot',
+    '/((?!_next|api|products/nihongo|products/hoc-bo-thu|products/owner-copilot|.*\\..*).*)'
   ]
 };

@@ -30,7 +30,9 @@ const nextConfig = {
       { source: '/products/nihongo', destination: '/products/nihongo/index.html' },
       { source: '/products/nihongo/', destination: '/products/nihongo/index.html' },
       { source: '/products/hoc-bo-thu', destination: '/products/hoc-bo-thu/index.html' },
-      { source: '/products/hoc-bo-thu/', destination: '/products/hoc-bo-thu/index.html' }
+      { source: '/products/hoc-bo-thu/', destination: '/products/hoc-bo-thu/index.html' },
+      { source: '/products/owner-copilot', destination: '/products/owner-copilot/index.html' },
+      { source: '/products/owner-copilot/', destination: '/products/owner-copilot/index.html' }
     ];
   }
 };
