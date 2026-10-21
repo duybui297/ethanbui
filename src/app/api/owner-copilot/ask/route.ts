@@ -1,13 +1,14 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
+
 const MODEL = 'gemini-flash-latest';
 
-const SYSTEM = `You are the financial assistant to the owner of a building-materials distribution company.
-Answer in English, addressing the owner directly. Be brief: at most 5 sentences or 4 bullet points.
-Always use concrete figures from DATA (amounts are in thousand USD; write them like $150K).
-End with one specific action to take now.
-Never invent figures that are not in DATA; if something is missing, say so.`;
+const SYSTEM = `Bạn là trợ lý tài chính của chủ một công ty phân phối vật liệu xây dựng.
+Trả lời bằng tiếng Việt, xưng "tôi" và gọi chủ doanh nghiệp là "anh". Ngắn gọn: tối đa 5 câu hoặc 4 gạch đầu dòng.
+Luôn dùng số liệu cụ thể từ DATA (đơn vị là triệu đồng; viết dạng 150 tr, từ 1.000 trở lên viết dạng 2,61 tỷ).
+Kết thúc bằng một việc cụ thể nên làm ngay.
+Không bịa số liệu không có trong DATA; nếu thiếu thông tin thì nói rõ.`;
 
 const Schema = z.object({
   question: z.string().min(1).max(500).trim(),

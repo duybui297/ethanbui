@@ -56,7 +56,7 @@ export function ForecastChart({ points, ghost, height = 280 }: { points: Forecas
 
   return (
     <div className="chart" ref={wrap} onMouseMove={onMove} onTouchMove={onMove} onMouseLeave={() => setHover(null)}>
-      <svg viewBox={`0 0 ${W} ${H}`} width="100%" height={H} role="img" aria-label="90-day cash forecast chart">
+      <svg viewBox={`0 0 ${W} ${H}`} width="100%" height={H} role="img" aria-label="Biểu đồ dự báo dòng tiền 90 ngày">
         <defs>
           <linearGradient id="gUp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="var(--good)" stopOpacity=".35" /><stop offset="1" stopColor="var(--good)" stopOpacity="0" /></linearGradient>
           <linearGradient id="gDn" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stopColor="var(--bad)" stopOpacity=".5" /><stop offset="1" stopColor="var(--bad)" stopOpacity=".05" /></linearGradient>
@@ -66,7 +66,7 @@ export function ForecastChart({ points, ghost, height = 280 }: { points: Forecas
         {ticks.map((t) => (
           <g key={t}>
             <line x1={L} x2={W - R} y1={y(t)} y2={y(t)} className={t === 0 ? 'axis-zero' : 'grid'} />
-            <text x={L - 8} y={y(t) + 4} className="tick" textAnchor="end">{t === 0 ? '$0' : money(t)}</text>
+            <text x={L - 8} y={y(t) + 4} className="tick" textAnchor="end">{t === 0 ? '0' : money(t)}</text>
           </g>
         ))}
         {months.map((p) => (
@@ -75,7 +75,7 @@ export function ForecastChart({ points, ghost, height = 280 }: { points: Forecas
             <text x={x(p.day) + 4} y={H - 10} className="tick">{monthName(p.date)}</text>
           </g>
         ))}
-        <text x={x(0)} y={H - 10} className="tick">Today</text>
+        <text x={x(0)} y={H - 10} className="tick">Hôm nay</text>
 
         {ghost && <path d={line(ghost)} className="ghost" />}
         <path d={area} fill="url(#gUp)" clipPath="url(#cUp)" className="morph" />
@@ -140,7 +140,7 @@ export function Waterfall({ start, end, startLabel, endLabel, drivers, onPick, p
         <div className="wf-l">{endLabel}</div>
         <div className="wf-track"><div className="wf-bar base end" style={{ left: 0, width: `${pos(end)}%` }} /><span className="wf-v" style={{ left: `${pos(end)}%` }}>{money(end)}</span></div>
       </div>
-      <div className="wf-axis"><span>{money(lo)}</span><span>zoomed in to show the gaps</span><span>{money(hi)}</span></div>
+      <div className="wf-axis"><span>{money(lo)}</span><span>phóng to để thấy rõ chênh lệch</span><span>{money(hi)}</span></div>
     </div>
   );
 }
@@ -156,7 +156,7 @@ export function PaperCash({ data }: { data: { m: string; paper: number; cash: nu
   const y = (v: number) => T + (1 - v / max) * (H - T - B);
   return (
     <div ref={wrap} className="pc">
-    <svg viewBox={`0 0 ${W} ${H}`} width="100%" height={H} role="img" aria-label="Profit on paper vs cash collected by month">
+    <svg viewBox={`0 0 ${W} ${H}`} width="100%" height={H} role="img" aria-label="Lợi nhuận trên sổ sách so với tiền thực thu theo tháng">
       {data.map((d, i) => {
         const cx = L + bw * i + bw / 2;
         const last = i === data.length - 1;

@@ -6,8 +6,8 @@ import { Icon, SectionTitle } from '../components/ui';
 import type { Tab } from '../App';
 
 const FIXES: { key: string; label: string; desc: string; patch: Partial<Scenario> }[] = [
-  { key: 'collect', label: 'Collect 60% of overdue debt', desc: 'Tanner, Fulton, Crestview — within 14 days', patch: { collectOverduePct: 60 } },
-  { key: 'negotiate', label: 'Extend 2 flexible suppliers', desc: 'Redstone Tile +15 days, Lumen Paints 50% now', patch: { negotiate: true } },
+  { key: 'collect', label: 'Thu 60% nợ quá hạn', desc: 'Tân Tiến, Phú Thành, Phước Lộc, trong 14 ngày', patch: { collectOverduePct: 60 } },
+  { key: 'negotiate', label: 'Gia hạn 2 nhà cung cấp linh hoạt', desc: 'Hồng Sơn +15 ngày, Ánh Dương trả trước 50%', patch: { negotiate: true } },
 ];
 
 export default function Cashflow({ go }: { go: (t: Tab) => void }) {
@@ -22,20 +22,20 @@ export default function Cashflow({ go }: { go: (t: Tab) => void }) {
 
   return (
     <div className="screen">
-      <SectionTitle kicker="90-day cash forecast" title="Can I pay my bills?" />
+      <SectionTitle kicker="Dự báo dòng tiền 90 ngày" title="Tôi có đủ tiền trả nợ không?" />
 
       <div className={`verdict card ${safe ? 'ok' : 'risk'}`}>
         <div className="verdict-ic"><Icon name={safe ? 'shield' : 'alert'} size={26} /></div>
         <div>
           {safe ? (
             <>
-              <h3>Safe — cash never drops below zero</h3>
-              <p>Lowest point is <b>{money(st.min.cash)}</b> on {wdMd(st.min.date)}. Compared with doing nothing: <b className="good-t">{money(st.min.cash - bst.min.cash, { sign: true })}</b> better.</p>
+              <h3>An toàn: tiền mặt không lúc nào bị âm</h3>
+              <p>Điểm thấp nhất là <b>{money(st.min.cash)}</b> vào {wdMd(st.min.date)}. So với không làm gì: tốt hơn <b className="good-t">{money(st.min.cash - bst.min.cash, { sign: true })}</b>.</p>
             </>
           ) : (
             <>
-              <h3>From {st.firstNeg && wdMd(st.firstNeg.date)}, cash could drop to {money(st.min.cash)}</h3>
-              <p>Why: 3 supplier bills ($393K) are all due on Nov 15, while 3 overdue customers are holding $284K. Cash stays negative for about <b>{st.negDays} days</b>.</p>
+              <h3>Từ {st.firstNeg && wdMd(st.firstNeg.date)}, tiền mặt có thể xuống {money(st.min.cash)}</h3>
+              <p>Lý do: 3 khoản trả nhà cung cấp (393 tr) cùng đến hạn ngày 15/11, trong khi 3 khách quá hạn đang giữ 284 tr. Tiền mặt bị âm khoảng <b>{st.negDays} ngày</b>.</p>
             </>
           )}
         </div>
@@ -44,15 +44,15 @@ export default function Cashflow({ go }: { go: (t: Tab) => void }) {
       <div className="card pad">
         <div className="chart-head">
           <div className="legend">
-            <span><i className="lg good" />Projected cash</span>
-            {on.length > 0 && <span><i className="lg ghost" />If you do nothing</span>}
+            <span><i className="lg good" />Tiền mặt dự kiến</span>
+            {on.length > 0 && <span><i className="lg ghost" />Nếu không làm gì</span>}
           </div>
-          <span className="muted small">Hover or tap to see each day</span>
+          <span className="muted small">Rê chuột hoặc chạm để xem từng ngày</span>
         </div>
         <ForecastChart points={pts} ghost={on.length ? base : undefined} />
       </div>
 
-      <SectionTitle kicker="Try it" title="What if you did this…" />
+      <SectionTitle kicker="Thử xem" title="Nếu anh làm thế này thì sao…" />
       <div className="fixes">
         {FIXES.map((f) => {
           const active = on.includes(f.key);
@@ -65,19 +65,19 @@ export default function Cashflow({ go }: { go: (t: Tab) => void }) {
         })}
         <button className="card fix ghostbtn" onClick={() => go('sim')}>
           <Icon name="sliders" />
-          <span className="fix-t"><b>More detailed simulation</b><em>Borrow, raise prices, cut costs…</em></span>
+          <span className="fix-t"><b>Mô phỏng chi tiết hơn</b><em>Vay vốn, tăng giá, cắt giảm chi phí…</em></span>
           <Icon name="arrowR" />
         </button>
       </div>
 
-      <SectionTitle kicker="Next 35 days" title="Large cash in and out" />
+      <SectionTitle kicker="35 ngày tới" title="Các khoản thu chi lớn" />
       <div className="card list">
         {upcoming.map(({ p, e }, i) => (
           <div key={i} className="li">
             <div className="li-date"><b>{md(p.date)}</b><span>{weekday(p.date)}</span></div>
             <div className="li-main">{e.label}</div>
             <div className={`li-amt ${e.amt < 0 ? 'bad-t' : 'good-t'}`}>{money(e.amt, { sign: true })}</div>
-            <div className={`li-bal ${p.cash < 0 ? 'bad-t' : 'muted'}`}>balance {money(p.cash)}</div>
+            <div className={`li-bal ${p.cash < 0 ? 'bad-t' : 'muted'}`}>số dư {money(p.cash)}</div>
           </div>
         ))}
       </div>

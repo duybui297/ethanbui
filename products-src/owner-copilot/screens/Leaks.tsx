@@ -12,15 +12,15 @@ export default function Leaks() {
 
   return (
     <div className="screen">
-      <SectionTitle kicker="Money leaks" title="Where is money slipping away?" />
+      <SectionTitle kicker="Thất thoát" title="Tiền đang rò rỉ ở đâu?" />
 
       <div className="card pad leak-hero">
         <div>
-          <div className="big-num bad-t">{money(total, { decimals: 1 })}<small>/month</small></div>
-          <div className="muted">≈ {money(total * 12)} a year · {Math.round((total / profit.curr) * 100)}% of monthly profit</div>
+          <div className="big-num bad-t">{money(total, { decimals: 1 })}<small>/tháng</small></div>
+          <div className="muted">≈ {money(total * 12)} mỗi năm · {Math.round((total / profit.curr) * 100)}% lợi nhuận tháng</div>
         </div>
         <div className="leak-progress">
-          <div className="lp-t"><span>Fixed so far</span><b className="good-t">{money(saved, { decimals: 1 })}</b></div>
+          <div className="lp-t"><span>Đã khắc phục</span><b className="good-t">{money(saved, { decimals: 1 })}</b></div>
           <div className="lp-bar"><i style={{ width: `${(saved / total) * 100}%` }} /></div>
         </div>
       </div>
@@ -34,7 +34,7 @@ export default function Leaks() {
               <button className="leak-h" onClick={() => setOpen(isOpen ? null : l.id)}>
                 <span className={`sev ${l.severity === 'high' ? 'bad' : 'warn'}`}>{isFixed ? <Icon name="check" size={14} /> : i + 1}</span>
                 <span className="leak-t">{l.title}</span>
-                <span className="leak-v">{money(l.perMonth, { decimals: 1 })}<em>/month</em></span>
+                <span className="leak-v">{money(l.perMonth, { decimals: 1 })}<em>/tháng</em></span>
               </button>
               {isOpen && (
                 <div className="leak-b fade-in">
@@ -46,12 +46,12 @@ export default function Leaks() {
                       ))}
                     </div>
                   )}
-                  <div className="suggest"><Icon name="spark" size={16} /><div><b>How to fix:</b> {l.fix}</div></div>
+                  <div className="suggest"><Icon name="spark" size={16} /><div><b>Cách xử lý:</b> {l.fix}</div></div>
                   <div className="row-btns">
-                    <button className="btn" disabled={isFixed} onClick={() => { setFixed((f) => [...f, l.id]); toast(`Task assigned: ${l.title.slice(0, 36)}…`); }}>
-                      {isFixed ? 'Task assigned' : 'Assign a fix'}
+                    <button className="btn" disabled={isFixed} onClick={() => { setFixed((f) => [...f, l.id]); toast(`Đã giao việc: ${l.title.slice(0, 36)}…`); }}>
+                      {isFixed ? 'Đã giao việc' : 'Giao việc xử lý'}
                     </button>
-                    <button className="btn ghost" onClick={() => toast('Reminder set to review in 7 days', 'info')}>Remind me later</button>
+                    <button className="btn ghost" onClick={() => toast('Sẽ nhắc anh xem lại sau 7 ngày', 'info')}>Nhắc tôi sau</button>
                   </div>
                 </div>
               )}

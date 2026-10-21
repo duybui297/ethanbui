@@ -4,9 +4,9 @@ export type Scenario = {
   priceUpPct: number; // % price increase
   customerLossPct: number; // % of customers lost because of the price increase
   opexCutPct: number; // % cut in fixed costs
-  loan: number; // thousand USD, disbursed on day 3
+  loan: number; // million VND, disbursed on day 3
   collectOverduePct: number; // % of hard overdue debt collected within 14 days
-  negotiate: boolean; // extend Redstone Tile + pay Lumen Paints 50%
+  negotiate: boolean; // extend Hồng Sơn + pay Ánh Dương 50%
 };
 
 export const baseScenario: Scenario = {
@@ -53,33 +53,33 @@ export function forecast(s: Scenario, days = 90): ForecastPoint[] {
 
   // Payables
   for (const p of payables) {
-    if (s.negotiate && p.id === 'p3') { push(p.dueIn + 15, -p.amount, `Pay ${p.supplier} (extended)`); continue; }
+    if (s.negotiate && p.id === 'p3') { push(p.dueIn + 15, -p.amount, `Trả ${p.supplier} (đã gia hạn)`); continue; }
     if (s.negotiate && p.id === 'p4') {
-      push(p.dueIn, -p.amount / 2, `Pay 50% to ${p.supplier}`);
-      push(p.dueIn + 16, -p.amount / 2, `Pay remaining 50% to ${p.supplier}`);
+      push(p.dueIn, -p.amount / 2, `Trả trước 50% cho ${p.supplier}`);
+      push(p.dueIn + 16, -p.amount / 2, `Trả nốt 50% cho ${p.supplier}`);
       continue;
     }
-    push(p.dueIn, -p.amount, `Pay ${p.supplier}`);
+    push(p.dueIn, -p.amount, `Trả ${p.supplier}`);
   }
   // Recurring fixed costs: warehouse rent on the 1st, payroll on the 5th
   for (let d = 0; d <= days; d++) {
     const dt = addDays(TODAY, d);
-    if (dt.getDate() === 1) push(d, -45, 'Warehouse rent');
-    if (dt.getDate() === 5) push(d, -180, 'Payroll');
+    if (dt.getDate() === 1) push(d, -45, 'Tiền thuê kho');
+    if (dt.getDate() === 5) push(d, -180, 'Trả lương');
     // regular customers pay at month end
-    if (dt.getDate() === 25 && d > 10) push(d, 380, 'Regular customer payments');
+    if (dt.getDate() === 25 && d > 10) push(d, 380, 'Khách quen thanh toán');
   }
   // Receivables: good customers pay on time; hard overdue only counts in a scenario
   for (const r of receivables) {
-    if (r.daysOverdue < 0) push(-r.daysOverdue, r.amount, `${r.customer} pays`);
-    else if (r.daysOverdue <= 10) push(7, r.amount, `${r.customer} pays`);
+    if (r.daysOverdue < 0) push(-r.daysOverdue, r.amount, `${r.customer} trả tiền`);
+    else if (r.daysOverdue <= 10) push(7, r.amount, `${r.customer} trả tiền`);
   }
   const hardOverdue = receivables.filter((r) => r.daysOverdue > 10);
   if (s.collectOverduePct > 0) {
     const total = hardOverdue.reduce((a, r) => a + r.amount, 0);
-    push(14, (total * s.collectOverduePct) / 100, `Overdue collected (${s.collectOverduePct}%)`);
+    push(14, (total * s.collectOverduePct) / 100, `Thu nợ quá hạn (${s.collectOverduePct}%)`);
   }
-  if (s.loan > 0) push(3, s.loan, `Bank loan disbursed`);
+  if (s.loan > 0) push(3, s.loan, `Giải ngân khoản vay`);
 
   for (let d = 0; d <= days; d++) {
     const dt = addDays(TODAY, d);

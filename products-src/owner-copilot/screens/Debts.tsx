@@ -5,10 +5,10 @@ import { reminderMessage } from '../lib/ai';
 import { Icon, Modal, SectionTitle, useToast } from '../components/ui';
 
 const ACTION_LABEL: Record<string, { t: string; c: string }> = {
-  'pay-now': { t: 'Pay now', c: 'bad' },
-  'pay-on-time': { t: 'Pay on time', c: 'warn' },
-  'pay-early': { t: 'Consider paying early', c: 'brand' },
-  negotiate: { t: 'Ask to extend', c: 'good' },
+  'pay-now': { t: 'Trả ngay', c: 'bad' },
+  'pay-on-time': { t: 'Trả đúng hạn', c: 'warn' },
+  'pay-early': { t: 'Cân nhắc trả sớm', c: 'brand' },
+  negotiate: { t: 'Xin gia hạn', c: 'good' },
 };
 const dueDate = (n: number) => { const d = new Date(TODAY); d.setDate(d.getDate() + n); return d; };
 
@@ -20,10 +20,10 @@ export default function Debts() {
 
   return (
     <div className="screen">
-      <SectionTitle kicker="Payables & receivables" title="Who to pay first, who to chase first?" />
+      <SectionTitle kicker="Công nợ phải trả và phải thu" title="Trả ai trước, đòi ai trước?" />
       <div className="seg">
-        <button className={tab === 'pay' ? 'on' : ''} onClick={() => setTab('pay')}>Payables <b>{money(payTotal)}</b></button>
-        <button className={tab === 'recv' ? 'on' : ''} onClick={() => setTab('recv')}>Receivables <b>{money(recvTotal)}</b>{recvOver.length > 0 && <i className="badge">{recvOver.length}</i>}</button>
+        <button className={tab === 'pay' ? 'on' : ''} onClick={() => setTab('pay')}>Phải trả <b>{money(payTotal)}</b></button>
+        <button className={tab === 'recv' ? 'on' : ''} onClick={() => setTab('recv')}>Phải thu <b>{money(recvTotal)}</b>{recvOver.length > 0 && <i className="badge">{recvOver.length}</i>}</button>
       </div>
       {tab === 'pay' ? <Payables /> : <Receivables />}
     </div>
@@ -38,7 +38,7 @@ function Payables() {
     <>
       <div className="callout brand">
         <Icon name="spark" size={18} />
-        <div>There isn't enough cash to pay all 5 bills in the next 27 days. I've ranked them by <b>late penalties, early-payment discounts and how critical each supplier is</b>. Following this plan saves <b className="good-t">{money(saving, { decimals: 1 })}</b> and keeps your 2 key suppliers happy.</div>
+        <div>Không đủ tiền để trả cả 5 khoản trong 27 ngày tới. Tôi đã xếp thứ tự theo <b>tiền phạt trả trễ, chiết khấu trả sớm và mức độ quan trọng của từng nhà cung cấp</b>. Làm theo kế hoạch này tiết kiệm được <b className="good-t">{money(saving, { decimals: 1 })}</b> và giữ được quan hệ với 2 nhà cung cấp chủ chốt.</div>
       </div>
       <div className="plist">
         {payables.map((p, i) => {
@@ -53,8 +53,8 @@ function Payables() {
                   <span className={`pill ${a.c}`}>{a.t}</span>
                 </div>
                 <div className="pay-meta">
-                  <span><Icon name="calendar" size={14} /> Due {md(dueDate(p.dueIn))} · in {p.dueIn} days</span>
-                  <span className={`imp ${p.importance === 'Critical' ? 'bad-t' : p.importance === 'Important' ? 'warn-t' : 'muted'}`}>● {p.importance}</span>
+                  <span><Icon name="calendar" size={14} /> Hạn {md(dueDate(p.dueIn))} · còn {p.dueIn} ngày</span>
+                  <span className={`imp ${p.importance === 'Sống còn' ? 'bad-t' : p.importance === 'Quan trọng' ? 'warn-t' : 'muted'}`}>● {p.importance}</span>
                   <span className="muted">{p.term}</span>
                 </div>
                 <p className="pay-adv">{p.advice}</p>
@@ -62,9 +62,9 @@ function Payables() {
               <div className="pay-r">
                 <div className="pay-amt">{money(p.amount)}</div>
                 {st ? <span className="pill good"><Icon name="check" size={13} /> {st}</span> : p.action === 'negotiate' ? (
-                  <button className="btn sm" onClick={() => { setState((s) => ({ ...s, [p.id]: 'Request sent' })); toast(`Extension request sent to ${p.supplier}`); }}>Request extension</button>
+                  <button className="btn sm" onClick={() => { setState((s) => ({ ...s, [p.id]: 'Đã gửi đề nghị' })); toast(`Đã gửi đề nghị gia hạn tới ${p.supplier}`); }}>Đề nghị gia hạn</button>
                 ) : (
-                  <button className="btn sm" onClick={() => { setState((s) => ({ ...s, [p.id]: 'Scheduled' })); toast(`Payment to ${p.supplier} scheduled`); }}>Schedule payment</button>
+                  <button className="btn sm" onClick={() => { setState((s) => ({ ...s, [p.id]: 'Đã lên lịch' })); toast(`Đã lên lịch trả ${p.supplier}`); }}>Lên lịch thanh toán</button>
                 )}
               </div>
             </div>
@@ -80,10 +80,10 @@ function Receivables() {
   const [open, setOpen] = useState(false);
   const [sent, setSent] = useState<string[]>([]);
   const buckets = [
-    { label: 'Not yet due', f: (r: Receivable) => r.daysOverdue <= 0, c: 'good' },
-    { label: '1–30 days', f: (r: Receivable) => r.daysOverdue > 0 && r.daysOverdue <= 30, c: 'warn' },
-    { label: '31–60 days', f: (r: Receivable) => r.daysOverdue > 30 && r.daysOverdue <= 60, c: 'bad' },
-    { label: 'Over 60 days', f: (r: Receivable) => r.daysOverdue > 60, c: 'dark' },
+    { label: 'Chưa đến hạn', f: (r: Receivable) => r.daysOverdue <= 0, c: 'good' },
+    { label: '1–30 ngày', f: (r: Receivable) => r.daysOverdue > 0 && r.daysOverdue <= 30, c: 'warn' },
+    { label: '31–60 ngày', f: (r: Receivable) => r.daysOverdue > 30 && r.daysOverdue <= 60, c: 'bad' },
+    { label: 'Trên 60 ngày', f: (r: Receivable) => r.daysOverdue > 60, c: 'dark' },
   ].map((b) => ({ ...b, v: receivables.filter(b.f).reduce((a, r) => a + r.amount, 0) }));
   const tot = buckets.reduce((a, b) => a + b.v, 0);
   const sorted = [...receivables].sort((a, b) => b.daysOverdue - a.daysOverdue);
@@ -91,7 +91,7 @@ function Receivables() {
   return (
     <>
       <div className="card pad">
-        <div className="card-t">Receivables aging</div>
+        <div className="card-t">Tuổi nợ phải thu</div>
         <div className="aging">
           {buckets.map((b) => b.v > 0 && <div key={b.label} className={`ag ${b.c}`} style={{ flex: b.v }} title={`${b.label}: ${money(b.v)}`} />)}
         </div>
@@ -103,8 +103,8 @@ function Receivables() {
       </div>
 
       <div className="recv-bar">
-        <span>{sel.length ? `${sel.length} selected · ${money(receivables.filter((r) => sel.includes(r.id)).reduce((a, r) => a + r.amount, 0))}` : 'Select customers to send reminders'}</span>
-        <button className="btn" disabled={!sel.length} onClick={() => setOpen(true)}><Icon name="send" size={16} /> Draft reminders ({sel.length})</button>
+        <span>{sel.length ? `Đã chọn ${sel.length} · ${money(receivables.filter((r) => sel.includes(r.id)).reduce((a, r) => a + r.amount, 0))}` : 'Chọn khách hàng để gửi tin nhắc nợ'}</span>
+        <button className="btn" disabled={!sel.length} onClick={() => setOpen(true)}><Icon name="send" size={16} /> Soạn tin nhắc nợ ({sel.length})</button>
       </div>
 
       <div className="card list">
@@ -118,13 +118,13 @@ function Receivables() {
                 <b>{r.customer}</b>
                 <span className="muted small">{r.history}</span>
               </div>
-              <div className="li-prob" title="Likelihood of collecting">
+              <div className="li-prob" title="Khả năng thu được">
                 <div className="prob"><i style={{ width: `${r.payProbability * 100}%` }} className={r.payProbability < 0.5 ? 'bad' : r.payProbability < 0.8 ? 'warn' : 'good'} /></div>
-                <span className="muted small">{Math.round(r.payProbability * 100)}% likely to pay</span>
+                <span className="muted small">{Math.round(r.payProbability * 100)}% khả năng trả</span>
               </div>
               <div className="li-amt">{money(r.amount)}</div>
               <div className={`li-od ${r.daysOverdue > 30 ? 'bad-t' : over ? 'warn-t' : 'good-t'}`}>
-                {sent.includes(r.id) ? '✓ Reminded' : over ? `${r.daysOverdue} days overdue` : `Due in ${-r.daysOverdue} days`}
+                {sent.includes(r.id) ? '✓ Đã nhắc' : over ? `Quá hạn ${r.daysOverdue} ngày` : `Còn ${-r.daysOverdue} ngày đến hạn`}
               </div>
             </label>
           );
@@ -150,20 +150,20 @@ export function ReminderModal({ open, targets, onClose, onSent }: { open: boolea
   const t = targets[i];
   if (!t) return null;
   return (
-    <Modal open={open} onClose={onClose} title={`Payment reminder ${targets.length > 1 ? `(${i + 1}/${targets.length})` : ''}`}>
+    <Modal open={open} onClose={onClose} title={`Tin nhắc thanh toán ${targets.length > 1 ? `(${i + 1}/${targets.length})` : ''}`}>
       {targets.length > 1 && (
         <div className="chips">
           {targets.map((x, k) => <button key={x.id} className={`chip ${k === i ? 'on' : ''}`} onClick={() => setI(k)}>{x.customer}</button>)}
         </div>
       )}
-      <div className="msg-to"><div className="avatar">{t.customer[0]}</div><div><b>{t.customer}</b><span className="muted small">{t.contact} · {money(t.amount)} · {t.daysOverdue} days overdue</span></div></div>
+      <div className="msg-to"><div className="avatar">{t.customer[0]}</div><div><b>{t.customer}</b><span className="muted small">{t.contact} · {money(t.amount)} · quá hạn {t.daysOverdue} ngày</span></div></div>
       <div className="bubble-wrap">
         <textarea className="bubble" value={texts[t.id] ?? ''} onChange={(e) => setTexts((s) => ({ ...s, [t.id]: e.target.value }))} rows={7} />
       </div>
-      <p className="muted small">The tone adapts to how overdue the invoice is. You can edit it directly.</p>
+      <p className="muted small">Giọng văn tự điều chỉnh theo mức độ quá hạn. Anh có thể sửa trực tiếp.</p>
       <div className="row-btns end">
-        <button className="btn ghost" onClick={() => { navigator.clipboard?.writeText(texts[t.id] ?? ''); toast('Message copied', 'info'); }}><Icon name="copy" size={16} /> Copy</button>
-        <button className="btn" onClick={() => { toast(`Sent to ${targets.length} customer${targets.length > 1 ? 's' : ''} (simulated)`); onSent(); }}><Icon name="send" size={16} /> Send {targets.length > 1 ? `all ${targets.length}` : ''} by text</button>
+        <button className="btn ghost" onClick={() => { navigator.clipboard?.writeText(texts[t.id] ?? ''); toast('Đã sao chép tin nhắn', 'info'); }}><Icon name="copy" size={16} /> Sao chép</button>
+        <button className="btn" onClick={() => { toast(`Đã gửi cho ${targets.length} khách hàng (mô phỏng)`); onSent(); }}><Icon name="send" size={16} /> Gửi {targets.length > 1 ? `cả ${targets.length} tin` : ''} qua Zalo</button>
       </div>
     </Modal>
   );

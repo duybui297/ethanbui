@@ -6,11 +6,11 @@ import { Icon } from '../components/ui';
 type Msg = { role: 'me' | 'ai'; text: string; source?: 'gemini' | 'local' };
 
 const SUGGEST = [
-  'Who owes us the longest?',
-  'Why did profit drop this month?',
-  'Do I have enough cash to pay November bills?',
-  'Where are we leaking money?',
-  'What was our most profitable product?',
+  'Khách nào nợ lâu nhất?',
+  'Vì sao lợi nhuận tháng này giảm?',
+  'Có đủ tiền trả nhà cung cấp tháng 11 không?',
+  'Mình đang thất thoát tiền ở đâu?',
+  'Sản phẩm nào lời nhất?',
 ];
 
 function render(text: string) {
@@ -23,7 +23,7 @@ function render(text: string) {
 
 export default function Ask() {
   const [msgs, setMsgs] = useState<Msg[]>([
-    { role: 'ai', text: `Hi ${company.owner}! Ask me anything in plain words about sales, profit, payables, receivables or cash flow — I'll answer with your company's real numbers.` },
+    { role: 'ai', text: `Chào ${company.owner}! Anh cứ hỏi bằng lời bình thường về doanh số, lợi nhuận, công nợ hay dòng tiền, tôi sẽ trả lời bằng số liệu thật của công ty.` },
   ]);
   const [q, setQ] = useState('');
   const [busy, setBusy] = useState(false);
@@ -45,9 +45,9 @@ export default function Ask() {
   const voice = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    if (!SR) { setQ("This browser doesn't support voice input yet"); return; }
+    if (!SR) { setQ('Trình duyệt này chưa hỗ trợ nhập bằng giọng nói'); return; }
     const rec = new SR();
-    rec.lang = 'en-US';
+    rec.lang = 'vi-VN';
     rec.interimResults = true;
     setListening(true);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -66,7 +66,7 @@ export default function Ask() {
     <div className="screen chat">
       <div className="chat-head">
         <div className="ai-orb"><Icon name="spark" size={20} /></div>
-        <div><h2>Ask the assistant</h2><span className="muted small">Answers from {company.full}'s numbers · powered by Gemini</span></div>
+        <div><h2>Hỏi trợ lý</h2><span className="muted small">Trả lời từ số liệu của {company.full} · dùng Gemini</span></div>
       </div>
 
       <div className="msgs">
@@ -75,7 +75,7 @@ export default function Ask() {
             {m.role === 'ai' && <div className="msg-av"><Icon name="spark" size={14} /></div>}
             <div className="msg-b">
               {render(m.text)}
-              {m.source && <span className={`src ${m.source}`}>{m.source === 'gemini' ? 'Gemini' : 'Quick answer'}</span>}
+              {m.source && <span className={`src ${m.source}`}>{m.source === 'gemini' ? 'Gemini' : 'Trả lời nhanh'}</span>}
             </div>
           </div>
         ))}
@@ -87,9 +87,9 @@ export default function Ask() {
         {SUGGEST.map((s) => <button key={s} className="chip" onClick={() => send(s)} disabled={busy}>{s}</button>)}
       </div>
       <form className="composer" onSubmit={(e) => { e.preventDefault(); send(q); }}>
-        <button type="button" className={`icon-btn mic ${listening ? 'live' : ''}`} onClick={voice} aria-label="Speak"><Icon name="mic" /></button>
-        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Ask anything, e.g. how much did we collect this week?" />
-        <button className="btn" disabled={!q.trim() || busy} aria-label="Send"><Icon name="send" size={16} /></button>
+        <button type="button" className={`icon-btn mic ${listening ? 'live' : ''}`} onClick={voice} aria-label="Nói"><Icon name="mic" /></button>
+        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Hỏi bất cứ điều gì, ví dụ: tuần này thu được bao nhiêu tiền?" />
+        <button className="btn" disabled={!q.trim() || busy} aria-label="Gửi"><Icon name="send" size={16} /></button>
       </form>
     </div>
   );

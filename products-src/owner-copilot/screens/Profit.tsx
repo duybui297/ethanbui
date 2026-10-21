@@ -14,59 +14,59 @@ export default function Profit() {
 
   return (
     <div className="screen">
-      <SectionTitle kicker="Profit" title="Why is profit down this month?" />
+      <SectionTitle kicker="Lợi nhuận" title="Vì sao lợi nhuận tháng này giảm?" />
 
       <div className="card pad profit-head">
         <div>
           <div className="big-num">{money(profit.curr)}</div>
-          <div className="muted">Projected October profit · revenue {money(profit.revenueCurr)}</div>
+          <div className="muted">Lợi nhuận tháng 10 dự kiến · doanh thu {money(profit.revenueCurr)}</div>
         </div>
-        <div className="delta bad"><Icon name="trend" size={16} /> {money(profit.curr - profit.prev, { sign: true })} vs September</div>
+        <div className="delta bad"><Icon name="trend" size={16} /> {money(profit.curr - profit.prev, { sign: true })} so với tháng 9</div>
       </div>
 
       <div className="grid-2">
         <div className="card pad">
-          <div className="card-t">From {money(profit.prev)} to {money(profit.curr)} — cause by cause</div>
-          <Waterfall start={profit.prev} end={profit.curr} startLabel={profit.prevLabel} endLabel="October"
+          <div className="card-t">Từ {money(profit.prev)} xuống {money(profit.curr)}: từng nguyên nhân</div>
+          <Waterfall start={profit.prev} end={profit.curr} startLabel={profit.prevLabel} endLabel="Tháng 10"
             drivers={profit.drivers} picked={picked} onPick={setPicked} />
         </div>
         <div className="card pad explain">
           {d && (
             <div key={picked} className="fade-in">
-              <div className={`pill ${d.value < 0 ? 'bad' : 'good'}`}>{money(d.value, { sign: true })} / month</div>
+              <div className={`pill ${d.value < 0 ? 'bad' : 'good'}`}>{money(d.value, { sign: true })} / tháng</div>
               <h3>{d.label}</h3>
               <p>{d.detail}</p>
               {picked === 0 && (
                 <div className="suggest">
                   <Icon name="spark" size={16} />
-                  <div><b>Suggestion:</b> raise cement prices 4% on new orders from Nov 1 — recovers about <b>$24K/month</b>. Competitors in the area already raised prices 5% on Oct 10.</div>
+                  <div><b>Đề xuất:</b> tăng giá xi măng 4% cho đơn mới từ 1/11, lấy lại khoảng <b>24 tr/tháng</b>. Đối thủ trong khu vực đã tăng giá 5% từ 10/10.</div>
                 </div>
               )}
               {picked === 1 && (
                 <div className="suggest">
                   <Icon name="spark" size={16} />
-                  <div><b>Suggestion:</b> call Westfield Developments and ask when Riverbend restarts. If it stays paused beyond 60 days, line up 2 replacement contractors in that area.</div>
+                  <div><b>Đề xuất:</b> gọi Địa ốc Tây Đô hỏi khi nào dự án Ven Sông chạy lại. Nếu dừng quá 60 ngày, tìm sẵn 2 nhà thầu thay thế trong khu vực đó.</div>
                 </div>
               )}
             </div>
           )}
-          <p className="muted small">Pick any row in the chart to see its explanation.</p>
+          <p className="muted small">Chọn một dòng bất kỳ trên biểu đồ để xem giải thích.</p>
         </div>
       </div>
 
-      <SectionTitle kicker="Real cash vs paper profit" title="Profitable, so why short on cash?" />
+      <SectionTitle kicker="Tiền thật so với lãi trên sổ" title="Có lãi, sao vẫn thiếu tiền?" />
       <div className="grid-2">
         <div className="card pad">
-          <div className="legend"><span><i className="lg paper" />Profit on paper</span><span><i className="lg good" />Cash collected</span></div>
+          <div className="legend"><span><i className="lg paper" />Lãi trên sổ sách</span><span><i className="lg good" />Tiền thực thu</span></div>
           <PaperCash data={paperVsCash} />
         </div>
         <div className="card pad stack-insight">
-          <div className="si-row"><span>October profit</span><b>{money(last.paper)}</b></div>
+          <div className="si-row"><span>Lợi nhuận tháng 10</span><b>{money(last.paper)}</b></div>
           <div className="si-bar"><i style={{ width: `${(last.cash / last.paper) * 100}%` }} /></div>
-          <div className="si-row"><span className="good-t">● Cash in the bank</span><b>{money(last.cash)}</b></div>
-          <div className="si-row"><span className="bad-t">● Still with customers & in stock</span><b>{money(stuck)}</b></div>
+          <div className="si-row"><span className="good-t">● Tiền đã về tài khoản</span><b>{money(last.cash)}</b></div>
+          <div className="si-row"><span className="bad-t">● Còn nằm ở khách hàng và tồn kho</span><b>{money(stuck)}</b></div>
           <div className="callout bad">
-            <b>The gap has widened 5 months in a row</b> — from {money(first.paper - first.cash)} (May) to {money(stuck)} (October). Customers are paying slower and slower; total overdue is {money(overdue)}.
+            <b>Khoảng chênh đã nới rộng 5 tháng liên tiếp</b>, từ {money(first.paper - first.cash)} (tháng 5) lên {money(stuck)} (tháng 10). Khách trả tiền ngày càng chậm, tổng nợ quá hạn là {money(overdue)}.
           </div>
         </div>
       </div>

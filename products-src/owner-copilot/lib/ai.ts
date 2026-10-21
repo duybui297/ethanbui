@@ -9,8 +9,8 @@ function context() {
   const st = forecastStats(forecast(baseScenario));
   return JSON.stringify({
     company: company.full,
-    today: 'Oct 19, 2026',
-    unit: 'thousand USD',
+    today: '19/10/2026',
+    unit: 'triệu đồng',
     cashOnHand: cash.now,
     runwayDays: runwayDays(baseScenario),
     cashForecast: { lowest: Math.round(st.min.cash), lowestDate: md(st.min.date), firstNegativeDate: st.firstNeg ? md(st.firstNeg.date) : null },
@@ -43,41 +43,41 @@ export async function ask(question: string): Promise<AskResult> {
   return { text: localAnswer(question), source: 'local' };
 }
 
-/** Rule-based answers — work without an API key */
+/** Rule-based answers — work without an API key. Matches with and without diacritics. */
 export function localAnswer(q: string): string {
   const s = q.toLowerCase();
   const st = forecastStats(forecast(baseScenario));
-  const negDate = st.firstNeg ? md(st.firstNeg.date) : 'Nov 15';
-  if (/(owes|overdue|longest|collect|who owe|debtor)/.test(s)) {
+  const negDate = st.firstNeg ? md(st.firstNeg.date) : '15/11';
+  if (/(khách.*nợ|khach.*no|nợ lâu|no lau|quá hạn|qua han|ai nợ|ai no|thu nợ|thu no|phải thu|phai thu)/.test(s)) {
     const od = receivables.filter((r) => r.daysOverdue > 0).sort((a, b) => b.daysOverdue - a.daysOverdue);
-    return `${od.length} customers are overdue, ${money(od.reduce((a, r) => a + r.amount, 0))} in total:\n` +
-      od.slice(0, 3).map((r) => `• ${r.customer}: ${money(r.amount)}, ${r.daysOverdue} days overdue`).join('\n') +
-      `\n\nCall Tanner Construction first — that $150K alone removes the risk of negative cash on ${negDate}.`;
+    return `${od.length} khách đang quá hạn, tổng cộng ${money(od.reduce((a, r) => a + r.amount, 0))}:\n` +
+      od.slice(0, 3).map((r) => `• ${r.customer}: ${money(r.amount)}, quá hạn ${r.daysOverdue} ngày`).join('\n') +
+      `\n\nGọi Xây dựng Tân Tiến trước: riêng khoản 150 tr này đã đủ xoá nguy cơ âm tiền ngày ${negDate}.`;
   }
-  if (/(profit|margin|earn).*(drop|down|why|fall|lower)|(why|drop|down).*(profit|margin)/.test(s)) {
+  if (/(lợi nhuận|loi nhuan|lãi|lai|lời|loi).*(giảm|giam|sụt|sut|thấp|thap|vì sao|vi sao|tại sao|tai sao)|(vì sao|vi sao|tại sao|tai sao|giảm|giam).*(lợi nhuận|loi nhuan|lãi|lời)/.test(s)) {
     const neg = profit.drivers.filter((d) => d.value < 0);
-    return `October profit is projected at ${money(profit.curr)}, down ${money(profit.prev - profit.curr)} from September. Main causes:\n` +
+    return `Lợi nhuận tháng 10 dự kiến ${money(profit.curr)}, giảm ${money(profit.prev - profit.curr)} so với tháng 9. Nguyên nhân chính:\n` +
       neg.map((d) => `• ${d.label}: ${money(d.value)}`).join('\n') +
-      `\n\nNext step: adjust cement selling prices now — it is the biggest item (−$31K).`;
+      `\n\nViệc nên làm: điều chỉnh giá bán xi măng ngay, đây là khoản lớn nhất (−31 tr).`;
   }
-  if (/(best|most profitable|top|product|item|selling)/.test(s)) {
-    return `Premium tile is the bright spot this month: 31% margin, adding $18K of profit.\n\nOn the other side, 3 products are selling below cost after discounts (Grade A porcelain tile 24×24, 5-gal exterior paint, 3" PVC pipe) — costing ~$11.4K/month. Set a price floor in the sales system.`;
+  if (/(sản phẩm|san pham|mặt hàng|mat hang|lời nhất|loi nhat|lãi nhất|lai nhat|bán chạy|ban chay)/.test(s)) {
+    return `Gạch cao cấp là điểm sáng tháng này: biên lợi nhuận 31%, mang về thêm 18 tr lợi nhuận.\n\nNgược lại, 3 sản phẩm đang bán dưới giá vốn sau chiết khấu (gạch porcelain 60×60 loại A, sơn ngoại thất thùng 18L, ống PVC phi 90), làm mất khoảng 11,4 tr/tháng. Nên đặt giá sàn trên phần mềm bán hàng.`;
   }
-  if (/(enough cash|cash flow|cashflow|cash|negative|pay (my )?(debts|bills|suppliers)|short)/.test(s)) {
-    return `You have ${money(cash.now)} in cash. But on ${negDate} three supplier payments ($393K) fall due at once, so cash is projected to bottom out at ${money(st.min.cash)} on ${md(st.min.date)}.\n\nTwo ways out:\n• Collect 60% of overdue debt within 14 days → cash never goes negative.\n• Ask Redstone Tile for a 15-day extension + pay Lumen Paints 50% now.`;
+  if (/(đủ tiền|du tien|tiền mặt|tien mat|dòng tiền|dong tien|âm tiền|am tien|thiếu tiền|thieu tien|trả nợ|tra no|nhà cung cấp|nha cung cap)/.test(s)) {
+    return `Anh đang có ${money(cash.now)} tiền mặt. Nhưng ngày ${negDate} có 3 khoản trả nhà cung cấp (393 tr) đến hạn cùng lúc, nên tiền mặt dự kiến xuống thấp nhất ${money(st.min.cash)} vào ngày ${md(st.min.date)}.\n\nCó 2 cách xử lý:\n• Thu được 60% nợ quá hạn trong 14 ngày → tiền mặt không bao giờ âm.\n• Xin Gạch ngói Hồng Sơn gia hạn 15 ngày + trả trước 50% cho Sơn Ánh Dương.`;
   }
-  if (/(leak|losing money|waste|discount)/.test(s)) {
+  if (/(thất thoát|that thoat|rò rỉ|ro ri|lãng phí|lang phi|chiết khấu|chiet khau|mất tiền|mat tien)/.test(s)) {
     const t = leaks.reduce((a, l) => a + l.perMonth, 0);
-    return `I found ${leaks.length} money leaks, about ${money(t, { decimals: 1 })}/month in total. The biggest:\n` +
-      leaks.slice(0, 3).map((l) => `• ${l.title}: ${money(l.perMonth, { decimals: 1 })}/month`).join('\n') +
-      `\n\nDo now: require your approval for any discount above 8%.`;
+    return `Tôi tìm thấy ${leaks.length} chỗ thất thoát, tổng khoảng ${money(t, { decimals: 1 })}/tháng. Lớn nhất là:\n` +
+      leaks.slice(0, 3).map((l) => `• ${l.title}: ${money(l.perMonth, { decimals: 1 })}/tháng`).join('\n') +
+      `\n\nLàm ngay: bắt buộc anh duyệt mọi chiết khấu trên 8%.`;
   }
-  return `Quick summary:\n• Cash ${money(cash.now)} — covers fixed costs for ${runwayDays(baseScenario)} days.\n• October profit projected at ${money(profit.curr)} (down ${money(profit.prev - profit.curr)}).\n• Risk: cash may go negative on ${negDate}.\n\nTry asking: "Who owes us the longest?" or "Why did profit drop?"`;
+  return `Tóm tắt nhanh:\n• Tiền mặt ${money(cash.now)}, đủ trả chi phí cố định trong ${runwayDays(baseScenario)} ngày.\n• Lợi nhuận tháng 10 dự kiến ${money(profit.curr)} (giảm ${money(profit.prev - profit.curr)}).\n• Rủi ro: tiền mặt có thể âm vào ngày ${negDate}.\n\nThử hỏi: "Khách nào nợ lâu nhất?" hoặc "Vì sao lợi nhuận giảm?"`;
 }
 
 export function reminderMessage(contact: string, amount: number, days: number, invoices: number) {
   const body = days > 30
-    ? `We currently have ${invoices} invoices totaling ${money(amount)} that are ${days} days past due. We're closing our October books — could you arrange payment by Oct 25?`
-    : `Just a friendly reminder: ${invoices === 1 ? '1 invoice' : `${invoices} invoices`} totaling ${money(amount)} ${invoices === 1 ? 'is' : 'are'} ${days} days past due. Could you take a look when you get a chance?`;
-  return `Hi ${contact},\nThis is Mark from Summit Building Supply. ${body}\nIf you need a statement of account, just let me know and I'll send it right over. Thanks as always for your business! 🙏`;
+    ? `Hiện bên mình còn ${invoices} hoá đơn, tổng ${amount} triệu đồng, đã quá hạn ${days} ngày. Bên em đang chốt sổ tháng 10, ${contact} sắp xếp thanh toán giúp em trước ngày 25/10 được không ạ?`
+    : `Em nhắc nhẹ: ${invoices} hoá đơn tổng ${amount} triệu đồng đã quá hạn ${days} ngày. Khi nào tiện ${contact} kiểm tra giúp em nhé.`;
+  return `Chào ${contact},\nEm là Minh bên ${company.full}. ${body}\nNếu cần bảng đối chiếu công nợ, ${contact} cứ báo em gửi ngay. Cảm ơn ${contact} đã luôn ủng hộ bên em! 🙏`;
 }

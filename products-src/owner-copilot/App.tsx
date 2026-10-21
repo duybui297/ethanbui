@@ -12,13 +12,13 @@ import Ask from './screens/Ask';
 export type Tab = 'today' | 'cash' | 'profit' | 'leaks' | 'debts' | 'sim' | 'ask';
 
 const NAV: { id: Tab; label: string; short: string; icon: string; badge?: string }[] = [
-  { id: 'today', label: 'Today', short: 'Today', icon: 'sun', badge: '3' },
-  { id: 'cash', label: 'Cash Flow', short: 'Cash', icon: 'wave', badge: '!' },
-  { id: 'profit', label: 'Profit', short: 'Profit', icon: 'pie' },
-  { id: 'debts', label: 'Payables & Receivables', short: 'Debts', icon: 'scale' },
-  { id: 'leaks', label: 'Money Leaks', short: 'Leaks', icon: 'drop', badge: '5' },
-  { id: 'sim', label: 'What-if', short: 'What-if', icon: 'sliders' },
-  { id: 'ask', label: 'Ask Assistant', short: 'Ask', icon: 'spark' },
+  { id: 'today', label: 'Hôm nay', short: 'Hôm nay', icon: 'sun', badge: '3' },
+  { id: 'cash', label: 'Dòng tiền', short: 'Dòng tiền', icon: 'wave', badge: '!' },
+  { id: 'profit', label: 'Lợi nhuận', short: 'Lợi nhuận', icon: 'pie' },
+  { id: 'debts', label: 'Công nợ', short: 'Công nợ', icon: 'scale' },
+  { id: 'leaks', label: 'Thất thoát', short: 'Thất thoát', icon: 'drop', badge: '5' },
+  { id: 'sim', label: 'Mô phỏng', short: 'Mô phỏng', icon: 'sliders' },
+  { id: 'ask', label: 'Hỏi trợ lý', short: 'Hỏi', icon: 'spark' },
 ];
 const MOBILE_NAV: Tab[] = ['today', 'cash', 'debts', 'leaks', 'ask'];
 
@@ -37,7 +37,7 @@ export default function App() {
       <div className="app">
         <aside className="side">
           <div className="brandbox">
-            <div className="logo">SB</div>
+            <div className="logo">{company.short}</div>
             <div><b>Owner Copilot</b><span>{company.full}</span></div>
           </div>
           <nav>
@@ -50,8 +50,8 @@ export default function App() {
             ))}
           </nav>
           <div className="side-foot">
-            <div className="sync"><span className="live-dot" />Updated 7:00 AM today</div>
-            <div className="muted small">Sample data · Prototype</div>
+            <div className="sync"><span className="live-dot" />Cập nhật 7:00 sáng nay</div>
+            <div className="muted small">Dữ liệu mẫu · Bản thử nghiệm</div>
           </div>
         </aside>
 

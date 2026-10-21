@@ -6,16 +6,16 @@ import { Icon, SectionTitle } from '../components/ui';
 
 type K = 'priceUpPct' | 'customerLossPct' | 'opexCutPct' | 'loan' | 'collectOverduePct';
 const SLIDERS: { k: K; label: string; min: number; max: number; step: number; fmt: (v: number) => string; hint: string }[] = [
-  { k: 'priceUpPct', label: 'Raise prices', min: 0, max: 10, step: 0.5, fmt: (v) => `${v}%`, hint: 'Across all products' },
-  { k: 'customerLossPct', label: 'Customers lost from price rise', min: 0, max: 30, step: 1, fmt: (v) => `${v}%`, hint: 'Volume drops by the same amount' },
-  { k: 'opexCutPct', label: 'Cut fixed costs', min: 0, max: 25, step: 1, fmt: (v) => `${v}%`, hint: 'Warehouse, trucks, office, staff' },
-  { k: 'collectOverduePct', label: 'Collect overdue within 14 days', min: 0, max: 100, step: 5, fmt: (v) => `${v}%`, hint: 'Of the $284K hard-to-collect debt' },
-  { k: 'loan', label: 'Bank loan (9%/year)', min: 0, max: 800, step: 50, fmt: (v) => `$${v}K`, hint: 'Disbursed in 3 days' },
+  { k: 'priceUpPct', label: 'Tăng giá bán', min: 0, max: 10, step: 0.5, fmt: (v) => `${String(v).replace('.', ',')}%`, hint: 'Áp dụng cho mọi sản phẩm' },
+  { k: 'customerLossPct', label: 'Khách bỏ đi do tăng giá', min: 0, max: 30, step: 1, fmt: (v) => `${v}%`, hint: 'Sản lượng giảm tương ứng' },
+  { k: 'opexCutPct', label: 'Cắt giảm chi phí cố định', min: 0, max: 25, step: 1, fmt: (v) => `${v}%`, hint: 'Kho bãi, xe tải, văn phòng, nhân sự' },
+  { k: 'collectOverduePct', label: 'Thu nợ quá hạn trong 14 ngày', min: 0, max: 100, step: 5, fmt: (v) => `${v}%`, hint: 'Trên 284 tr nợ khó đòi' },
+  { k: 'loan', label: 'Vay ngân hàng (9%/năm)', min: 0, max: 800, step: 50, fmt: (v) => `${v} tr`, hint: 'Giải ngân sau 3 ngày' },
 ];
 const PRESETS: { label: string; s: Partial<Scenario> }[] = [
-  { label: 'Raise prices 5%, lose 10% of customers', s: { priceUpPct: 5, customerLossPct: 10 } },
-  { label: 'Borrow $500K', s: { loan: 500 } },
-  { label: 'Chase debts hard + cut costs 10%', s: { collectOverduePct: 70, opexCutPct: 10 } },
+  { label: 'Tăng giá 5%, mất 10% khách', s: { priceUpPct: 5, customerLossPct: 10 } },
+  { label: 'Vay 500 tr', s: { loan: 500 } },
+  { label: 'Đòi nợ quyết liệt + cắt 10% chi phí', s: { collectOverduePct: 70, opexCutPct: 10 } },
 ];
 
 function Out({ label, value, base, fmt, good }: { label: string; value: number; base: number; fmt: (n: number) => string; good: (d: number) => boolean }) {
@@ -25,7 +25,7 @@ function Out({ label, value, base, fmt, good }: { label: string; value: number; 
     <div className="out">
       <span>{label}</span>
       <b>{fmt(v)}</b>
-      {Math.abs(d) > 0.5 ? <em className={good(d) ? 'good-t' : 'bad-t'}>{d > 0 ? '▲' : '▼'} {fmt(Math.abs(d))} vs today</em> : <em className="muted">same as today</em>}
+      {Math.abs(d) > 0.5 ? <em className={good(d) ? 'good-t' : 'bad-t'}>{d > 0 ? '▲' : '▼'} {fmt(Math.abs(d))} so với hiện tại</em> : <em className="muted">như hiện tại</em>}
     </div>
   );
 }
@@ -40,17 +40,17 @@ export default function Simulator() {
   const changed = JSON.stringify(s) !== JSON.stringify(baseScenario);
 
   const verdict = useMemo(() => {
-    if (!changed) return 'Drag the sliders to see how your decisions affect profit and cash flow.';
+    if (!changed) return 'Kéo các thanh trượt để xem quyết định của anh ảnh hưởng thế nào tới lợi nhuận và dòng tiền.';
     const parts: string[] = [];
-    parts.push(mp >= bmp ? `Profit up ${money(mp - bmp)}/month` : `Profit down ${money(bmp - mp)}/month`);
-    parts.push(st.min.cash >= 0 ? 'cash stays positive for all 90 days' : `cash still goes negative from ${st.firstNeg ? wdMd(st.firstNeg.date) : ''}`);
-    if (s.loan > 0) parts.push(`interest costs ${money((s.loan * 0.09) / 12, { decimals: 1 })}/month`);
+    parts.push(mp >= bmp ? `Lợi nhuận tăng ${money(mp - bmp)}/tháng` : `Lợi nhuận giảm ${money(bmp - mp)}/tháng`);
+    parts.push(st.min.cash >= 0 ? 'tiền mặt dương suốt 90 ngày' : `tiền mặt vẫn âm từ ${st.firstNeg ? wdMd(st.firstNeg.date) : ''}`);
+    if (s.loan > 0) parts.push(`tiền lãi ${money((s.loan * 0.09) / 12, { decimals: 1 })}/tháng`);
     return parts.join(', ') + '.';
   }, [s, changed, mp, bmp, st]);
 
   return (
     <div className="screen">
-      <SectionTitle kicker="Decision simulator" title="What if…?" right={changed ? <button className="btn ghost sm" onClick={() => setS(baseScenario)}>Reset</button> : undefined} />
+      <SectionTitle kicker="Mô phỏng quyết định" title="Nếu như…?" right={changed ? <button className="btn ghost sm" onClick={() => setS(baseScenario)}>Đặt lại</button> : undefined} />
 
       <div className="chips">
         {PRESETS.map((p) => <button key={p.label} className="chip" onClick={() => setS({ ...baseScenario, ...p.s })}><Icon name="spark" size={14} />{p.label}</button>)}
@@ -70,7 +70,7 @@ export default function Simulator() {
           <label className="sl-toggle">
             <span className={`switch ${s.negotiate ? 'on' : ''}`}><i /></span>
             <input type="checkbox" hidden checked={s.negotiate} onChange={(e) => setS((x) => ({ ...x, negotiate: e.target.checked }))} />
-            <span><b>Extend 2 flexible suppliers</b><em className="muted small">Redstone Tile, Lumen Paints</em></span>
+            <span><b>Gia hạn 2 nhà cung cấp linh hoạt</b><em className="muted small">Gạch ngói Hồng Sơn, Sơn Ánh Dương</em></span>
           </label>
         </div>
 
@@ -79,12 +79,12 @@ export default function Simulator() {
             <Icon name="spark" size={18} /><p>{verdict}</p>
           </div>
           <div className="outs">
-            <Out label="Profit / month" value={mp} base={bmp} fmt={(n) => money(n)} good={(d) => d > 0} />
-            <Out label="Cash runway" value={rw} base={brw} fmt={(n) => `${Math.round(n)} days`} good={(d) => d > 0} />
-            <Out label="Lowest cash" value={st.min.cash} base={bst.min.cash} fmt={(n) => money(n)} good={(d) => d > 0} />
+            <Out label="Lợi nhuận / tháng" value={mp} base={bmp} fmt={(n) => money(n)} good={(d) => d > 0} />
+            <Out label="Số ngày tiền mặt trụ được" value={rw} base={brw} fmt={(n) => `${Math.round(n)} ngày`} good={(d) => d > 0} />
+            <Out label="Tiền mặt thấp nhất" value={st.min.cash} base={bst.min.cash} fmt={(n) => money(n)} good={(d) => d > 0} />
           </div>
           <div className="card pad">
-            <div className="legend"><span><i className="lg good" />Your scenario</span>{changed && <span><i className="lg ghost" />Today</span>}</div>
+            <div className="legend"><span><i className="lg good" />Kịch bản của anh</span>{changed && <span><i className="lg ghost" />Hiện tại</span>}</div>
             <ForecastChart points={pts} ghost={changed ? base : undefined} height={240} />
           </div>
         </div>

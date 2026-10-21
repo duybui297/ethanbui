@@ -1,24 +1,27 @@
 import { useEffect, useRef, useState } from 'react';
 
-/** Money in thousands of USD: 412 → "$412K", 2610 → "$2.61M", -145 → "−$145K" */
-export function money(k: number, opts: { sign?: boolean; decimals?: number } = {}) {
-  const sign = k < 0 ? '−' : opts.sign && k > 0 ? '+' : '';
-  const a = Math.abs(k);
-  if (a >= 1000) return `${sign}$${(a / 1000).toFixed(2)}M`;
+/** Vietnamese decimal: 2.61 → "2,61" */
+const vn = (n: number, d: number) => n.toFixed(d).replace('.', ',');
+
+/** Money in millions of VND: 412 → "412 tr", 2610 → "2,61 tỷ", -145 → "−145 tr" */
+export function money(m: number, opts: { sign?: boolean; decimals?: number } = {}) {
+  const sign = m < 0 ? '−' : opts.sign && m > 0 ? '+' : '';
+  const a = Math.abs(m);
+  if (a >= 1000) return `${sign}${vn(a / 1000, 2)} tỷ`;
   const d = opts.decimals ?? (a < 10 && a % 1 !== 0 ? 1 : 0);
-  return `${sign}$${a.toFixed(d)}K`;
+  return `${sign}${vn(a, d)} tr`;
 }
 
-export const pct = (v: number, d = 0) => `${v > 0 ? '+' : v < 0 ? '−' : ''}${Math.abs(v).toFixed(d)}%`;
+export const pct = (v: number, d = 0) => `${v > 0 ? '+' : v < 0 ? '−' : ''}${vn(Math.abs(v), d)}%`;
 
-const WD = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const MO = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-/** "Oct 19" */
-export const md = (d: Date) => `${MO[d.getMonth()]} ${d.getDate()}`;
-/** "Mon, Oct 19" */
-export const wdMd = (d: Date) => `${WD[d.getDay()]}, ${md(d)}`;
+const WD = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+const WD_LONG = ['Chủ nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
+/** "19/10" */
+export const md = (d: Date) => `${d.getDate()}/${d.getMonth() + 1}`;
+/** "Thứ Hai, 19/10" */
+export const wdMd = (d: Date) => `${WD_LONG[d.getDay()]}, ${md(d)}`;
 export const weekday = (d: Date) => WD[d.getDay()];
-export const monthName = (d: Date) => MO[d.getMonth()];
+export const monthName = (d: Date) => `Th${d.getMonth() + 1}`;
 
 /** Animates a number from its previous value to the new one */
 export function useCountUp(target: number, ms = 900) {

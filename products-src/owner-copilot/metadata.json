@@ -1,5 +1,5 @@
 {
   "name": "Owner Copilot",
-  "description": "A financial copilot for business owners: morning brief, 90-day cash forecast, profit explained, money-leak detection, bill-payment priorities, what-if simulator and Gemini-powered Q&A.",
+  "description": "Trợ lý tài chính cho chủ doanh nghiệp: bản tin buổi sáng, dự báo dòng tiền 90 ngày, giải thích lợi nhuận, phát hiện thất thoát, thứ tự trả nợ, mô phỏng kịch bản và hỏi đáp bằng Gemini.",
   "requestFramePermissions": ["microphone"]
 }

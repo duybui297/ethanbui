@@ -92,7 +92,7 @@ export function Modal({ open, onClose, title, children }: { open: boolean; onClo
       <div className="modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-label={title}>
         <div className="modal-h">
           <h3>{title}</h3>
-          <button className="icon-btn" onClick={onClose} aria-label="Close"><Icon name="x" /></button>
+          <button className="icon-btn" onClick={onClose} aria-label="Đóng"><Icon name="x" /></button>
         </div>
         {children}
       </div>
